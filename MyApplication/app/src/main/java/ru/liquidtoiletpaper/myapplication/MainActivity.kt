@@ -82,6 +82,14 @@ fun StartPage(navController: NavController){
             .fillMaxHeight()
             .background(GreetingPageBackground),
     ) {
+        /*
+        Image(
+            painter = painterResource(id = R.drawable.background),
+            contentDescription = "",
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.fillMaxSize()
+        )
+         */
         Column(
             modifier = Modifier.fillMaxSize(),
         ) {
@@ -189,7 +197,7 @@ fun StartPage(navController: NavController){
                     },
                 ){
                     Text(
-                        text = "Start activity",
+                        text = "First time?",
                         color = PrimaryText,
                         style = MaterialTheme.typography.h1,
                         fontSize = 15.sp,
@@ -213,7 +221,7 @@ fun StartPage(navController: NavController){
                     },
                 ){
                     Text(
-                        text = "Login",
+                        text = "Enter the dungeon",
                         color = PrimaryText,
                         style = MaterialTheme.typography.h1,
                         fontSize = 15.sp,
