@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.drawable.VectorDrawable
 import android.os.Bundle
@@ -29,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -76,20 +78,13 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun StartPage(navController: NavController){
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxSize()
             .fillMaxHeight()
             .background(GreetingPageBackground),
     ) {
-        /*
-        Image(
-            painter = painterResource(id = R.drawable.background),
-            contentDescription = "",
-            contentScale = ContentScale.FillBounds,
-            modifier = Modifier.fillMaxSize()
-        )
-         */
         Column(
             modifier = Modifier.fillMaxSize(),
         ) {
@@ -99,17 +94,6 @@ fun StartPage(navController: NavController){
                     .fillMaxWidth()
                     .weight(0.5f)
             ) {
-                /*
-                Image(
-                    painter = painterResource(id = R.drawable.roflanpodushka),
-                    contentDescription = "",
-                    contentScale = ContentScale.FillHeight,
-                    alignment = Alignment.TopCenter,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.4f)
-                )
-                 */
             }
             // Колонна с заголовком
             Column(
@@ -170,7 +154,8 @@ fun StartPage(navController: NavController){
                     textAlign = TextAlign.Center
                 )
                 Text(
-                    text = "Enjoy, buddy. And don't forget to grant access to your ass later in the terms of service.",
+                    text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris lacinia eros risus.",
+                    maxLines = 2,
                     color = SecondaryText,
                     style = MaterialTheme.typography.body1,
                     fontSize = 12.sp,
@@ -197,7 +182,7 @@ fun StartPage(navController: NavController){
                     },
                 ){
                     Text(
-                        text = "First time?",
+                        text = "Register",
                         color = PrimaryText,
                         style = MaterialTheme.typography.h1,
                         fontSize = 15.sp,
@@ -217,11 +202,11 @@ fun StartPage(navController: NavController){
                         .padding(horizontal = 20.dp),
                     shape = RoundedCornerShape(5.dp),
                     onClick = {
-
+                        context.startActivity(Intent(context, LoginActivity::class.java))
                     },
                 ){
                     Text(
-                        text = "Enter the dungeon",
+                        text = "Login",
                         color = PrimaryText,
                         style = MaterialTheme.typography.h1,
                         fontSize = 15.sp,

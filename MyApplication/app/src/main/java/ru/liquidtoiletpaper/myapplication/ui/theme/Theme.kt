@@ -14,14 +14,13 @@ private val DarkColorPalette = darkColors(
 
 private val LightColorPalette = lightColors(
 
-    /* Other default colors to override
-    background = Color.White,
+
+    background = GreetingPageBackground,
     surface = Color.White,
     onPrimary = Color.White,
     onSecondary = Color.Black,
     onBackground = Color.Black,
     onSurface = Color.Black,
-    */
 )
 
 @Composable
