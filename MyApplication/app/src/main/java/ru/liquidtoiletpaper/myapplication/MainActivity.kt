@@ -55,12 +55,12 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
     fun Context.findActivity(): Activity? = when (this) {
         is Activity -> this
         is ContextWrapper -> baseContext.findActivity()
         else -> null
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -130,7 +130,6 @@ fun StartPage(navController: NavController){
                 Image(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_imagecut),
                     contentDescription = "",
-
                 )
             }
             Column(modifier = Modifier
