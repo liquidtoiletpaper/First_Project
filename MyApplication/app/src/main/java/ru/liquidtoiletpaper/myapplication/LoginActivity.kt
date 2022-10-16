@@ -38,7 +38,7 @@ import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 class LoginActivity : ComponentActivity() {
 
-    /// Заблокировать поворот экрана на устройстве
+    // Заблокировать поворот экрана на устройстве
     @Composable
     fun LockScreenOrientation(orientation: Int) {
         val context = LocalContext.current
@@ -90,7 +90,6 @@ fun LoginPage(navController: NavController){
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f)
             ) {
                 IconButton(onClick = { navController.navigateUp() }) {
                     Icon(
@@ -130,8 +129,7 @@ fun LoginPage(navController: NavController){
             }
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(4f),
+                    .fillMaxWidth(),
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
@@ -154,7 +152,7 @@ fun LoginPage(navController: NavController){
                         key = true
                     }
                 }
-                TextField(
+                OutlinedTextField(
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = TextFieldBackground,
                         cursorColor = androidx.compose.ui.graphics.Color.Black,
@@ -196,7 +194,7 @@ fun LoginPage(navController: NavController){
                 var isErrorPassword by rememberSaveable { mutableStateOf(false) }
                 var passwordText by remember { mutableStateOf("") }
                 var passwordVisible by rememberSaveable { mutableStateOf(false) }
-                TextField(
+                OutlinedTextField(
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = TextFieldBackground,
                         cursorColor = androidx.compose.ui.graphics.Color.Black,
@@ -281,15 +279,6 @@ fun LoginPage(navController: NavController){
                         textAlign = TextAlign.Center,
                     )
                 }
-            }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(6f),
-                verticalArrangement = Arrangement.Top
-            ) {
-
             }
         }
     }

@@ -1,12 +1,9 @@
 package ru.liquidtoiletpaper.myapplication
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
-import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.graphics.drawable.VectorDrawable
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,18 +16,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -38,7 +29,6 @@ import androidx.navigation.compose.rememberNavController
 import ru.liquidtoiletpaper.myapplication.ui.theme.GreetingPageBackground
 import ru.liquidtoiletpaper.myapplication.ui.theme.MyApplicationTheme
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
-import java.util.*
 
 class MainActivity : ComponentActivity() {
 
@@ -70,6 +60,9 @@ class MainActivity : ComponentActivity() {
                 NavHost(navController = navController, startDestination = "startPage") {
                     composable("startPage") { StartPage(navController) }
                     composable("loginPage") { LoginPage(navController) }
+                    composable("registerPage1") { RegisterPage1(navController) }
+                    composable("registerPage2") { RegisterPage2(navController) }
+                    composable("registerPage3") { RegisterPage3(navController) }
                 }
                 LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
             }
@@ -178,7 +171,8 @@ fun StartPage(navController: NavController){
                         .padding(top = 20.dp),
                     shape = RoundedCornerShape(5.dp),
                     onClick = {
-
+                        //context.startActivity(Intent(context, RegisterActivity::class.java))
+                        navController.navigate("registerPage1")
                     },
                 ){
                     Text(
