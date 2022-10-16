@@ -69,6 +69,7 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = "startPage") {
                     composable("startPage") { StartPage(navController) }
+                    composable("loginPage") { LoginPage(navController) }
                 }
                 LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
             }
@@ -201,7 +202,8 @@ fun StartPage(navController: NavController){
                         .padding(horizontal = 20.dp),
                     shape = RoundedCornerShape(5.dp),
                     onClick = {
-                        context.startActivity(Intent(context, LoginActivity::class.java))
+                        //context.startActivity(Intent(context, LoginActivity::class.java))
+                        navController.navigate("loginPage")
                     },
                 ){
                     Text(

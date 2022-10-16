@@ -30,6 +30,10 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 class LoginActivity : ComponentActivity() {
@@ -62,8 +66,9 @@ class LoginActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ){
-                    LoginPage()
+                    val navController = rememberNavController()
                     LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+                    LoginPage(navController = navController)
                 }
             }
         }
@@ -71,7 +76,7 @@ class LoginActivity : ComponentActivity() {
 }
 
 @Composable
-fun LoginPage(){
+fun LoginPage(navController: NavController){
     val context = LocalContext.current
     Column(
         modifier = Modifier
@@ -87,7 +92,7 @@ fun LoginPage(){
                     .fillMaxWidth()
                     .weight(1f)
             ) {
-                IconButton(onClick = { context.startActivity(Intent(context, MainActivity::class.java)) }) {
+                IconButton(onClick = { navController.navigateUp() }) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = "Back",
