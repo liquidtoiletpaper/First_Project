@@ -1,10 +1,12 @@
 package ru.liquidtoiletpaper.myapplication
 
 import android.app.Activity
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.widget.DatePicker
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -32,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
+import java.util.*
 
 class RegisterActivity : ComponentActivity() {
     // Заблокировать поворот экрана на устройстве
@@ -478,12 +481,35 @@ fun RegisterPage3(navController: NavController){
                         .padding(top = 15.dp)
                         .padding(horizontal = 20.dp)
                 )
-                var nameText by rememberSaveable { mutableStateOf("") }
-                var isErrorName by rememberSaveable { mutableStateOf(false) }
+                var dateText by rememberSaveable { mutableStateOf("") }
+                var isErrorDate by rememberSaveable { mutableStateOf(false) }
                 var key = false
-                fun validate(length: Int, minLength: Int, maxLength: Int) {
-                    if (length < minLength || length > maxLength) {
-                        key = true
+                val mYear: Int
+                val mMonth: Int
+                val mDay: Int
+                val mCalendar = Calendar.getInstance()
+
+                mYear = mCalendar.get(Calendar.YEAR)
+                mMonth = mCalendar.get(Calendar.MONTH)
+                mDay = mCalendar.get(Calendar.DAY_OF_MONTH)
+
+                mCalendar.time = Date()
+
+                val mDate = remember { mutableStateOf("") }
+                val mDatePickerDialog = DatePickerDialog(
+                    context,
+                    { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
+                        mDate.value = "$mDayOfMonth.${mMonth+1}.$mYear"
+                    }, mYear, mMonth, mDay
+                )
+
+                fun validate(year: Int, month: Int, day: Int) {
+                    if (year <= (mYear - 18)) {
+                        if (month <= mMonth){
+                            if(day <= mDay){
+                                key = true
+                            }
+                        }
                     }
                 }
                 OutlinedTextField(
@@ -495,13 +521,11 @@ fun RegisterPage3(navController: NavController){
                         unfocusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
                         focusedLabelColor = DisabledText
                     ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
-                        .padding(top = 10.dp),
+
+                    enabled = false,
                     singleLine = true,
-                    value = nameText,
-                    onValueChange = { nameText = it.take(24) },
+                    value = mDate.value,
+                    onValueChange = { dateText = it.take(10) },
                     placeholder = {
                         Text(
                             text = "01.01.1991",
@@ -510,18 +534,25 @@ fun RegisterPage3(navController: NavController){
                     },
                     shape = RoundedCornerShape(5.dp),
                     trailingIcon = {
-                        if (isErrorName) {
+                        if (isErrorDate) {
                             Icon(Icons.Filled.Warning, "error", tint = Error)
                         }
                     },
-                    isError = isErrorName,
+                    isError = isErrorDate,
                     keyboardActions = KeyboardActions {
                         validate(
-                            nameText.length,
-                            1,
-                            24
-                        ); isErrorName = key
-                    }
+                            Integer.parseInt(mDate.value.split(".")[2]),
+                            Integer.parseInt(mDate.value.split(".")[1]),
+                            Integer.parseInt(mDate.value.split(".")[0])
+                        ); isErrorDate = key
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                        .padding(top = 10.dp)
+                        .clickable {
+                            mDatePickerDialog.show()
+                        },
                 )
 
 
