@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.widget.DatePicker
@@ -569,7 +570,7 @@ fun RegisterPage3(navController: NavController){
                         .padding(top = 25.dp),
                     shape = RoundedCornerShape(5.dp),
                     onClick = {
-
+                        context.startActivity(Intent(context, MainActivity::class.java))
                     },
                 ) {
                     Text(

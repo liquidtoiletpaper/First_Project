@@ -68,7 +68,7 @@ class LoginActivity : ComponentActivity() {
                 ){
                     val navController = rememberNavController()
                     LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-                    LoginPage(navController = navController)
+                    LoginPage(navController)
                 }
             }
         }

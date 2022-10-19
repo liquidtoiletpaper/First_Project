@@ -13,12 +13,10 @@ private val DarkColorPalette = darkColors(
 )
 
 private val LightColorPalette = lightColors(
-
-
     background = GreetingPageBackground,
     surface = Color.White,
     onPrimary = Color.White,
-    onSecondary = Color.Black,
+    onSecondary = Color.White,
     onBackground = Color.Black,
     onSurface = Color.Black,
 )

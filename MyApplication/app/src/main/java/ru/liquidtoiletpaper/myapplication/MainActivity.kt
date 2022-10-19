@@ -11,23 +11,25 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import ru.liquidtoiletpaper.myapplication.ui.theme.GreetingPageBackground
-import ru.liquidtoiletpaper.myapplication.ui.theme.MyApplicationTheme
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 class MainActivity : ComponentActivity() {
@@ -55,14 +57,16 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyApplicationTheme() {
-                val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "startPage") {
-                    composable("startPage") { StartPage(navController) }
-                    composable("loginPage") { LoginPage(navController) }
-                    composable("registerPage1") { RegisterPage1(navController) }
-                    composable("registerPage2") { RegisterPage2(navController) }
-                    composable("registerPage3") { RegisterPage3(navController) }
+            MyApplicationTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colors.background
+                ) {
+                    val navController = rememberNavController()
+                    NavHost(navController = navController, startDestination = "mainPage") {
+                        composable("mainPage") { MainPage(navController) }
+                    }
+                    MainPage(navController)
                 }
                 LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
             }
@@ -71,143 +75,99 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun StartPage(navController: NavController){
-    val context = LocalContext.current
+fun MainPage(navController : NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .fillMaxHeight()
             .background(GreetingPageBackground),
     ) {
+        var key = false
+        fun validate(length: Int, minLength: Int, maxLength: Int) {
+            if (length < minLength || length > maxLength) {
+                key = true
+            }
+        }
         Column(
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(0.5f)
-            ) {
-            }
-            // Колонна с заголовком
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 0.dp),
-                    horizontalArrangement = Arrangement.Center,
-                ) {
-                    Text(
-                        text = "GENSHIN IMPACT",
-                        color = PrimaryText,
-                        style = MaterialTheme.typography.h1,
-                        fontSize = 30.sp,
-                        fontFamily = SemiBoldFont,
-                        textAlign = TextAlign.Center
-                    )
-
-                }
-
-            }
-            // Колонна с изображением
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(5f),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Image(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_imagecut),
-                    contentDescription = "",
-                )
-            }
-            Column(modifier = Modifier
+            modifier = Modifier
                 .fillMaxWidth()
-                .weight(0.5f)) {
-                
-            }
-            // Колонна с кнопками
-            Column(
+        ) {
+
+            var isErrorSearch by rememberSaveable { mutableStateOf(false) }
+            var searchText by remember { mutableStateOf("") }
+            OutlinedTextField(
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = TextFieldBackground,
+                    cursorColor = androidx.compose.ui.graphics.Color.Black,
+                    focusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
+                    unfocusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
+                ),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(3f),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ){
-                Text(
-                    text = "Welcome to the club",
-                    color = PrimaryText,
-                    style = MaterialTheme.typography.h1,
-                    fontSize = 25.sp,
-                    fontFamily = SemiBoldFont,
-                    textAlign = TextAlign.Center
-                )
-                Text(
-                    text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris lacinia eros risus.",
-                    maxLines = 2,
-                    color = SecondaryText,
-                    style = MaterialTheme.typography.body1,
-                    fontSize = 12.sp,
-                    fontFamily = NormalFont,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .padding(horizontal = 20.dp)
-                        .padding(top = 5.dp)
-                )
-                Button(
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = PrimaryButton,
-                        contentColor = PrimaryText,
-                        disabledBackgroundColor = SecondaryButton,
-                        disabledContentColor = PrimaryText
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
-                        .padding(top = 20.dp),
-                    shape = RoundedCornerShape(5.dp),
-                    onClick = {
-                        //context.startActivity(Intent(context, RegisterActivity::class.java))
-                        navController.navigate("registerPage1")
-                    },
-                ){
-                    Text(
-                        text = "Register",
-                        color = PrimaryText,
-                        style = MaterialTheme.typography.h1,
-                        fontSize = 15.sp,
-                        fontFamily = SemiBoldFont,
-                        textAlign = TextAlign.Center,
+                    .padding(horizontal = 20.dp)
+                    .padding(top = 5.dp),
+                singleLine = true,
+
+                value = searchText,
+                onValueChange = { searchText = it.take(128) },
+                placeholder = {
+                    Image(
+                        imageVector = Icons.Filled.Search,
+                        contentDescription = "",
+                        colorFilter = ColorFilter.tint(PrimaryTextField)
                     )
+                    Text(
+                        "Search",
+                        fontFamily = NormalFont,
+                        modifier = Modifier
+                            .padding(start = 30.dp)
+                    )
+                },
+                shape = RoundedCornerShape(5.dp),
+                isError = isErrorSearch,
+                keyboardActions = KeyboardActions {
+                    validate(
+                        searchText.length,
+                        6,
+                        72
+                    ); isErrorSearch = key
                 }
-                Button(
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = SecondaryButton,
-                        contentColor = PrimaryText,
-                        disabledBackgroundColor = SecondaryButton,
-                        disabledContentColor = PrimaryText
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp),
-                    shape = RoundedCornerShape(5.dp),
-                    onClick = {
-                        //context.startActivity(Intent(context, LoginActivity::class.java))
-                        navController.navigate("loginPage")
-                    },
-                ){
-                    Text(
-                        text = "Login",
-                        color = PrimaryText,
-                        style = MaterialTheme.typography.h1,
-                        fontSize = 15.sp,
-                        fontFamily = SemiBoldFont,
-                        textAlign = TextAlign.Center
-                    )
+            )
+        }
+        Row(
+            verticalAlignment = Alignment.Bottom,
+            modifier = Modifier
+                .fillMaxWidth()
+        ){
+            /*
+            BottomAppBar(
+                modifier: Modifier = Modifier,
+                backgroundColor: Color = MaterialTheme.colors.primarySurface,
+                contentColor: Color = contentColorFor(backgroundColor),
+                cutoutShape: Shape? = null,
+                elevation: Dp = AppBarDefaults.BottomAppBarElevation,
+                contentPadding: PaddingValues = AppBarDefaults.ContentPadding,
+                content: RowScope.() -> Unit
+            )
+             */
+            BottomAppBar(
+                modifier = Modifier
+                //.background(DarkAppBarBackground),
+                ,
+                backgroundColor = DarkAppBarBackground,
+                contentColor = Color.White,
+                contentPadding = PaddingValues(horizontal = 30.dp)
+
+            ) {
+                IconButton(onClick = { }) {
+                    Icon(Icons.Filled.Menu, contentDescription = "Меню")
+                }
+
+                IconButton(onClick = { }) {
+                    Icon(Icons.Filled.Info, contentDescription = "Информация о приложении")
+                }
+                IconButton(onClick = { }) {
+                    Icon(Icons.Filled.Search, contentDescription = "Избранное")
                 }
             }
         }
