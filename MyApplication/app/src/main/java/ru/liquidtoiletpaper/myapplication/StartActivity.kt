@@ -26,7 +26,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import ru.liquidtoiletpaper.myapplication.ui.theme.GreetingPageBackground
+import ru.liquidtoiletpaper.myapplication.ui.theme.PrimaryPageBackground
 import ru.liquidtoiletpaper.myapplication.ui.theme.MyApplicationTheme
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
@@ -77,7 +77,7 @@ fun StartPage(navController: NavController){
         modifier = Modifier
             .fillMaxSize()
             .fillMaxHeight()
-            .background(GreetingPageBackground),
+            .background(PrimaryPageBackground),
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),

@@ -82,7 +82,7 @@ fun RegisterPage1(navController: NavController){
         modifier = Modifier
             .fillMaxSize()
             .fillMaxHeight()
-            .background(GreetingPageBackground),
+            .background(PrimaryPageBackground),
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -222,7 +222,7 @@ fun RegisterPage2(navController: NavController){
         modifier = Modifier
             .fillMaxSize()
             .fillMaxHeight()
-            .background(GreetingPageBackground),
+            .background(PrimaryPageBackground),
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -431,7 +431,7 @@ fun RegisterPage3(navController: NavController){
         modifier = Modifier
             .fillMaxSize()
             .fillMaxHeight()
-            .background(GreetingPageBackground),
+            .background(PrimaryPageBackground),
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),

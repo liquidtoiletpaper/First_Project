@@ -7,13 +7,12 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import ru.liquidtoiletpaper.myapplication.R
 
 private val DarkColorPalette = darkColors(
 )
 
 private val LightColorPalette = lightColors(
-    background = GreetingPageBackground,
+    background = PrimaryPageBackground,
     surface = Color.White,
     onPrimary = Color.White,
     onSecondary = Color.White,
@@ -39,7 +38,7 @@ fun MyApplicationTheme(
         content = content
     )
     val systemUiController = rememberSystemUiController()
-    systemUiController.setSystemBarsColor(color = GreetingPageBackground)
-    systemUiController.setStatusBarColor(color = GreetingPageBackground)
-    systemUiController.setNavigationBarColor(color = GreetingPageBackground)
+    systemUiController.setSystemBarsColor(color = PrimaryPageBackground)
+    systemUiController.setStatusBarColor(color = PrimaryPageBackground)
+    systemUiController.setNavigationBarColor(color = PrimaryPageBackground)
 }
