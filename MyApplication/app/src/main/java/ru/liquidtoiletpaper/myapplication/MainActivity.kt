@@ -100,6 +100,7 @@ fun MainPage(navController : NavController) {
         }
         Scaffold(
             topBar = {
+                /*
                 TopAppBar(
                     backgroundColor = DarkAppBarBackground,
                     contentColor = Color.White,
@@ -110,9 +111,9 @@ fun MainPage(navController : NavController) {
                     OutlinedTextField(
                         colors = TextFieldDefaults.textFieldColors(
                             backgroundColor = TextFieldBackground,
-                            cursorColor = androidx.compose.ui.graphics.Color.White,
-                            focusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
-                            unfocusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
+                            cursorColor = Color.White,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
                         ),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -147,37 +148,12 @@ fun MainPage(navController : NavController) {
                         }
                     )
                 }
+                 */
             },
             content = {
                 BottomNavGraph(navController = navController)
             },
             bottomBar = {
-                /*
-                BottomAppBar(
-                    backgroundColor = DarkAppBarBackground,
-                    contentColor = Color.White,
-                    contentPadding = PaddingValues(horizontal = 20.dp)
-
-                ) {
-                    IconButton(
-                        onClick = {  }, modifier = Modifier.weight(1f))
-                    {
-                        Icon(Icons.Filled.Home, contentDescription = "", tint = PrimarySelected)
-                    }
-                    IconButton(onClick = { }, Modifier.weight(1f)) {
-                        Icon(Icons.Filled.Search, contentDescription = "")
-                    }
-                    IconButton(onClick = { }, Modifier.weight(1f)) {
-                        Icon(Icons.Filled.Favorite, contentDescription = "")
-                    }
-                    IconButton(onClick = { }, Modifier.weight(1f)) {
-                        Icon(Icons.Filled.Person, contentDescription = "")
-                    }
-                    IconButton(onClick = { }, Modifier.weight(1f)) {
-                        Icon(Icons.Filled.ShoppingCart, contentDescription = "")
-                    }
-                }
-                 */
                 BottomBar(navController = navController)
             }
         )
