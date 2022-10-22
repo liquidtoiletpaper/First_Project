@@ -5,14 +5,22 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import ru.liquidtoiletpaper.myapplication.MainActivity
 
 private val DarkColorPalette = darkColors(
+    background = Color.Transparent,
+    surface = Color.White,
+    onPrimary = Color.White,
+    onSecondary = Color.White,
+    onBackground = Color.Black,
+    onSurface = Color.Black,
 )
 
 private val LightColorPalette = lightColors(
-    background = PrimaryPageBackground,
+    background = Color.Transparent,
     surface = Color.White,
     onPrimary = Color.White,
     onSecondary = Color.White,
@@ -38,7 +46,15 @@ fun MyApplicationTheme(
         content = content
     )
     val systemUiController = rememberSystemUiController()
-    systemUiController.setSystemBarsColor(color = PrimaryPageBackground)
-    systemUiController.setStatusBarColor(color = PrimaryPageBackground)
-    systemUiController.setNavigationBarColor(color = PrimaryPageBackground)
+    val darkTheme = isSystemInDarkTheme()
+    SideEffect {
+        systemUiController.setSystemBarsColor(color = PrimaryPageBackground)
+    }
+    /*
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setSystemBarsColor(Color.Transparent)
+    systemUiController.setNavigationBarColor(Color.Transparent)
+    systemUiController.setStatusBarColor(Color.Transparent)
+
+     */
 }

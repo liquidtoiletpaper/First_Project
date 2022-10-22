@@ -10,6 +10,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -32,6 +33,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 class MainActivity : ComponentActivity() {
@@ -60,6 +62,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MyApplicationTheme {
+                val systemUiController = rememberSystemUiController()
+                val darkTheme = isSystemInDarkTheme()
+                SideEffect {
+                    systemUiController.setSystemBarsColor(color = DarkAppBarBackground)
+                }
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
@@ -155,7 +162,7 @@ fun MainPage(navController : NavController) {
             },
             bottomBar = {
                 BottomBar(navController = navController)
-            }
+            },
         )
     }
 }
@@ -172,7 +179,10 @@ fun BottomBar(navController: NavHostController){
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     
-    BottomNavigation() {
+    BottomNavigation(
+        backgroundColor = DarkAppBarBackground,
+        contentColor = Color.White
+    ) {
         screens.forEach { screen ->
             AddItem(
                 screen = screen,
