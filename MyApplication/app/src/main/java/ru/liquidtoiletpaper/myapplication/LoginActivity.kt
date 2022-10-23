@@ -51,7 +51,6 @@ class LoginActivity : ComponentActivity() {
         else -> null
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -90,7 +89,8 @@ fun LoginPage(navController: NavController){
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = "Back",
                         modifier = Modifier
-                            .padding(horizontal = 20.dp)
+                            .padding(horizontal = 20.dp),
+                        contentColorFor(backgroundColor = PrimaryWhite),
                     )
                 }
             }
@@ -102,7 +102,7 @@ fun LoginPage(navController: NavController){
             ) {
                 Text(
                     text = "Welcome back!",
-                    color = PrimaryText,
+                    color = PrimaryWhite,
                     style = MaterialTheme.typography.h1,
                     fontSize = 25.sp,
                     fontFamily = SemiBoldFont,
@@ -251,9 +251,9 @@ fun LoginPage(navController: NavController){
                 Button(
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = PrimaryButton,
-                        contentColor = PrimaryText,
+                        contentColor = PrimaryWhite,
                         disabledBackgroundColor = SecondaryButton,
-                        disabledContentColor = PrimaryText
+                        disabledContentColor = PrimaryWhite
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -266,7 +266,7 @@ fun LoginPage(navController: NavController){
                 ) {
                     Text(
                         text = "Login",
-                        color = PrimaryText,
+                        color = PrimaryWhite,
                         style = MaterialTheme.typography.h1,
                         fontSize = 15.sp,
                         fontFamily = SemiBoldFont,

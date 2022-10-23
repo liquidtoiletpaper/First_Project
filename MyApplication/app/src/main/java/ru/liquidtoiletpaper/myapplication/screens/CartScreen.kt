@@ -4,21 +4,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import ru.liquidtoiletpaper.myapplication.AddItem
-import ru.liquidtoiletpaper.myapplication.BottomBarScreen
-import ru.liquidtoiletpaper.myapplication.BottomNavGraph
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 @Composable
@@ -39,7 +31,7 @@ fun CartScreen() {
         ) {
             Text(
                 text = "Your cart is empty",
-                color = PrimaryText,
+                color = PrimaryWhite,
                 style = MaterialTheme.typography.h1,
                 fontSize = 25.sp,
                 fontFamily = SemiBoldFont,
@@ -48,7 +40,7 @@ fun CartScreen() {
             Text(
                 text = "Use catalog to choose products",
                 maxLines = 2,
-                color = PrimaryText,
+                color = PrimaryWhite,
                 style = MaterialTheme.typography.body1,
                 fontSize = 20.sp,
                 fontFamily = NormalFont,
@@ -60,9 +52,9 @@ fun CartScreen() {
             Button(
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = PrimaryButton,
-                    contentColor = PrimaryText,
+                    contentColor = PrimaryWhite,
                     disabledBackgroundColor = SecondaryButton,
-                    disabledContentColor = PrimaryText
+                    disabledContentColor = PrimaryWhite
                 ),
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
@@ -74,7 +66,7 @@ fun CartScreen() {
             ) {
                 Text(
                     text = "To catalog",
-                    color = PrimaryText,
+                    color = PrimaryWhite,
                     style = MaterialTheme.typography.h1,
                     fontSize = 15.sp,
                     fontFamily = SemiBoldFont,

@@ -98,7 +98,8 @@ fun RegisterPage1(navController: NavController){
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = "Back",
                         modifier = Modifier
-                            .padding(horizontal = 20.dp)
+                            .padding(horizontal = 20.dp),
+                        contentColorFor(backgroundColor = PrimaryWhite),
                     )
                 }
             }
@@ -111,7 +112,7 @@ fun RegisterPage1(navController: NavController){
             ) {
                 Text(
                     text = "Enter your E-mail",
-                    color = PrimaryText,
+                    color = PrimaryWhite,
                     style = MaterialTheme.typography.h1,
                     fontSize = 25.sp,
                     fontFamily = SemiBoldFont,
@@ -186,9 +187,9 @@ fun RegisterPage1(navController: NavController){
                 Button(
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = PrimaryButton,
-                        contentColor = PrimaryText,
+                        contentColor = PrimaryWhite,
                         disabledBackgroundColor = SecondaryButton,
-                        disabledContentColor = PrimaryText
+                        disabledContentColor = PrimaryWhite
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -201,7 +202,7 @@ fun RegisterPage1(navController: NavController){
                 ) {
                     Text(
                         text = "Enter",
-                        color = PrimaryText,
+                        color = PrimaryWhite,
                         style = MaterialTheme.typography.h1,
                         fontSize = 15.sp,
                         fontFamily = SemiBoldFont,
@@ -236,7 +237,8 @@ fun RegisterPage2(navController: NavController){
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = "Back",
                         modifier = Modifier
-                            .padding(horizontal = 20.dp)
+                            .padding(horizontal = 20.dp),
+                        contentColorFor(backgroundColor = PrimaryWhite),
                     )
                 }
             }
@@ -248,7 +250,7 @@ fun RegisterPage2(navController: NavController){
             ) {
                 Text(
                     text = "Register",
-                    color = PrimaryText,
+                    color = PrimaryWhite,
                     style = MaterialTheme.typography.h1,
                     fontSize = 25.sp,
                     fontFamily = SemiBoldFont,
@@ -395,9 +397,9 @@ fun RegisterPage2(navController: NavController){
                 Button(
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = PrimaryButton,
-                        contentColor = PrimaryText,
+                        contentColor = PrimaryWhite,
                         disabledBackgroundColor = SecondaryButton,
-                        disabledContentColor = PrimaryText
+                        disabledContentColor = PrimaryWhite
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -410,7 +412,7 @@ fun RegisterPage2(navController: NavController){
                 ) {
                     Text(
                         text = "Enter",
-                        color = PrimaryText,
+                        color = PrimaryWhite,
                         style = MaterialTheme.typography.h1,
                         fontSize = 15.sp,
                         fontFamily = SemiBoldFont,
@@ -445,7 +447,8 @@ fun RegisterPage3(navController: NavController){
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = "Back",
                         modifier = Modifier
-                            .padding(horizontal = 20.dp)
+                            .padding(horizontal = 20.dp),
+                        contentColorFor(backgroundColor = PrimaryWhite),
                     )
                 }
             }
@@ -457,7 +460,7 @@ fun RegisterPage3(navController: NavController){
             ) {
                 Text(
                     text = "Enter your date of birth",
-                    color = PrimaryText,
+                    color = PrimaryWhite,
                     style = MaterialTheme.typography.h1,
                     fontSize = 25.sp,
                     fontFamily = SemiBoldFont,
@@ -560,9 +563,9 @@ fun RegisterPage3(navController: NavController){
                 Button(
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = PrimaryButton,
-                        contentColor = PrimaryText,
+                        contentColor = PrimaryWhite,
                         disabledBackgroundColor = SecondaryButton,
-                        disabledContentColor = PrimaryText
+                        disabledContentColor = PrimaryWhite
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -575,7 +578,7 @@ fun RegisterPage3(navController: NavController){
                 ) {
                     Text(
                         text = "Create genshin impact account",
-                        color = PrimaryText,
+                        color = PrimaryWhite,
                         style = MaterialTheme.typography.h1,
                         fontSize = 15.sp,
                         fontFamily = SemiBoldFont,

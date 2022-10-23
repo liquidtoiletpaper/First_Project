@@ -104,7 +104,7 @@ fun StartPage(navController: NavController){
                 ) {
                     Text(
                         text = "GENSHIN IMPACT",
-                        color = PrimaryText,
+                        color = PrimaryWhite,
                         style = MaterialTheme.typography.h1,
                         fontSize = 30.sp,
                         fontFamily = SemiBoldFont,
@@ -118,7 +118,7 @@ fun StartPage(navController: NavController){
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(5f),
+                    .weight(4f),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Image(
@@ -140,7 +140,7 @@ fun StartPage(navController: NavController){
             ){
                 Text(
                     text = "Welcome to the club",
-                    color = PrimaryText,
+                    color = PrimaryWhite,
                     style = MaterialTheme.typography.h1,
                     fontSize = 25.sp,
                     fontFamily = SemiBoldFont,
@@ -161,9 +161,9 @@ fun StartPage(navController: NavController){
                 Button(
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = PrimaryButton,
-                        contentColor = PrimaryText,
+                        contentColor = PrimaryWhite,
                         disabledBackgroundColor = SecondaryButton,
-                        disabledContentColor = PrimaryText
+                        disabledContentColor = PrimaryWhite
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -177,7 +177,7 @@ fun StartPage(navController: NavController){
                 ){
                     Text(
                         text = "Register",
-                        color = PrimaryText,
+                        color = PrimaryWhite,
                         style = MaterialTheme.typography.h1,
                         fontSize = 15.sp,
                         fontFamily = SemiBoldFont,
@@ -187,9 +187,9 @@ fun StartPage(navController: NavController){
                 Button(
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = SecondaryButton,
-                        contentColor = PrimaryText,
+                        contentColor = PrimaryWhite,
                         disabledBackgroundColor = SecondaryButton,
-                        disabledContentColor = PrimaryText
+                        disabledContentColor = PrimaryWhite
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -202,7 +202,7 @@ fun StartPage(navController: NavController){
                 ){
                     Text(
                         text = "Login",
-                        color = PrimaryText,
+                        color = PrimaryWhite,
                         style = MaterialTheme.typography.h1,
                         fontSize = 15.sp,
                         fontFamily = SemiBoldFont,
