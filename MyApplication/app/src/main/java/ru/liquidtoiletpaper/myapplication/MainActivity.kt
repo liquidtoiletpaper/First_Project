@@ -21,6 +21,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import ru.liquidtoiletpaper.myapplication.screens.*
+import ru.liquidtoiletpaper.myapplication.screens.profileScreens.MyPurchases
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 class MainActivity : ComponentActivity() {
@@ -56,6 +58,12 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = "mainPage") {
                         composable("mainPage") { MainPage(navController) }
+                        composable("homeScreen") { HomeScreen() }
+                        composable("catalogScreen") { CatalogScreen(navController) }
+                        composable("favoritesScreen") { FavoritesScreen() }
+                        composable("cartScreen") { CartScreen(navController) }
+                        composable("profileScreen") { ProfileScreen() }
+                        composable("myPurchasesScreen") { MyPurchases(navController) }
                     }
                     MainPage(navController)
                 }

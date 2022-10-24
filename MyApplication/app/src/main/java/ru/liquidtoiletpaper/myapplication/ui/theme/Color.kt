@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.Color
 val PrimaryPageBackground = Color(0xFF363940)
 val AlternativePrimaryBackground = Color(0xff212226)
 val PrimaryWhite = Color(0xffFFFFFF)
+val LowerPrimaryText = Color(0xffdfdfdf)
 val SecondaryText = Color(0xFFbbbbbb)
 val PrimaryButton = Color(0xFF5865f2)
 val SecondaryButton = Color(0xff4f535c)

@@ -17,13 +17,13 @@ fun BottomNavGraph(navController: NavHostController) {
             HomeScreen()
         }
         composable(route = BottomBarScreen.Catalog.route){
-            CatalogScreen()
+            CatalogScreen(navController)
         }
         composable(route = BottomBarScreen.Favorites.route){
             FavoritesScreen()
         }
         composable(route = BottomBarScreen.Cart.route){
-            CartScreen()
+            CartScreen(navController)
         }
         composable(route = BottomBarScreen.Profile.route){
             ProfileScreen()

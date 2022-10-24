@@ -1,9 +1,9 @@
-package ru.liquidtoiletpaper.myapplication.screens
+package ru.liquidtoiletpaper.myapplication.screens.profileScreens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,7 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 @Composable
-fun CartScreen(navController: NavController) {
+fun MyPurchases(navController: NavController){
     val navController = rememberNavController()
     Scaffold(
         topBar = {
@@ -23,14 +23,14 @@ fun CartScreen(navController: NavController) {
                 backgroundColor = DarkAppBarBackground,
                 contentColor = Color.White,
 
-            ) {
+                ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Cart",
+                        text = "Purchases",
                         color = PrimaryWhite,
                         style = MaterialTheme.typography.h1,
                         fontSize = 16.sp,
@@ -50,7 +50,7 @@ fun CartScreen(navController: NavController) {
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Your cart is empty",
+                text = "You have no purchases",
                 color = PrimaryWhite,
                 style = MaterialTheme.typography.h1,
                 fontSize = 25.sp,
@@ -58,7 +58,7 @@ fun CartScreen(navController: NavController) {
                 textAlign = TextAlign.Center
             )
             Text(
-                text = "Use catalog to choose products",
+                text = "Choose products from catalog",
                 maxLines = 2,
                 color = LowerPrimaryText,
                 style = MaterialTheme.typography.body1,

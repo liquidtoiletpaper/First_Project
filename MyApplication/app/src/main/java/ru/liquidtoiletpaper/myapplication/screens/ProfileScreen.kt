@@ -27,13 +27,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
 import ru.liquidtoiletpaper.myapplication.MainActivity
 import ru.liquidtoiletpaper.myapplication.StartActivity
+import ru.liquidtoiletpaper.myapplication.screens.profileScreens.MyPurchases
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 @Composable
 fun ProfileScreen() {
-    val activity = (LocalContext.current as? Activity)
-    val context = LocalContext.current
     val navController = rememberNavController()
+    val activity = (LocalContext.current as? Activity)
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -71,7 +71,7 @@ fun ProfileScreen() {
                 modifier = Modifier
                     .padding(top = 5.dp)
                     .clickable {
-
+                        navController.navigate("myPurchasesScreen")
                     }
             ) {
                 Column(
