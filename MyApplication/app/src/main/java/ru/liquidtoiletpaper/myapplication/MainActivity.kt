@@ -10,12 +10,16 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -55,17 +59,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = "mainPage") {
-                        composable("mainPage") { MainPage(navController) }
-                        composable("homeScreen") { HomeScreen() }
-                        composable("catalogScreen") { CatalogScreen(navController) }
-                        composable("favoritesScreen") { FavoritesScreen() }
-                        composable("cartScreen") { CartScreen(navController) }
-                        composable("profileScreen") { ProfileScreen() }
-                        composable("myPurchasesScreen") { MyPurchases(navController) }
-                    }
-                    MainPage(navController)
+                    MainPage()
                 }
                 LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
             }
@@ -74,7 +68,21 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainPage(navController : NavController) {
+fun Navigation(navController: NavHostController) {
+    NavHost(navController = navController, startDestination = "mainScreen") {
+        composable("mainScreen") { MainPage() }
+        composable("homeScreen") { HomeScreen() }
+        composable("catalogScreen") { CatalogScreen() }
+        composable("favoritesScreen") { FavoritesScreen() }
+        composable("cartScreen") { CartScreen() }
+        composable("profileScreen") { ProfileScreen() }
+        composable("myPurchasesScreen") { MyPurchases() }
+    }
+}
+
+@Composable
+fun MainPage() {
+    val context = LocalContext.current
     val navController = rememberNavController()
     var key = false
     fun validate(length: Int, minLength: Int, maxLength: Int) {
@@ -147,64 +155,86 @@ fun MainPage(navController : NavController) {
                 }
                  */
             },
-            content = {
-                BottomNavGraph(navController = navController)
-            },
             bottomBar = {
-                BottomBar(navController = navController)
+                BottomNavigationBar(
+                    items = listOf(
+                        BottomNavItem(
+                            title = "Home",
+                            route = "homeScreen",
+                            icon = Icons.Default.Home
+                        ),
+                        BottomNavItem(
+                            title = "Catalog",
+                            route = "catalogScreen",
+                            icon = Icons.Default.List
+                        ),
+                        BottomNavItem(
+                            title = "Favs",
+                            route = "favoritesScreen",
+                            icon = Icons.Default.Favorite
+                        ),
+                        BottomNavItem(
+                            title = "Cart",
+                            route = "cartScreen",
+                            icon = Icons.Default.ShoppingCart
+                        ),
+                        BottomNavItem(
+                            title = "Profile",
+                            route = "profileScreen",
+                            icon = Icons.Default.Person
+                        )
+                    ),
+                    navController = navController,
+                    onItemClick = {
+                        navController.navigate(it.route)
+                    }
+                )
             },
-        )
+        ) {
+            Navigation(navController = navController)
+        }
     }
 }
 
+
+
 @Composable
-fun BottomBar(navController: NavHostController){
-    val screens = listOf(
-        BottomBarScreen.Home,
-        BottomBarScreen.Catalog,
-        BottomBarScreen.Favorites,
-        BottomBarScreen.Cart,
-        BottomBarScreen.Profile
-    )
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
-    
+fun BottomNavigationBar(
+    items: List<BottomNavItem>,
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    onItemClick: (BottomNavItem) -> Unit
+){
+    val backStackEntry = navController.currentBackStackEntryAsState()
     BottomNavigation(
+        modifier = modifier,
         backgroundColor = DarkAppBarBackground,
-        contentColor = PrimaryWhite
+        contentColor = PrimaryWhite,
+        elevation = 5.dp
     ) {
-        screens.forEach { screen ->
-            AddItem(
-                screen = screen,
-                currentDestination = currentDestination,
-                navController = navController
+        items.forEach { item ->
+            val selected = item.route == backStackEntry.value?.destination?.route
+            BottomNavigationItem(
+                selected = item.route == navController.currentDestination?.route,
+                onClick = { onItemClick(item) },
+                selectedContentColor = PrimaryWhite,
+                unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
+                icon = {
+                    Column(horizontalAlignment = CenterHorizontally) {
+                        Icon(
+                            imageVector = item.icon,
+                            contentDescription = item.title
+                        )
+                        Text(
+                            text = item.title,
+                            textAlign = TextAlign.Center,
+                            fontFamily = NormalFont,
+                            style = MaterialTheme.typography.body1,
+                            fontSize = 11.sp
+                        )
+                    }
+                }
             )
         }
     }
-}
-
-@Composable
-fun RowScope.AddItem(
-    screen: BottomBarScreen,
-    currentDestination: NavDestination?,
-    navController: NavHostController
-    ) {
-    BottomNavigationItem(
-        label = {
-            Text(text = screen.title)
-        },
-        icon = {
-            Icon(
-                imageVector = screen.icon,
-                contentDescription = ""
-            )
-        },
-        selected = currentDestination?.hierarchy?.any {
-            it.route == screen.route
-        } == true,
-        unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
-        onClick = {
-            navController.navigate(screen.route)
-        }
-    )
 }

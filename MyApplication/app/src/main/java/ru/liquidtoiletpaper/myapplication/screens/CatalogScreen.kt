@@ -6,7 +6,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun CatalogScreen(navController: NavController) {
+fun CatalogScreen() {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = {

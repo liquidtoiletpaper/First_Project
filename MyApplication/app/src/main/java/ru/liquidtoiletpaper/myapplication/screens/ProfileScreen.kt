@@ -1,10 +1,8 @@
 package ru.liquidtoiletpaper.myapplication.screens
 
 import android.app.Activity
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,20 +16,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
-import ru.liquidtoiletpaper.myapplication.MainActivity
 import ru.liquidtoiletpaper.myapplication.StartActivity
-import ru.liquidtoiletpaper.myapplication.screens.profileScreens.MyPurchases
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 @Composable
 fun ProfileScreen() {
+    val context = LocalContext.current
     val navController = rememberNavController()
     val activity = (LocalContext.current as? Activity)
     Column(
@@ -71,6 +67,7 @@ fun ProfileScreen() {
                 modifier = Modifier
                     .padding(top = 5.dp)
                     .clickable {
+                        //navController.navigate("myPurchasesScreen")
                         navController.navigate("myPurchasesScreen")
                     }
             ) {

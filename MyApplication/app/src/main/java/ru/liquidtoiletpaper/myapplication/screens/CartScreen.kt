@@ -10,19 +10,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 @Composable
-fun CartScreen(navController: NavController) {
+fun CartScreen() {
     val navController = rememberNavController()
     Scaffold(
         topBar = {
             TopAppBar(
                 backgroundColor = DarkAppBarBackground,
-                contentColor = Color.White,
-
+                contentColor = Color.White
             ) {
                 Column(
                     modifier = Modifier
@@ -38,7 +36,6 @@ fun CartScreen(navController: NavController) {
                         textAlign = TextAlign.Center
                     )
                 }
-
             }
         },
     ) {

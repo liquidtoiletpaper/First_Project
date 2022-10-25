@@ -15,7 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 @Composable
-fun MyPurchases(navController: NavController){
+fun MyPurchases(){
     val navController = rememberNavController()
     Scaffold(
         topBar = {
