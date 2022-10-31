@@ -171,7 +171,7 @@ fun LoginPage(navController: NavController){
                     shape = RoundedCornerShape(5.dp),
                     trailingIcon = {
                         if (isErrorName) {
-                            Icon(Icons.Filled.Warning, "error", tint = Error)
+                            Icon(Icons.Filled.Warning, "error", tint = ErrorColor)
                         }
                     },
                     isError = isErrorName,

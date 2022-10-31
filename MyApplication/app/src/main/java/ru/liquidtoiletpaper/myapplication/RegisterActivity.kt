@@ -170,7 +170,7 @@ fun RegisterPage1(navController: NavController){
                     shape = RoundedCornerShape(5.dp),
                     trailingIcon = {
                         if (isErrorEmail) {
-                            Icon(Icons.Filled.Warning, "error", tint = Error)
+                            Icon(Icons.Filled.Warning, "error", tint = ErrorColor)
                         }
                     },
                     isError = isErrorEmail,
@@ -307,7 +307,7 @@ fun RegisterPage2(navController: NavController){
                     shape = RoundedCornerShape(5.dp),
                     trailingIcon = {
                         if (isErrorName) {
-                            Icon(Icons.Filled.Warning, "error", tint = Error)
+                            Icon(Icons.Filled.Warning, "error", tint = ErrorColor)
                         }
                     },
                     isError = isErrorName,
@@ -539,7 +539,7 @@ fun RegisterPage3(navController: NavController){
                     shape = RoundedCornerShape(5.dp),
                     trailingIcon = {
                         if (isErrorDate) {
-                            Icon(Icons.Filled.Warning, "error", tint = Error)
+                            Icon(Icons.Filled.Warning, "error", tint = ErrorColor)
                         }
                     },
                     isError = isErrorDate,
