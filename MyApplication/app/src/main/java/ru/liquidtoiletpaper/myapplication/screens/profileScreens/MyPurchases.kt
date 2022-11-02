@@ -28,6 +28,7 @@ import ru.liquidtoiletpaper.myapplication.ui.theme.*
 @Preview
 @Composable
 fun MyPurchases(){
+    val check = true
     val navController = rememberNavController()
     Scaffold(
         modifier = Modifier
@@ -82,7 +83,7 @@ fun MyPurchases(){
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            if(false){
+            if(!check){
                 Text(
                     text = "You have no purchases",
                     color = PrimaryWhite,
@@ -127,168 +128,93 @@ fun MyPurchases(){
                         textAlign = TextAlign.Center,
                     )
                 }
-            } else {
             }
-            Column(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth()
-                    .padding(top = 20.dp),
-            ){
+            else {
                 Column(
                     modifier = Modifier
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = rememberRipple(
-                                color = Color.Black
-                            ),
-                            onClick = {  },
-                        )
-                ){
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 10.dp),
-                        ) {
-                        Column(
-                            modifier = Modifier
-                                .padding(start = 20.dp, end = 10.dp, top = 5.dp),
-                            verticalArrangement = Arrangement.Center
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Close,
-                                contentDescription = "Canceled",
-                                tint = ErrorColor,
-                            )
-                        }
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalArrangement = Arrangement.Center
-                        ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    text = "№ 1 111 111 111",
-                                    textAlign = TextAlign.Start,
-                                    fontFamily = SemiBoldFont,
-                                    style = MaterialTheme.typography.h1,
-                                    fontSize = 16.sp,
-                                    color = PrimaryWhite,
-                                    letterSpacing = 1.sp,
-                                    modifier = Modifier
-                                        .weight(2f)
-                                )
-                                Text(
-                                    text = "01/01/2000",
-                                    fontFamily = NormalFont,
-                                    style = MaterialTheme.typography.body1,
-                                    fontSize = 12.sp,
-                                    color = SecondaryText,
-                                    modifier = Modifier
-                                        .weight(1f),
-                                )
-                                Text(
-                                    text = "100 $",
-                                    fontFamily = SemiBoldFont,
-                                    style = MaterialTheme.typography.h1,
-                                    fontSize = 14.sp,
-                                    color = PrimaryWhite,
-                                    textAlign = TextAlign.End,
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .padding(end = 20.dp),
-                                    letterSpacing = 1.sp
-                                )
-                            }
-                            Text(
-                                text = "Canceled",
-                                textAlign = TextAlign.Start,
-                                fontFamily = NormalFont,
-                                style = MaterialTheme.typography.body1,
-                                fontSize = 12.sp,
-                                color = DisabledText
-                            )
-                        }
-                    }
-                }
+                        .fillMaxHeight()
+                        .fillMaxWidth()
+                        .padding(top = 20.dp),
+                ) {
+                    MyPurchasesItem()
 
-                Column(
-                    modifier = Modifier
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = rememberRipple(
-                                color = Color.Black
-                            ),
-                            onClick = {  },
-                        )
-                ){
-                    Row(
+                    Column(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 10.dp),
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .padding(start = 20.dp, end = 10.dp, top = 5.dp),
-                            verticalArrangement = Arrangement.Center
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Done,
-                                contentDescription = "Accepted",
-                                tint = PrimaryGreen,
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = rememberRipple(
+                                    color = Color.Black
+                                ),
+                                onClick = { },
                             )
-                        }
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalArrangement = Arrangement.Center
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 10.dp),
                         ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically
+                            Column(
+                                modifier = Modifier
+                                    .padding(start = 20.dp, end = 10.dp, top = 5.dp),
+                                verticalArrangement = Arrangement.Center
                             ) {
-                                Text(
-                                    text = "№ 2 222 222 222",
-                                    fontFamily = SemiBoldFont,
-                                    style = MaterialTheme.typography.h1,
-                                    fontSize = 16.sp,
-                                    color = PrimaryWhite,
-                                    modifier = Modifier
-                                        .weight(2f)
-                                        .fillMaxWidth()
-                                        .drawWithContent { drawContent() },
-                                    letterSpacing = 1.sp,
-                                    maxLines = 1
+                                Icon(
+                                    imageVector = Icons.Filled.Done,
+                                    contentDescription = "Accepted",
+                                    tint = PrimaryGreen,
                                 )
+                            }
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = "№ 2 222 222 222",
+                                        fontFamily = SemiBoldFont,
+                                        style = MaterialTheme.typography.h1,
+                                        fontSize = 16.sp,
+                                        color = PrimaryWhite,
+                                        modifier = Modifier
+                                            .weight(2f)
+                                            .fillMaxWidth()
+                                            .drawWithContent { drawContent() },
+                                        letterSpacing = 1.sp,
+                                        maxLines = 1
+                                    )
+                                    Text(
+                                        text = "02/02/2002",
+                                        fontFamily = NormalFont,
+                                        style = MaterialTheme.typography.body1,
+                                        fontSize = 12.sp,
+                                        color = SecondaryText,
+                                        modifier = Modifier
+                                            .weight(1f),
+                                    )
+                                    Text(
+                                        text = "50 $",
+                                        fontFamily = SemiBoldFont,
+                                        style = MaterialTheme.typography.h1,
+                                        fontSize = 14.sp,
+                                        color = PrimaryWhite,
+                                        textAlign = TextAlign.End,
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .padding(end = 20.dp),
+                                        letterSpacing = 1.sp
+                                    )
+                                }
                                 Text(
-                                    text = "02/02/2002",
+                                    text = "Accepted",
+                                    textAlign = TextAlign.Start,
                                     fontFamily = NormalFont,
                                     style = MaterialTheme.typography.body1,
                                     fontSize = 12.sp,
-                                    color = SecondaryText,
-                                    modifier = Modifier
-                                        .weight(1f),
-                                )
-                                Text(
-                                    text = "50 $",
-                                    fontFamily = SemiBoldFont,
-                                    style = MaterialTheme.typography.h1,
-                                    fontSize = 14.sp,
-                                    color = PrimaryWhite,
-                                    textAlign = TextAlign.End,
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .padding(end = 20.dp),
-                                    letterSpacing = 1.sp
+                                    color = DisabledText
                                 )
                             }
-                            Text(
-                                text = "Accepted",
-                                textAlign = TextAlign.Start,
-                                fontFamily = NormalFont,
-                                style = MaterialTheme.typography.body1,
-                                fontSize = 12.sp,
-                                color = DisabledText
-                            )
                         }
                     }
                 }
