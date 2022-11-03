@@ -21,14 +21,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import ru.liquidtoiletpaper.myapplication.StartActivity
+import ru.liquidtoiletpaper.myapplication.screens.profileScreens.CitiesList
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(navController: NavHostController) {
     val context = LocalContext.current
-    val navController = rememberNavController()
     val activity = (LocalContext.current as? Activity)
     Column(
         modifier = Modifier
@@ -48,7 +49,7 @@ fun ProfileScreen() {
                     .wrapContentHeight(),
             ) {
                 Text(
-                    text = "Alexander Liquid",
+                    text = "Name Fullname",
                     color = PrimaryWhite,
                     style = MaterialTheme.typography.h1,
                     fontSize = 26.sp,
@@ -124,7 +125,7 @@ fun ProfileScreen() {
                 modifier = Modifier
                     .padding(top = 5.dp)
                     .clickable {
-
+                        navController.navigate("cityScreen")
                     }
             ) {
                 Column(
@@ -161,7 +162,7 @@ fun ProfileScreen() {
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "Moscow",
+                                text = CitiesList.GetSelected(),
                                 maxLines = 1,
                                 color = DisabledText,
                                 style = MaterialTheme.typography.body1,

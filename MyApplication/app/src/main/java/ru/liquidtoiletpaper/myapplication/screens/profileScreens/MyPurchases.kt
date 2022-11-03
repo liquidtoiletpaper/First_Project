@@ -22,14 +22,13 @@ import androidx.compose.ui.text.style.TextAlign.Companion.Justify
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
-@Preview
 @Composable
-fun MyPurchases(){
+fun MyPurchases(navController: NavHostController){
     val check = true
-    val navController = rememberNavController()
     Scaffold(
         modifier = Modifier
             .background(PrimaryPageBackground),
@@ -39,7 +38,6 @@ fun MyPurchases(){
                 contentColor = Color.White,
                 ) {
                 IconButton(
-                    modifier = Modifier.padding(start = 20.dp),
                     onClick = { navController.navigateUp() }
                 ) {
                     Icon(
@@ -66,12 +64,6 @@ fun MyPurchases(){
                         letterSpacing = 0.5.sp
                     )
                 }
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    modifier = Modifier.padding(end = 20.dp),
-                    contentColorFor(backgroundColor = PrimaryWhite),
-                )
             }
         },
     ) {
@@ -222,3 +214,11 @@ fun MyPurchases(){
         }
     }
 }
+
+/*
+@Preview
+@Composable
+fun MyPurchasesPreview() {
+    MyPurchases()
+}
+ */

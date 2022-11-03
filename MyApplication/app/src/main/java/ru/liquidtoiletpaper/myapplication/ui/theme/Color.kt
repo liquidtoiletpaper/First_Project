@@ -14,7 +14,7 @@ val PrimaryTextField = Color(0xffa4b0be)
 val TextFieldBackground = Color(0xff212226)
 val DarkAppBarBackground = Color(0xff212226)
 val PrimaryGreen = Color(0xff27ae60)
-val PrimaryBorder = Color(0xff38393e)
+val PrimaryBorder = Color(0xff42454c)
 val PrimarySelected = Color(0xff3498db)
 
 val ErrorColor = Color(0xffd84a4e)

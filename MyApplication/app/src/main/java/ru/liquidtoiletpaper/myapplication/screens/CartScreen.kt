@@ -10,12 +10,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 @Composable
-fun CartScreen() {
-    val navController = rememberNavController()
+fun CartScreen(navController: NavHostController) {
     Scaffold(
         topBar = {
             TopAppBar(
