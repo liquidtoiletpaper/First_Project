@@ -28,6 +28,8 @@ import androidx.navigation.compose.rememberNavController
 import ru.liquidtoiletpaper.myapplication.screens.*
 import ru.liquidtoiletpaper.myapplication.screens.profileScreens.City
 import ru.liquidtoiletpaper.myapplication.screens.profileScreens.MyPurchases
+import ru.liquidtoiletpaper.myapplication.screens.profileScreens.MyPurchasesOrder
+import ru.liquidtoiletpaper.myapplication.screens.profileScreens.ProfileInfo
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 class MainActivity : ComponentActivity() {
@@ -78,7 +80,9 @@ fun Navigation(navController: NavHostController) {
         composable("cartScreen") { CartScreen(navController) }
         composable("profileScreen") { ProfileScreen(navController) }
         composable("myPurchasesScreen") { MyPurchases(navController) }
+        composable("myPurchasesOrderScreen") { MyPurchasesOrder(navController) }
         composable("cityScreen") { City(navController) }
+        composable("profileInfoScreen") { ProfileInfo(navController) }
     }
 }
 

@@ -22,14 +22,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import ru.liquidtoiletpaper.myapplication.StartActivity
 import ru.liquidtoiletpaper.myapplication.screens.profileScreens.CitiesList
+import ru.liquidtoiletpaper.myapplication.screens.profileScreens.MyPurchasesList
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 @Composable
 fun ProfileScreen(navController: NavHostController) {
-    val context = LocalContext.current
     val activity = (LocalContext.current as? Activity)
     Column(
         modifier = Modifier
@@ -101,7 +100,7 @@ fun ProfileScreen(navController: NavHostController) {
                                 .padding(start = 20.dp)
                         )
                         Text(
-                            text = "0",
+                            text = MyPurchasesList.purchases.size.toString(),
                             maxLines = 1,
                             color = DisabledText,
                             style = MaterialTheme.typography.body1,
@@ -162,7 +161,7 @@ fun ProfileScreen(navController: NavHostController) {
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = CitiesList.GetSelected(),
+                                text = CitiesList.getSelected(),
                                 maxLines = 1,
                                 color = DisabledText,
                                 style = MaterialTheme.typography.body1,
@@ -230,7 +229,7 @@ fun ProfileScreen(navController: NavHostController) {
                 modifier = Modifier
                     .padding(top = 5.dp)
                     .clickable {
-
+                        navController.navigate("ProfileInfoScreen")
                     }
             ) {
                 Column(
@@ -251,7 +250,7 @@ fun ProfileScreen(navController: NavHostController) {
                             colorFilter = ColorFilter.tint(PrimaryWhite)
                         )
                         Text(
-                            text = "Personal info",
+                            text = "Profile info",
                             maxLines = 1,
                             color = PrimaryWhite,
                             style = MaterialTheme.typography.body1,

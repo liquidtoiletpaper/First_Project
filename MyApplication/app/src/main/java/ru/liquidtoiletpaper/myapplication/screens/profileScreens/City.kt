@@ -75,13 +75,7 @@ fun City(navController: NavHostController) {
                     .fillMaxWidth()
                     .padding(top = 10.dp),
             ){
-                var selectedCity = ""
-                var cities = CitiesList.cities
-                for (city in cities) {
-                    if(city.selected) {
-                        selectedCity = city.city
-                    }
-                }
+                val cities = CitiesList.cities
                 Column(
                     modifier = Modifier
                         .clickable(
@@ -112,7 +106,7 @@ fun City(navController: NavHostController) {
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
-                                    text = selectedCity,
+                                    text = CitiesList.getSelected(),
                                     fontFamily = SemiBoldFont,
                                     style = MaterialTheme.typography.h1,
                                     fontSize = 16.sp,
@@ -142,7 +136,6 @@ fun City(navController: NavHostController) {
                     ) {
 
                     }
-                    //cities.remove(CitiesItem(city = selectedCity, selected = true))
                 }
                 for (j in cities) {
                     if(!j.selected){
@@ -155,7 +148,7 @@ fun City(navController: NavHostController) {
                                     ),
                                     onClick = {
                                         for (k in cities) {
-                                            if (k.city == selectedCity) {
+                                            if (k.city == CitiesList.getSelected()) {
                                                 k.selected = false
                                             }
                                         }

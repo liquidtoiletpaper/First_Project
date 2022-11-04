@@ -24,13 +24,13 @@ class CitiesList() {
                 selected = false
             )
         )
-        fun GetSelected(): String {
+        fun getSelected(): String {
             for(i in cities){
                 if (i.selected) {
                     return i.city
                 }
             }
-            return "null"
+            return "Moscow"
         }
     }
 }

@@ -30,6 +30,6 @@ val Typography = Typography(
         fontFamily = fonts,
         fontWeight = FontWeight.Normal,
         fontSize = 15.sp,
-        color = PrimaryTextField
+        color = PrimaryWhite
     ),
 )
