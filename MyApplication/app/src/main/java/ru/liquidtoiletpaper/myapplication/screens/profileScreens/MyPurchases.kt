@@ -147,7 +147,7 @@ fun MyPurchases(navController: NavHostController){
                                     indication = rememberRipple(
                                         color = Color.Black
                                     ),
-                                    onClick = { ->
+                                    onClick = {
                                         navController.navigate("MyPurchasesOrderScreen")
                                         //return@clickable purchaseInfo
                                     },
@@ -238,15 +238,7 @@ fun MyPurchases(navController: NavHostController){
                                 }
                             }
                         }
-                        // BORDERLINE
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(height = 2.dp)
-                                .border(width = 2.dp, color = PrimaryBorder)
-                        ) {
-
-                        }
+                        BorderLine()
                     }
                 }
             }

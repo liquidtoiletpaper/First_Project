@@ -26,10 +26,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ru.liquidtoiletpaper.myapplication.screens.*
-import ru.liquidtoiletpaper.myapplication.screens.profileScreens.City
-import ru.liquidtoiletpaper.myapplication.screens.profileScreens.MyPurchases
-import ru.liquidtoiletpaper.myapplication.screens.profileScreens.MyPurchasesOrder
-import ru.liquidtoiletpaper.myapplication.screens.profileScreens.ProfileInfo
+import ru.liquidtoiletpaper.myapplication.screens.profileScreens.*
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 class MainActivity : ComponentActivity() {
@@ -83,6 +80,8 @@ fun Navigation(navController: NavHostController) {
         composable("myPurchasesOrderScreen") { MyPurchasesOrder(navController) }
         composable("cityScreen") { City(navController) }
         composable("profileInfoScreen") { ProfileInfo(navController) }
+        composable("helpScreen") { Help(navController) }
+        composable("reviewsScreen") { Reviews(navController) }
     }
 }
 
@@ -111,55 +110,7 @@ fun MainPage() {
         }
         Scaffold(
             topBar = {
-                /*
-                TopAppBar(
-                    backgroundColor = DarkAppBarBackground,
-                    contentColor = Color.White,
-                    contentPadding = PaddingValues(vertical = 5.dp)
-                ) {
-                    var isErrorSearch by rememberSaveable { mutableStateOf(false) }
-                    var searchText by remember { mutableStateOf("") }
-                    OutlinedTextField(
-                        colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = TextFieldBackground,
-                            cursorColor = Color.White,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                        ),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp)
-                            .padding(top = 5.dp)
-                            .border(width = 1.dp, color = SecondaryButton, shape = Shapes.small),
-                        singleLine = true,
 
-                        value = searchText,
-                        onValueChange = { searchText = it.take(128) },
-                        placeholder = {
-                            Image(
-                                imageVector = Icons.Filled.Search,
-                                contentDescription = "",
-                                colorFilter = ColorFilter.tint(PrimaryTextField)
-                            )
-                            Text(
-                                "Search",
-                                fontFamily = NormalFont,
-                                modifier = Modifier
-                                    .padding(start = 30.dp)
-                            )
-                        },
-                        shape = RoundedCornerShape(5.dp),
-                        isError = isErrorSearch,
-                        keyboardActions = KeyboardActions {
-                            validate(
-                                searchText.length,
-                                6,
-                                72
-                            ); isErrorSearch = key
-                        }
-                    )
-                }
-                 */
             },
             bottomBar = {
                 BottomNavigationBar(

@@ -75,7 +75,7 @@ fun ProfileScreen(navController: NavHostController) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(DarkAppBarBackground)
-                        .padding(horizontal = 20.dp)
+                        .padding(start = 20.dp, end = 10.dp)
                         .padding(vertical = 10.dp),
                 ) {
                     Row(
@@ -131,7 +131,7 @@ fun ProfileScreen(navController: NavHostController) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(DarkAppBarBackground)
-                        .padding(horizontal = 20.dp)
+                        .padding(start = 20.dp, end = 10.dp)
                         .padding(vertical = 10.dp),
                 ) {
                     Row(
@@ -184,14 +184,14 @@ fun ProfileScreen(navController: NavHostController) {
                 modifier = Modifier
                     .padding(top = 5.dp)
                     .clickable {
-
+                        navController.navigate("reviewsScreen")
                     }
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(DarkAppBarBackground)
-                        .padding(horizontal = 20.dp)
+                        .padding(start = 20.dp, end = 10.dp)
                         .padding(vertical = 10.dp),
                 ) {
                     Row(
@@ -236,7 +236,7 @@ fun ProfileScreen(navController: NavHostController) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(DarkAppBarBackground)
-                        .padding(horizontal = 20.dp)
+                        .padding(start = 20.dp, end = 10.dp)
                         .padding(vertical = 10.dp),
                 ) {
                     Row(
@@ -274,14 +274,14 @@ fun ProfileScreen(navController: NavHostController) {
                 modifier = Modifier
                     .padding(top = 5.dp)
                     .clickable {
-
+                        navController.navigate("helpScreen")
                     }
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(DarkAppBarBackground)
-                        .padding(horizontal = 20.dp)
+                        .padding(start = 20.dp, end = 10.dp)
                         .padding(vertical = 10.dp),
                 ) {
                     Row(
@@ -399,7 +399,7 @@ fun ProfileScreen(navController: NavHostController) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(DarkAppBarBackground)
-                            .padding(horizontal = 20.dp)
+                            .padding(start = 20.dp, end = 10.dp)
                             .padding(vertical = 10.dp),
                     ) {
                         Row(

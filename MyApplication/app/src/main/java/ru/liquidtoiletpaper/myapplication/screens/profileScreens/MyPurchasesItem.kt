@@ -4,5 +4,6 @@ data class MyPurchasesItem(
     val status: Boolean,
     val index: String,
     val date: String,
-    val value: Int
+    val value: Int,
+    var amount: Int
 )

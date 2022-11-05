@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Github Repositories/First_Project/MyApplication/app/src/main/res/drawable/icon_accept.xml" value="0.1" />
+        <entry key="..\:/Github Repositories/First_Project/MyApplication/app/src/main/res/drawable/icon_cancel.xml" value="0.1" />
         <entry key="..\:/Users/lucky/AndroidStudioProjects/MyApplication/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.128" />
         <entry key="..\:/Users/lucky/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/ic_imagecut.xml" value="0.1" />
         <entry key="..\:/Users/lucky/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/ic_launcher_background.xml" value="0.128" />

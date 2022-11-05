@@ -122,15 +122,7 @@ fun ProfileInfo(navController: NavHostController) {
                     )
                 }
             )
-            // BORDERLINE
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(height = 2.dp)
-                    .border(width = 2.dp, color = PrimaryBorder)
-            ) {
-
-            }
+            BorderLine()
 
             var fullNameText by rememberSaveable { mutableStateOf("Zelenskiy") }
             var isErrorFullName by rememberSaveable { mutableStateOf(false) }
@@ -172,72 +164,85 @@ fun ProfileInfo(navController: NavHostController) {
                     )
                 }
             )
-            // BORDERLINE
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(height = 2.dp)
-                    .border(width = 2.dp, color = PrimaryBorder)
-            ) {
+            BorderLine()
 
-            }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(bottom = 10.dp)
             ) {
-                /*
-                var showMenu by remember { mutableStateOf(false) }
-                val items = listOf("Male", "Female")
-                var selectedIndex by remember { mutableStateOf(0) }
-                DropdownMenu(
-                    expanded = showMenu,
-                    onDismissRequest = { showMenu = false },
-                    modifier = Modifier
-                        .background(PrimaryTextField)
-                ) {
-                    items.forEachIndexed {
-                        DropdownMenuItem(onClick = { /*TODO*/ }) {
-                            Text(
-                                text = "Male",
-                                fontFamily = SemiBoldFont,
-                                style = MaterialTheme.typography.h1,
-                                fontSize = 12.sp,
-                                color = PrimaryWhite,
-                                textAlign = TextAlign.End,
-                                modifier = Modifier,
-                                letterSpacing = 1.sp,
-                                maxLines = 1
-                            )
-                        }
-                        DropdownMenuItem(onClick = { /*TODO*/ }) {
-                            Text(
-                                text = "Female",
-                                fontFamily = SemiBoldFont,
-                                style = MaterialTheme.typography.h1,
-                                fontSize = 12.sp,
-                                color = PrimaryWhite,
-                                textAlign = TextAlign.End,
-                                modifier = Modifier,
-                                letterSpacing = 1.sp,
-                                maxLines = 1
-                            )
-                        }
-                    }
-                }
-                 */
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                 ){
                     Box(
-                        modifier = Modifier.weight(1f).padding(start = 20.dp, end = 10.dp)
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(start = 20.dp, end = 10.dp)
                     ){ DropdownMenu() }
                     Box(
-                        modifier = Modifier.weight(1f).padding(start = 10.dp, end = 20.dp)
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(start = 10.dp, end = 20.dp)
                     ){ MyDatePicker() }
                 }
             }
+            BorderLine()
+
+            var emailText by rememberSaveable { mutableStateOf("zelenskiemail@mail.com") }
+            var isErrorEmail by rememberSaveable { mutableStateOf(false) }
+            TextField(
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = TextFieldBackground,
+                    cursorColor = Color.Gray,
+                    disabledLabelColor = DisabledText,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedLabelColor = PrimaryWhite,
+                    textColor = PrimaryWhite,
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+                    .padding(vertical = 10.dp),
+                singleLine = true,
+                value = emailText,
+                onValueChange = { emailText = it.take(24) },
+                shape = RoundedCornerShape(5.dp),
+                trailingIcon = {
+                    if (isErrorEmail) {
+                        Icon(Icons.Filled.Warning, "error", tint = ErrorColor)
+                    }
+                },
+                isError = isErrorEmail,
+                keyboardActions = KeyboardActions {
+                    validate(
+                        emailText.length,
+                        1,
+                        24
+                    ); isErrorEmail = key
+                },
+                label = {
+                    Text(
+                        text = "Email",
+                        fontFamily = NormalFont,
+                        color = PrimaryTextField
+                    )
+                }
+            )
         }
+    }
+}
+
+@Composable
+fun BorderLine() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(height = 2.dp)
+            .border(width = 2.dp, color = PrimaryBorder)
+    ) {
+
     }
 }
 
@@ -251,6 +256,11 @@ fun MyDatePicker() {
     val mMonth: Int
     val mDay: Int
     val mCalendar = Calendar.getInstance()
+    var mExpanded by remember { mutableStateOf(false) }
+    val icon = if (mExpanded)
+        Icons.Filled.KeyboardArrowUp
+    else
+        Icons.Filled.KeyboardArrowDown
 
     mYear = mCalendar.get(Calendar.YEAR)
     mMonth = mCalendar.get(Calendar.MONTH)
@@ -295,11 +305,11 @@ fun MyDatePicker() {
             )
         },
         shape = RoundedCornerShape(5.dp),
+        /*
         trailingIcon = {
-            if (isErrorDate) {
-                Icon(Icons.Filled.Warning, "error", tint = ErrorColor)
-            }
+            Icon(icon,"contentDescription",)
         },
+         */
         isError = isErrorDate,
         keyboardActions = KeyboardActions {
             validate(
@@ -360,23 +370,27 @@ fun DropdownMenu(){
                 Icon(icon,"contentDescription",)
             }
         )
-        DropdownMenu(
-            expanded = mExpanded,
-            onDismissRequest = { mExpanded = false },
-            modifier = Modifier
-                .width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })
-                .background(PrimaryTextField)
-        ) {
-            mGender.forEach { label ->
-                DropdownMenuItem(
-                    onClick = {
-                        mSelectedText = label
-                        mExpanded = false
-                    },
-                ) {
-                    Text(
-                        text = label,
-                    )
+        MaterialTheme(
+            colors = MaterialTheme.colors.copy(surface = TextFieldBackground),
+            shapes = MaterialTheme.shapes.copy(medium = RoundedCornerShape(5))
+        ){
+            DropdownMenu(
+                expanded = mExpanded,
+                onDismissRequest = { mExpanded = false },
+                modifier = Modifier
+                    .width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })
+            ) {
+                mGender.forEach { label ->
+                    DropdownMenuItem(
+                        onClick = {
+                            mSelectedText = label
+                            mExpanded = false
+                        },
+                    ) {
+                        Text(
+                            text = label,
+                        )
+                    }
                 }
             }
         }
