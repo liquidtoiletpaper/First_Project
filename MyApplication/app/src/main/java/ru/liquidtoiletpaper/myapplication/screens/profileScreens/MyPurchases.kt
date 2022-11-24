@@ -68,9 +68,10 @@ fun MyPurchases(navController: NavHostController){
                 }
             }
         },
-    ) {
+    ) { padding ->
         Column(
             modifier = Modifier
+                .padding(padding)
                 .fillMaxHeight()
                 .fillMaxWidth()
                 .background(PrimaryPageBackground),
@@ -203,7 +204,7 @@ fun MyPurchases(navController: NavHostController){
                                             color = SecondaryText,
                                         )
                                         Text(
-                                            text = "${i.value} ₽",
+                                            text = "${i.value} $",
                                             fontFamily = SemiBoldFont,
                                             style = MaterialTheme.typography.h1,
                                             fontSize = 12.sp,

@@ -3,8 +3,11 @@ package ru.liquidtoiletpaper.myapplication
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -25,6 +28,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+import com.android.volley.toolbox.Volley
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonObject
 import ru.liquidtoiletpaper.myapplication.screens.*
 import ru.liquidtoiletpaper.myapplication.screens.profileScreens.*
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
@@ -62,10 +74,16 @@ class MainActivity : ComponentActivity() {
                     MainPage()
                 }
                 LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+
             }
         }
     }
 }
+public
+
+
+
+
 
 @Composable
 fun Navigation(navController: NavHostController) {
@@ -85,9 +103,42 @@ fun Navigation(navController: NavHostController) {
     }
 }
 
+fun makeRequest(context: Context, url: String, parameters: Map<String, String>?, callback: (response: String?) -> Unit) {
+    val request = object : StringRequest(
+        Method.POST, url,
+        Response.Listener { response ->
+            callback.invoke(response)
+        },
+        Response.ErrorListener { error ->
+            println(error)
+        }) {
+        override fun getParams(): Map<String, String>? {
+            return parameters
+        }
+    }
+    VolleySingleton.getInstance(context).addToRequestQueue(request)
+}
+
 @Composable
 fun MainPage() {
     val context = LocalContext.current
+    fun requestUserData(id: Int) {
+        val url = "http:/tautaste.ru/getData"
+        val queue = Volley.newRequestQueue(context)
+        val request = StringRequest(
+            Request.Method.GET, url,
+            { //result ->
+                //println(result)
+                result -> Log.d("MyLog", "Result: $result")
+            },
+            { //error ->
+                error -> Log.d("MyLog", "Error: $error")
+                //println(error)
+            }
+        )
+        //queue.add(request)
+        VolleySingleton.getInstance(context).addToRequestQueue(request)
+    }
     val navController = rememberNavController()
     var key = false
     fun validate(length: Int, minLength: Int, maxLength: Int) {
@@ -144,11 +195,14 @@ fun MainPage() {
                     navController = navController,
                     onItemClick = {
                         navController.navigate(it.route)
+                        requestUserData(1)
                     }
                 )
             },
-        ) {
-            Navigation(navController = navController)
+        ) { padding ->
+            Column(Modifier.padding(padding)){
+                Navigation(navController = navController)
+            }
         }
     }
 }

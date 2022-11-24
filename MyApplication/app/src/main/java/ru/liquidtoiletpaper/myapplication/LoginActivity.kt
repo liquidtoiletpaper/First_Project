@@ -6,6 +6,7 @@ import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -28,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonObject
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 class LoginActivity : ComponentActivity() {
@@ -138,8 +141,8 @@ fun LoginPage(navController: NavController){
                         .padding(top = 15.dp)
                         .padding(horizontal = 20.dp)
                 )
-                var nameText by rememberSaveable { mutableStateOf("") }
-                var isErrorName by rememberSaveable { mutableStateOf(false) }
+                var emailText by rememberSaveable { mutableStateOf("") }
+                var isErrorEmail by rememberSaveable { mutableStateOf(false) }
                 var key = false
                 fun validate(length: Int, minLength: Int, maxLength: Int) {
                     if (length < minLength || length > maxLength) {
@@ -160,27 +163,28 @@ fun LoginPage(navController: NavController){
                         .padding(horizontal = 20.dp)
                         .padding(top = 10.dp),
                     singleLine = true,
-                    value = nameText,
-                    onValueChange = { nameText = it.take(24) },
+                    value = emailText,
+                    onValueChange = { emailText = it.take(24) },
                     placeholder = {
                         Text(
-                            text = "Nickname",
-                            fontFamily = NormalFont
+                            text = "Email",
+                            fontFamily = NormalFont,
+                            color = PrimaryTextField
                         )
                             },
                     shape = RoundedCornerShape(5.dp),
                     trailingIcon = {
-                        if (isErrorName) {
+                        if (isErrorEmail) {
                             Icon(Icons.Filled.Warning, "error", tint = ErrorColor)
                         }
                     },
-                    isError = isErrorName,
+                    isError = isErrorEmail,
                     keyboardActions = KeyboardActions {
                         validate(
-                            nameText.length,
+                            emailText.length,
                             1,
                             24
-                        ); isErrorName = key
+                        ); isErrorEmail = key
                     }
                 )
 
@@ -191,7 +195,7 @@ fun LoginPage(navController: NavController){
                 OutlinedTextField(
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = TextFieldBackground,
-                        cursorColor = androidx.compose.ui.graphics.Color.Black,
+                        cursorColor = androidx.compose.ui.graphics.Color.White,
                         focusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
                         unfocusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
                     ),
@@ -203,7 +207,13 @@ fun LoginPage(navController: NavController){
 
                     value = passwordText,
                     onValueChange = { passwordText = it.take(32) },
-                    placeholder = { Text("Password", fontFamily = NormalFont) },
+                    placeholder = {
+                        Text(
+                            "Password",
+                            fontFamily = NormalFont,
+                            color = PrimaryTextField
+                        )
+                    },
                     shape = RoundedCornerShape(5.dp),
                     visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
@@ -246,7 +256,7 @@ fun LoginPage(navController: NavController){
                     text = "Forgot password?",
                     fontFamily = NormalFont,
                     color = LinkText,
-                    fontSize = 12.sp
+                    fontSize = 12.sp,
                 )
                 Button(
                     colors = ButtonDefaults.buttonColors(
@@ -261,7 +271,17 @@ fun LoginPage(navController: NavController){
                         .padding(top = 20.dp),
                     shape = RoundedCornerShape(5.dp),
                     onClick = {
-                        context.startActivity(Intent(context, MainActivity::class.java))
+                        makeRequest(context, "http:/tautaste.ru/auth", mapOf("email" to emailText, "password" to passwordText)){ response ->
+                            val obj = Json.parseToJsonElement(response.toString()).jsonObject
+                            val status = obj["status"]!!.toString().replace("\"", "")
+                            if(status == "success") {
+                                context.startActivity(Intent(context, MainActivity::class.java))
+                            }else if (obj["code"]!!.toString() == "0"){
+                                Toast.makeText(context, "Данные введены неверно", Toast.LENGTH_SHORT).show()
+                            }else {
+                                Toast.makeText(context, "Что-то не так", Toast.LENGTH_SHORT).show()
+                            }
+                        }
                     },
                 ) {
                     Text(

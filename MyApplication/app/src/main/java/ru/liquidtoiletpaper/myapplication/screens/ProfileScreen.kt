@@ -30,6 +30,7 @@ import ru.liquidtoiletpaper.myapplication.ui.theme.*
 @Composable
 fun ProfileScreen(navController: NavHostController) {
     val activity = (LocalContext.current as? Activity)
+
     Column(
         modifier = Modifier
             .fillMaxWidth()

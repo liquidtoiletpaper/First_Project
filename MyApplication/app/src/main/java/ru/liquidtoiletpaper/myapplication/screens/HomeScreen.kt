@@ -2,6 +2,7 @@ package ru.liquidtoiletpaper.myapplication.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -97,7 +98,12 @@ fun HomeScreen() {
                 )
             }
         },
-    ) {
+    ) { padding ->
+        Column(
+            modifier = Modifier
+            .padding(padding)
+        ) {
 
+        }
     }
 }

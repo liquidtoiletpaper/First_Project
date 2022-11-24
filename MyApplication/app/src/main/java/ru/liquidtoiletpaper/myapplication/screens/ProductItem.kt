@@ -1,8 +1,5 @@
 package ru.liquidtoiletpaper.myapplication.screens
 
-import android.media.Image
-import ru.liquidtoiletpaper.myapplication.R
-
 data class ProductItem (
     val id: String,
     val image: Int,

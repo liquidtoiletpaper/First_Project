@@ -57,7 +57,12 @@ fun Reviews(navController: NavHostController) {
                 }
             }
         },
-    ) {
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .padding(padding)
+        ){
 
+        }
     }
 }

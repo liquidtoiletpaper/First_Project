@@ -38,9 +38,10 @@ fun CartScreen(navController: NavHostController) {
                 }
             }
         },
-    ) {
+    ) { padding ->
         Column(
             modifier = Modifier
+                .padding(padding)
                 .fillMaxHeight()
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,

@@ -1,14 +1,18 @@
 package ru.liquidtoiletpaper.myapplication.screens.profileScreens
 
+import ru.liquidtoiletpaper.myapplication.screens.Order
+import ru.liquidtoiletpaper.myapplication.screens.ProductList
+
 class MyPurchasesList() {
     companion object {
+        private val products = ProductList().products
         var purchases = listOf(
             MyPurchasesItem(
-                status = false,
+                status = true,
                 index = "1 111 111 111",
                 date = "01/01/2001",
-                value = 100,
-                amount = 1
+                value = getValue(),
+                amount = products.size
             ),
             MyPurchasesItem(
                 status = true,
@@ -49,5 +53,12 @@ class MyPurchasesList() {
             return "Moscow"
         }
          */
+        fun getValue() : Int {
+            var value = 0
+            for (i in products.indices) {
+                value += products[i].cost
+            }
+            return value
+        }
     }
 }

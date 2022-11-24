@@ -164,7 +164,8 @@ fun RegisterPage1(navController: NavController){
                     placeholder = {
                         Text(
                             text = "E-mail",
-                            fontFamily = NormalFont
+                            fontFamily = NormalFont,
+                            color = PrimaryTextField
                         )
                     },
                     shape = RoundedCornerShape(5.dp),
@@ -301,7 +302,8 @@ fun RegisterPage2(navController: NavController){
                     placeholder = {
                         Text(
                             text = "What's your name?",
-                            fontFamily = NormalFont
+                            fontFamily = NormalFont,
+                            color = PrimaryTextField
                         )
                     },
                     shape = RoundedCornerShape(5.dp),
@@ -351,7 +353,7 @@ fun RegisterPage2(navController: NavController){
 
                     value = passwordText,
                     onValueChange = { passwordText = it.take(32) },
-                    placeholder = { Text("Password", fontFamily = NormalFont) },
+                    placeholder = { Text("Password", fontFamily = NormalFont, color = PrimaryTextField) },
                     shape = RoundedCornerShape(5.dp),
                     visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {

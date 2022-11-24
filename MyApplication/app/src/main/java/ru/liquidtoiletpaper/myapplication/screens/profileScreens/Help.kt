@@ -61,9 +61,10 @@ fun Help(navController: NavHostController) {
                 }
             }
         },
-    ) {
+    ) { padding ->
         Column(
             modifier = Modifier
+                .padding(padding)
                 .fillMaxHeight()
                 .fillMaxWidth()
                 .background(PrimaryPageBackground),

@@ -57,7 +57,7 @@ fun ProfileInfo(navController: NavHostController) {
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "Profile",
+                        text = "Profile info",
                         color = PrimaryWhite,
                         style = MaterialTheme.typography.h1,
                         fontSize = 16.sp,
@@ -68,9 +68,10 @@ fun ProfileInfo(navController: NavHostController) {
                 }
             }
         },
-    ) {
+    ) { padding ->
         Column(
             modifier = Modifier
+                .padding(padding)
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .background(PrimaryPageBackground)
@@ -115,53 +116,69 @@ fun ProfileInfo(navController: NavHostController) {
                     ); isErrorName = key
                 },
                 label = {
-                    Text(
-                        text = "Name",
-                        fontFamily = NormalFont,
-                        color = PrimaryTextField
-                    )
+                    if(!isErrorName){
+                        Text(
+                            text = "Name",
+                            fontFamily = NormalFont,
+                            color = PrimaryTextField
+                        )
+                    } else {
+                        Text(
+                            text = "Name",
+                            fontFamily = NormalFont,
+                            color = ErrorColor
+                        )
+                    }
                 }
             )
             BorderLine()
 
-            var fullNameText by rememberSaveable { mutableStateOf("Zelenskiy") }
-            var isErrorFullName by rememberSaveable { mutableStateOf(false) }
+            var lastnameText by rememberSaveable { mutableStateOf("Zelenskiy") }
+            var isErrorLastname by rememberSaveable { mutableStateOf(false) }
             TextField(
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = TextFieldBackground,
-                    cursorColor = Color.Black,
+                    cursorColor = Color.Gray,
                     disabledLabelColor = DisabledText,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
-                    focusedLabelColor = DisabledText
+                    focusedLabelColor = DisabledText,
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
                     .padding(vertical = 10.dp),
                 singleLine = true,
-                value = fullNameText,
-                onValueChange = { fullNameText = it.take(24) },
+                value = lastnameText,
+                onValueChange = { lastnameText = it.take(24) },
                 shape = RoundedCornerShape(5.dp),
                 trailingIcon = {
-                    if (isErrorFullName) {
+                    if (isErrorLastname) {
                         Icon(Icons.Filled.Warning, "error", tint = ErrorColor)
                     }
                 },
-                isError = isErrorFullName,
+                isError = isErrorLastname,
                 keyboardActions = KeyboardActions {
                     validate(
-                        fullNameText.length,
+                        lastnameText.length,
                         1,
                         24
-                    ); isErrorFullName = key
+                    ); isErrorLastname = key
                 },
                 label = {
-                    Text(
-                        text = "Fullname",
-                        fontFamily = NormalFont,
-                        color = PrimaryTextField
-                    )
+                    if(!isErrorLastname){
+                        Text(
+                            text = "Lastname",
+                            fontFamily = NormalFont,
+                            color = PrimaryTextField
+                        )
+                    } else {
+                        Text(
+                            text = "Lastname",
+                            fontFamily = NormalFont,
+                            color = ErrorColor
+                        )
+                    }
                 }
             )
             BorderLine()
@@ -223,11 +240,19 @@ fun ProfileInfo(navController: NavHostController) {
                     ); isErrorEmail = key
                 },
                 label = {
-                    Text(
-                        text = "Email",
-                        fontFamily = NormalFont,
-                        color = PrimaryTextField
-                    )
+                    if(!isErrorEmail){
+                        Text(
+                            text = "Email",
+                            fontFamily = NormalFont,
+                            color = PrimaryTextField
+                        )
+                    } else {
+                        Text(
+                            text = "Email",
+                            fontFamily = NormalFont,
+                            color = ErrorColor
+                        )
+                    }
                 }
             )
         }
