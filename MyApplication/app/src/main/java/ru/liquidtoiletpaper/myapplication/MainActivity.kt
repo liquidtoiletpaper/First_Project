@@ -123,7 +123,7 @@ fun makeRequest(context: Context, url: String, parameters: Map<String, String>?,
 fun MainPage() {
     val context = LocalContext.current
     fun requestUserData(id: Int) {
-        val url = "http:/tautaste.ru/getData"
+        val url = "http://tautaste.ru/getData?id=$id"
         val queue = Volley.newRequestQueue(context)
         val request = StringRequest(
             Request.Method.GET, url,
@@ -146,6 +146,7 @@ fun MainPage() {
             key = true
         }
     }
+    //requestUserData(User.id)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -195,7 +196,7 @@ fun MainPage() {
                     navController = navController,
                     onItemClick = {
                         navController.navigate(it.route)
-                        requestUserData(1)
+
                     }
                 )
             },

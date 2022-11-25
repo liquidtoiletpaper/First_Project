@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import ru.liquidtoiletpaper.myapplication.StartActivity
+import ru.liquidtoiletpaper.myapplication.User
 import ru.liquidtoiletpaper.myapplication.screens.profileScreens.CitiesList
 import ru.liquidtoiletpaper.myapplication.screens.profileScreens.MyPurchasesList
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
@@ -49,7 +50,7 @@ fun ProfileScreen(navController: NavHostController) {
                     .wrapContentHeight(),
             ) {
                 Text(
-                    text = "Name Fullname",
+                    text = "${User.name} ${User.lastname}",
                     color = PrimaryWhite,
                     style = MaterialTheme.typography.h1,
                     fontSize = 26.sp,

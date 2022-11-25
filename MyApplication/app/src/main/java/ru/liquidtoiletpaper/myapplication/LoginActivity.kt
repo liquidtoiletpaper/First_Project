@@ -29,8 +29,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.decodeFromJsonElement
+import ru.liquidtoiletpaper.myapplication.models.AuthModel
+import ru.liquidtoiletpaper.myapplication.models.ResponseShell
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 class LoginActivity : ComponentActivity() {
@@ -272,11 +276,15 @@ fun LoginPage(navController: NavController){
                     shape = RoundedCornerShape(5.dp),
                     onClick = {
                         makeRequest(context, "http:/tautaste.ru/auth", mapOf("email" to emailText, "password" to passwordText)){ response ->
-                            val obj = Json.parseToJsonElement(response.toString()).jsonObject
-                            val status = obj["status"]!!.toString().replace("\"", "")
-                            if(status == "success") {
+                            val shell = Json.decodeFromString<ResponseShell>(response.toString())
+                            if(shell.status == "success") {
+                                val authModel = Json.decodeFromJsonElement<AuthModel>(shell.content!!)
+                                User.id = authModel.id
+                                User.email = authModel.email
+                                User.name = authModel.name
+                                User.lastname = authModel.lastname
                                 context.startActivity(Intent(context, MainActivity::class.java))
-                            }else if (obj["code"]!!.toString() == "0"){
+                            }else if (shell.code == 0){
                                 Toast.makeText(context, "Данные введены неверно", Toast.LENGTH_SHORT).show()
                             }else {
                                 Toast.makeText(context, "Что-то не так", Toast.LENGTH_SHORT).show()
