@@ -7,17 +7,23 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.*
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -56,18 +62,40 @@ class StartActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MyApplicationTheme() {
-                val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "startPage") {
-                    composable("startPage") { StartPage(navController) }
-                    composable("loginPage") { LoginPage(navController) }
-                    composable("registerPage1") { RegisterPage1(navController) }
-                    composable("registerPage2") { RegisterPage2(navController) }
-                    composable("registerPage3") { RegisterPage3(navController) }
+                Surface(color = PrimaryPageBackground){
+                    val navController = rememberNavController()
+                    NavHost(navController = navController, startDestination = "startPage") {
+                        composable("startPage") { EnterAnimation { StartPage(navController) } }
+                        composable("loginPage") { EnterAnimation { LoginPage(navController) } }
+                        composable("registerPage1") { EnterAnimation { RegisterPage1(navController) } }
+                        composable("registerPage2") { EnterAnimation { RegisterPage2(navController) } }
+                        composable("registerPage3") { EnterAnimation { RegisterPage3(navController) } }
+                    }
+                    LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
                 }
-                LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
             }
         }
     }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun EnterAnimation(content: @Composable () -> Unit) {
+    var visible by remember { mutableStateOf(true) }
+    val density = LocalDensity.current
+    AnimatedVisibility(
+        visible = visible,
+        enter = slideInHorizontally(
+            animationSpec = tween(durationMillis = 200),
+            initialOffsetX = { 200 }
+        ) + fadeIn(initialAlpha = 0.3f),
+        exit = slideOutHorizontally(
+            animationSpec = spring(stiffness = Spring.StiffnessHigh),
+            targetOffsetX = { 200 },
+        ) + fadeOut(),
+        content = content,
+        initiallyVisible = true //true - без анимации, false - с анимацией
+    )
 }
 
 @Composable
@@ -122,8 +150,9 @@ fun StartPage(navController: NavController){
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Image(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_imagecut),
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_knight_banner),
                     contentDescription = "",
+                    colorFilter = ColorFilter.tint(LowerPrimaryText)
                 )
             }
             Column(modifier = Modifier

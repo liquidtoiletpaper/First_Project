@@ -5,4 +5,5 @@ object User {
     var email = ""
     var name = ""
     var lastname = ""
+    var password = ""
 }

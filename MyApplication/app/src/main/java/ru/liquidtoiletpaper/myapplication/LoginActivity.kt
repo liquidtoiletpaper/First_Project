@@ -160,7 +160,7 @@ fun LoginPage(navController: NavController){
                         disabledLabelColor = DisabledText,
                         focusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
                         unfocusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
-                        focusedLabelColor = DisabledText
+                        focusedLabelColor = DisabledText,
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -168,7 +168,7 @@ fun LoginPage(navController: NavController){
                         .padding(top = 10.dp),
                     singleLine = true,
                     value = emailText,
-                    onValueChange = { emailText = it.take(24) },
+                    onValueChange = { emailText = it.take(64) },
                     placeholder = {
                         Text(
                             text = "Email",
@@ -187,7 +187,7 @@ fun LoginPage(navController: NavController){
                         validate(
                             emailText.length,
                             1,
-                            24
+                            64
                         ); isErrorEmail = key
                     }
                 )
@@ -210,7 +210,7 @@ fun LoginPage(navController: NavController){
                     singleLine = true,
 
                     value = passwordText,
-                    onValueChange = { passwordText = it.take(32) },
+                    onValueChange = { passwordText = it.take(64) },
                     placeholder = {
                         Text(
                             "Password",
@@ -243,8 +243,8 @@ fun LoginPage(navController: NavController){
                     keyboardActions = KeyboardActions {
                         validate(
                             passwordText.length,
-                            2,
-                            32
+                            4,
+                            64
                         ); isErrorPassword = key
                     }
                 )
@@ -285,8 +285,12 @@ fun LoginPage(navController: NavController){
                                 User.lastname = authModel.lastname
                                 context.startActivity(Intent(context, MainActivity::class.java))
                             }else if (shell.code == 0){
+                                isErrorEmail = true
+                                isErrorPassword = true
                                 Toast.makeText(context, "Данные введены неверно", Toast.LENGTH_SHORT).show()
                             }else {
+                                isErrorEmail = true
+                                isErrorPassword = true
                                 Toast.makeText(context, "Что-то не так", Toast.LENGTH_SHORT).show()
                             }
                         }

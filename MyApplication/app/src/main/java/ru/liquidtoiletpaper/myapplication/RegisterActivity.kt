@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.widget.DatePicker
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -34,6 +35,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromJsonElement
+import ru.liquidtoiletpaper.myapplication.models.AuthModel
+import ru.liquidtoiletpaper.myapplication.models.RegModel
+import ru.liquidtoiletpaper.myapplication.models.ResponseShell
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 import java.util.*
 
@@ -148,7 +155,7 @@ fun RegisterPage1(navController: NavController){
                 OutlinedTextField(
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = TextFieldBackground,
-                        cursorColor = Color.Black,
+                        cursorColor = Color.White,
                         disabledLabelColor = DisabledText,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
@@ -198,7 +205,32 @@ fun RegisterPage1(navController: NavController){
                         .padding(top = 20.dp),
                     shape = RoundedCornerShape(5.dp),
                     onClick = {
-                        navController.navigate("registerPage2")
+                        if("@" in emailText){
+                            val fullEmail = emailText.split("@")
+                            val firstEmail = fullEmail[0]
+                            val secondEmail = fullEmail[1]
+                            if("." in secondEmail && firstEmail.length >= 2){
+                                val halfEmail = secondEmail.split(".")
+                                val thirdEmail = halfEmail[0]
+                                val fourthEmail = halfEmail[1]
+                                if(thirdEmail == "gmail" || thirdEmail == "mail" || thirdEmail == "yandex"
+                                    || thirdEmail == "inbox") {
+                                    if(fourthEmail == "com" || fourthEmail == "ru"){
+                                        User.email = emailText
+                                        isErrorEmail = false
+                                        navController.navigate("registerPage2")
+                                    }else {
+                                        isErrorEmail = true
+                                    }
+                                }else {
+                                    isErrorEmail = true
+                                }
+                            }else {
+                                isErrorEmail = true
+                            }
+                        }else {
+                            isErrorEmail = true
+                        }
                     },
                 ) {
                     Text(
@@ -286,10 +318,10 @@ fun RegisterPage2(navController: NavController){
                 OutlinedTextField(
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = TextFieldBackground,
-                        cursorColor = androidx.compose.ui.graphics.Color.Black,
+                        cursorColor = Color.White,
                         disabledLabelColor = DisabledText,
-                        focusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
-                        unfocusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
                         focusedLabelColor = DisabledText
                     ),
                     modifier = Modifier
@@ -321,17 +353,45 @@ fun RegisterPage2(navController: NavController){
                         ); isErrorName = key
                     }
                 )
-                Text(
-                    text = "You can change it any time!",
-                    maxLines = 1,
-                    color = SecondaryText,
-                    style = MaterialTheme.typography.body1,
-                    fontSize = 12.sp,
-                    fontFamily = NormalFont,
-                    textAlign = TextAlign.Left,
+                var lastnameText by rememberSaveable { mutableStateOf("") }
+                var isErrorLastname by rememberSaveable { mutableStateOf(false) }
+                OutlinedTextField(
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = TextFieldBackground,
+                        cursorColor = Color.White,
+                        disabledLabelColor = DisabledText,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        focusedLabelColor = DisabledText
+                    ),
                     modifier = Modifier
-                        .padding(top = 10.dp)
+                        .fillMaxWidth()
                         .padding(horizontal = 20.dp)
+                        .padding(top = 10.dp),
+                    singleLine = true,
+                    value = lastnameText,
+                    onValueChange = { lastnameText = it.take(24) },
+                    placeholder = {
+                        Text(
+                            text = "Lastname",
+                            fontFamily = NormalFont,
+                            color = PrimaryTextField
+                        )
+                    },
+                    shape = RoundedCornerShape(5.dp),
+                    trailingIcon = {
+                        if (isErrorLastname) {
+                            Icon(Icons.Filled.Warning, "error", tint = ErrorColor)
+                        }
+                    },
+                    isError = isErrorLastname,
+                    keyboardActions = KeyboardActions {
+                        validate(
+                            lastnameText.length,
+                            1,
+                            24
+                        ); isErrorLastname = key
+                    }
                 )
 
 
@@ -341,9 +401,9 @@ fun RegisterPage2(navController: NavController){
                 OutlinedTextField(
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = TextFieldBackground,
-                        cursorColor = androidx.compose.ui.graphics.Color.Black,
-                        focusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
-                        unfocusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
+                        cursorColor = Color.White,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -379,13 +439,13 @@ fun RegisterPage2(navController: NavController){
                     keyboardActions = KeyboardActions {
                         validate(
                             passwordText.length,
-                            6,
+                            4,
                             72
                         ); isErrorPassword = key
                     }
                 )
                 Text(
-                    text = "Password must be from 6 to 72 char",
+                    text = "Password must be from 4 to 72 char",
                     maxLines = 1,
                     color = SecondaryText,
                     style = MaterialTheme.typography.body1,
@@ -406,10 +466,27 @@ fun RegisterPage2(navController: NavController){
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp)
-                        .padding(top = 25.dp),
+                        .padding(top = 10.dp),
                     shape = RoundedCornerShape(5.dp),
                     onClick = {
-                        navController.navigate("registerPage3")
+                        if(nameText.isEmpty()){
+                            isErrorName = true
+                        }
+                        if(lastnameText.isEmpty()){
+                            isErrorLastname = true
+                        }
+                        if(passwordText.length < 4){
+                            isErrorPassword = true
+                        }
+                        if(nameText.isNotEmpty() && lastnameText.isNotEmpty() && passwordText.length >= 4){
+                            isErrorName = false
+                            isErrorLastname = false
+                            isErrorPassword = false
+                            User.name = nameText
+                            User.lastname = lastnameText
+                            User.password = passwordText
+                            navController.navigate("registerPage3")
+                        }
                     },
                 ) {
                     Text(
@@ -521,10 +598,10 @@ fun RegisterPage3(navController: NavController){
                 OutlinedTextField(
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = TextFieldBackground,
-                        cursorColor = androidx.compose.ui.graphics.Color.Black,
+                        cursorColor = Color.White,
                         disabledLabelColor = DisabledText,
-                        focusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
-                        unfocusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
                         focusedLabelColor = DisabledText
                     ),
 
@@ -575,7 +652,27 @@ fun RegisterPage3(navController: NavController){
                         .padding(top = 25.dp),
                     shape = RoundedCornerShape(5.dp),
                     onClick = {
-                        context.startActivity(Intent(context, MainActivity::class.java))
+                        makeRequest(context, "http:/tautaste.ru/reg", mapOf("email" to User.email, "name" to User.name, "lastname" to User.lastname, "password" to User.password)){ response ->
+                            val shell = Json.decodeFromString<ResponseShell>(response.toString())
+                            if(shell.status == "success") {
+                                /*
+                                val regModel = Json.decodeFromJsonElement<RegModel>(shell.content!!)
+                                User.name = regModel.name
+                                User.lastname = regModel.lastname
+                                User.email = regModel.email
+                                User.password = regModel.password
+                                 */
+                                context.startActivity(Intent(context, MainActivity::class.java))
+                            }else if (shell.code == 0){
+                                Toast.makeText(context, "Почта занята", Toast.LENGTH_SHORT).show()
+                            }else if (shell.code == 1){
+                                Toast.makeText(context, "Слишком короткий пароль", Toast.LENGTH_SHORT).show()
+                            }else if (shell.code == 2){
+                                Toast.makeText(context, "Заполните имя и фамилию", Toast.LENGTH_SHORT).show()
+                            }else {
+                                Toast.makeText(context, "Что-то не так", Toast.LENGTH_SHORT).show()
+                            }
+                        }
                     },
                 ) {
                     Text(
