@@ -296,7 +296,7 @@ fun RegisterPage2(navController: NavController){
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
-                    text = "Choose your nickname",
+                    text = "Введите свои данные",
                     maxLines = 1,
                     color = SecondaryText,
                     style = MaterialTheme.typography.h1,
@@ -394,6 +394,7 @@ fun RegisterPage2(navController: NavController){
                     }
                 )
 
+                DropdownMenu()
 
                 var isErrorPassword by rememberSaveable { mutableStateOf(false) }
                 var passwordText by remember { mutableStateOf("") }
@@ -408,7 +409,7 @@ fun RegisterPage2(navController: NavController){
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp)
-                        .padding(top = 25.dp),
+                        .padding(top = 10.dp),
                     singleLine = true,
 
                     value = passwordText,
@@ -453,7 +454,7 @@ fun RegisterPage2(navController: NavController){
                     fontFamily = NormalFont,
                     textAlign = TextAlign.Left,
                     modifier = Modifier
-                        .padding(top = 10.dp)
+                        .padding(top = 20.dp)
                         .padding(horizontal = 20.dp)
                 )
                 Button(

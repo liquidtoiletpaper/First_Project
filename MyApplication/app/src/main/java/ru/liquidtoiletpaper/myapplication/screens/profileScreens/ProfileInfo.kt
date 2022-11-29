@@ -26,6 +26,7 @@ import ru.liquidtoiletpaper.myapplication.ui.theme.*
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import ru.liquidtoiletpaper.myapplication.User
 import java.util.*
 
 @Composable
@@ -76,7 +77,7 @@ fun ProfileInfo(navController: NavHostController) {
                 .fillMaxHeight()
                 .background(PrimaryPageBackground)
         ) {
-            var nameText by rememberSaveable { mutableStateOf("Vladimir") }
+            var nameText by rememberSaveable { mutableStateOf(User.name) }
             var isErrorName by rememberSaveable { mutableStateOf(false) }
             var key = false
             fun validate(length: Int, minLength: Int, maxLength: Int) {
@@ -118,13 +119,13 @@ fun ProfileInfo(navController: NavHostController) {
                 label = {
                     if(!isErrorName){
                         Text(
-                            text = "Name",
+                            text = "Имя",
                             fontFamily = NormalFont,
                             color = PrimaryTextField
                         )
                     } else {
                         Text(
-                            text = "Name",
+                            text = "Имя",
                             fontFamily = NormalFont,
                             color = ErrorColor
                         )
@@ -133,7 +134,7 @@ fun ProfileInfo(navController: NavHostController) {
             )
             BorderLine()
 
-            var lastnameText by rememberSaveable { mutableStateOf("Zelenskiy") }
+            var lastnameText by rememberSaveable { mutableStateOf(User.lastname) }
             var isErrorLastname by rememberSaveable { mutableStateOf(false) }
             TextField(
                 colors = TextFieldDefaults.textFieldColors(
@@ -168,13 +169,13 @@ fun ProfileInfo(navController: NavHostController) {
                 label = {
                     if(!isErrorLastname){
                         Text(
-                            text = "Lastname",
+                            text = "Фамилия",
                             fontFamily = NormalFont,
                             color = PrimaryTextField
                         )
                     } else {
                         Text(
-                            text = "Lastname",
+                            text = "Фамилия",
                             fontFamily = NormalFont,
                             color = ErrorColor
                         )
@@ -196,7 +197,7 @@ fun ProfileInfo(navController: NavHostController) {
                         modifier = Modifier
                             .weight(1f)
                             .padding(start = 20.dp, end = 10.dp)
-                    ){ DropdownMenu() }
+                    ){ ru.liquidtoiletpaper.myapplication.DropdownMenu() }
                     Box(
                         modifier = Modifier
                             .weight(1f)
@@ -206,9 +207,10 @@ fun ProfileInfo(navController: NavHostController) {
             }
             BorderLine()
 
-            var emailText by rememberSaveable { mutableStateOf("zelenskiemail@mail.com") }
+            var emailText by rememberSaveable { mutableStateOf(User.email) }
             var isErrorEmail by rememberSaveable { mutableStateOf(false) }
             TextField(
+                enabled = false,
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = TextFieldBackground,
                     cursorColor = Color.Gray,
@@ -217,6 +219,7 @@ fun ProfileInfo(navController: NavHostController) {
                     unfocusedIndicatorColor = Color.Transparent,
                     focusedLabelColor = PrimaryWhite,
                     textColor = PrimaryWhite,
+                    disabledTextColor = DisabledText
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -240,21 +243,50 @@ fun ProfileInfo(navController: NavHostController) {
                     ); isErrorEmail = key
                 },
                 label = {
-                    if(!isErrorEmail){
-                        Text(
-                            text = "Email",
-                            fontFamily = NormalFont,
-                            color = PrimaryTextField
-                        )
-                    } else {
-                        Text(
-                            text = "Email",
-                            fontFamily = NormalFont,
-                            color = ErrorColor
-                        )
-                    }
-                }
+                    Text(
+                        text = "Email",
+                        fontFamily = NormalFont,
+                        color = PrimaryTextField
+                    )
+                },
             )
+            Button(
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = PrimaryButton,
+                    contentColor = PrimaryWhite,
+                    disabledBackgroundColor = SecondaryButton,
+                    disabledContentColor = PrimaryWhite,
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+                    .padding(top = 10.dp),
+                shape = RoundedCornerShape(5.dp),
+                onClick = {
+                    if(nameText.isEmpty()){
+                        isErrorName = true
+                    }
+                    if(lastnameText.isEmpty()){
+                        isErrorLastname = true
+                    }
+                    if(nameText.isNotEmpty() && lastnameText.isNotEmpty()){
+                        isErrorName = false
+                        isErrorLastname = false
+                        User.name = nameText
+                        User.lastname = lastnameText
+                        navController.navigate("profileScreen")
+                    }
+                },
+            ) {
+                Text(
+                    text = "Применить изменения",
+                    color = PrimaryWhite,
+                    style = MaterialTheme.typography.h1,
+                    fontSize = 15.sp,
+                    fontFamily = SemiBoldFont,
+                    textAlign = TextAlign.Center,
+                )
+            }
         }
     }
 }
@@ -350,74 +382,4 @@ fun MyDatePicker() {
                 mDatePickerDialog.show()
             },
     )
-}
-
-@Composable
-fun DropdownMenu(){
-    var mExpanded by remember { mutableStateOf(false) }
-    val mGender = listOf("Male", "Female")
-    var mSelectedText by remember { mutableStateOf(mGender[0]) }
-    var mTextFieldSize by remember { mutableStateOf(Size.Zero)}
-    val icon = if (mExpanded)
-        Icons.Filled.KeyboardArrowUp
-    else
-        Icons.Filled.KeyboardArrowDown
-
-    Column(
-        Modifier
-            .padding(top = 10.dp)) {
-        TextField(
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = TextFieldBackground,
-                cursorColor = Color.Black,
-                disabledLabelColor = DisabledText,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                focusedLabelColor = DisabledText
-            ),
-            value = mSelectedText,
-            onValueChange = { mSelectedText = it },
-            enabled = false,
-            modifier = Modifier
-                .clickable { mExpanded = !mExpanded }
-                .fillMaxWidth()
-                .onGloballyPositioned { coordinates ->
-                    mTextFieldSize = coordinates.size.toSize()
-                },
-            label = {
-                Text(
-                    text = "Gender",
-                    fontFamily = NormalFont,
-                    color = PrimaryTextField
-                )
-            },
-            trailingIcon = {
-                Icon(icon,"contentDescription",)
-            }
-        )
-        MaterialTheme(
-            colors = MaterialTheme.colors.copy(surface = TextFieldBackground),
-            shapes = MaterialTheme.shapes.copy(medium = RoundedCornerShape(5))
-        ){
-            DropdownMenu(
-                expanded = mExpanded,
-                onDismissRequest = { mExpanded = false },
-                modifier = Modifier
-                    .width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })
-            ) {
-                mGender.forEach { label ->
-                    DropdownMenuItem(
-                        onClick = {
-                            mSelectedText = label
-                            mExpanded = false
-                        },
-                    ) {
-                        Text(
-                            text = label,
-                        )
-                    }
-                }
-            }
-        }
-    }
 }

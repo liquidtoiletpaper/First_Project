@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 data class AuthModel(
     val id: Int,
     val name: String,
+    val gender: String,
     val lastname: String,
     val email: String
 )

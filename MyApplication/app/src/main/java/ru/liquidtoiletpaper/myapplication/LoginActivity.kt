@@ -283,6 +283,7 @@ fun LoginPage(navController: NavController){
                                 User.email = authModel.email
                                 User.name = authModel.name
                                 User.lastname = authModel.lastname
+                                User.gender = authModel.gender
                                 context.startActivity(Intent(context, MainActivity::class.java))
                             }else if (shell.code == 0){
                                 isErrorEmail = true

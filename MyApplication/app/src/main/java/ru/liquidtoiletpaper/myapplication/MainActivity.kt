@@ -11,17 +11,24 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -79,10 +86,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-public
-
-
-
 
 
 @Composable
@@ -247,6 +250,77 @@ fun BottomNavigationBar(
                     }
                 }
             )
+        }
+    }
+}
+
+
+@Composable
+fun DropdownMenu(){
+    var mExpanded by remember { mutableStateOf(false) }
+    val mGender = listOf("Мужской", "Женский")
+    var mSelectedText by remember { mutableStateOf(mGender[0]) }
+    var mTextFieldSize by remember { mutableStateOf(Size.Zero)}
+    val icon = if (mExpanded)
+        Icons.Filled.KeyboardArrowUp
+    else
+        Icons.Filled.KeyboardArrowDown
+
+    Column(
+        Modifier
+            .padding(top = 10.dp)) {
+        TextField(
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = TextFieldBackground,
+                cursorColor = Color.Black,
+                disabledLabelColor = DisabledText,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                focusedLabelColor = DisabledText
+            ),
+            value = mSelectedText,
+            onValueChange = { mSelectedText = it },
+            enabled = false,
+            modifier = Modifier
+                .clickable { mExpanded = !mExpanded }
+                .fillMaxWidth()
+                .onGloballyPositioned { coordinates ->
+                    mTextFieldSize = coordinates.size.toSize()
+                },
+            label = {
+                Text(
+                    text = "Пол",
+                    fontFamily = NormalFont,
+                    color = PrimaryTextField
+                )
+            },
+            trailingIcon = {
+                Icon(icon,"contentDescription",)
+            }
+        )
+        MaterialTheme(
+            colors = MaterialTheme.colors.copy(surface = TextFieldBackground),
+            shapes = MaterialTheme.shapes.copy(medium = RoundedCornerShape(5))
+        ){
+            DropdownMenu(
+                expanded = mExpanded,
+                onDismissRequest = { mExpanded = false },
+                modifier = Modifier
+                    .width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })
+            ) {
+                mGender.forEach { label ->
+                    DropdownMenuItem(
+                        onClick = {
+                            mSelectedText = label
+                            mExpanded = false
+                        },
+                    ) {
+                        Text(
+                            text = label,
+                        )
+                    }
+                }
+            }
         }
     }
 }
