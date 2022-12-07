@@ -122,6 +122,45 @@ fun makeRequest(context: Context, url: String, parameters: Map<String, String>?,
     VolleySingleton.getInstance(context).addToRequestQueue(request)
 }
 
+fun requestProducts(context: Context, callback: (response: String?) -> Unit) {
+    val url = "http://tautaste.ru/getProducts"
+    val queue = Volley.newRequestQueue(context)
+    val request = StringRequest(
+        Request.Method.GET, url,
+        { //result ->
+            //println(result)
+                result -> Log.d("MyLog", "Result: $result")
+        },
+        { //error ->
+                error -> Log.d("MyLog", "Error: $error")
+            //println(error)
+        }
+    )
+    //queue.add(request)
+    VolleySingleton.getInstance(context).addToRequestQueue(request)
+}
+
+fun requestProduct(id: Int, context: Context, callback: (response: String?) -> Unit) {
+    val url = "http://tautaste.ru/getProduct?product_id=$id"
+    val queue = Volley.newRequestQueue(context)
+    val request = StringRequest(
+        Request.Method.GET, url,
+        { //result ->
+            //println(result)
+                result -> println(result)
+                Log.d("MyLog", "Result: $result")
+        },
+        { //error ->
+                error -> println(error)
+            //println(error)
+        }
+    )
+    //queue.add(request)
+    VolleySingleton.getInstance(context).addToRequestQueue(request)
+}
+
+
+
 @Composable
 fun MainPage() {
     val context = LocalContext.current
@@ -142,6 +181,9 @@ fun MainPage() {
         //queue.add(request)
         VolleySingleton.getInstance(context).addToRequestQueue(request)
     }
+
+
+
     val navController = rememberNavController()
     var key = false
     fun validate(length: Int, minLength: Int, maxLength: Int) {
@@ -254,7 +296,6 @@ fun BottomNavigationBar(
     }
 }
 
-
 @Composable
 fun DropdownMenu(){
     var mExpanded by remember { mutableStateOf(false) }
@@ -265,7 +306,7 @@ fun DropdownMenu(){
         Icons.Filled.KeyboardArrowUp
     else
         Icons.Filled.KeyboardArrowDown
-
+    User.gender = mSelectedText
     Column(
         Modifier
             .padding(top = 10.dp)) {
@@ -295,7 +336,7 @@ fun DropdownMenu(){
                 )
             },
             trailingIcon = {
-                Icon(icon,"contentDescription",)
+                Icon(icon,"contentDescription")
             }
         )
         MaterialTheme(

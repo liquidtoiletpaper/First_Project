@@ -47,7 +47,7 @@ fun MyPurchasesOrder(navController: NavHostController) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(end = 40.dp),
-                    verticalAlignment = Alignment.CenterVertically,
+                    verticalAlignment = CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(

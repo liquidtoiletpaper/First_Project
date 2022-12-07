@@ -145,7 +145,7 @@ fun LoginPage(navController: NavController){
                         .padding(top = 15.dp)
                         .padding(horizontal = 20.dp)
                 )
-                var emailText by rememberSaveable { mutableStateOf("") }
+                var emailText by rememberSaveable { mutableStateOf("email2@yandex.ru") }
                 var isErrorEmail by rememberSaveable { mutableStateOf(false) }
                 var key = false
                 fun validate(length: Int, minLength: Int, maxLength: Int) {
@@ -194,7 +194,7 @@ fun LoginPage(navController: NavController){
 
 
                 var isErrorPassword by rememberSaveable { mutableStateOf(false) }
-                var passwordText by remember { mutableStateOf("") }
+                var passwordText by remember { mutableStateOf("1234") }
                 var passwordVisible by rememberSaveable { mutableStateOf(false) }
                 OutlinedTextField(
                     colors = TextFieldDefaults.textFieldColors(
@@ -254,7 +254,7 @@ fun LoginPage(navController: NavController){
                         .padding(horizontal = 20.dp)
                         .padding(top = 10.dp)
                         .clickable(enabled = true) {
-
+                            context.startActivity(Intent(context, MainActivity::class.java))
                         },
                     textAlign = TextAlign.End,
                     text = "Forgot password?",

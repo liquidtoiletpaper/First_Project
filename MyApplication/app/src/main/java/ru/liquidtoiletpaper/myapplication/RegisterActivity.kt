@@ -37,9 +37,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.decodeFromJsonElement
-import ru.liquidtoiletpaper.myapplication.models.AuthModel
-import ru.liquidtoiletpaper.myapplication.models.RegModel
 import ru.liquidtoiletpaper.myapplication.models.ResponseShell
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 import java.util.*
@@ -394,7 +391,11 @@ fun RegisterPage2(navController: NavController){
                     }
                 )
 
-                DropdownMenu()
+                Box(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)
+                ){
+                    DropdownMenu()
+                }
 
                 var isErrorPassword by rememberSaveable { mutableStateOf(false) }
                 var passwordText by remember { mutableStateOf("") }

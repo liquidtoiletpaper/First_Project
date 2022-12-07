@@ -2,6 +2,7 @@ package ru.liquidtoiletpaper.myapplication.screens.profileScreens
 
 import android.app.DatePickerDialog
 import android.widget.DatePicker
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -16,17 +17,19 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavHostController
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromJsonElement
 import ru.liquidtoiletpaper.myapplication.User
+import ru.liquidtoiletpaper.myapplication.makeRequest
+import ru.liquidtoiletpaper.myapplication.models.ResponseShell
+import ru.liquidtoiletpaper.myapplication.models.UpdateModel
 import java.util.*
 
 @Composable
@@ -77,6 +80,11 @@ fun ProfileInfo(navController: NavHostController) {
                 .fillMaxHeight()
                 .background(PrimaryPageBackground)
         ) {
+            var errorCode = 0
+            var updated = false
+            if(updated){
+
+            }
             var nameText by rememberSaveable { mutableStateOf(User.name) }
             var isErrorName by rememberSaveable { mutableStateOf(false) }
             var key = false
@@ -210,7 +218,7 @@ fun ProfileInfo(navController: NavHostController) {
             var emailText by rememberSaveable { mutableStateOf(User.email) }
             var isErrorEmail by rememberSaveable { mutableStateOf(false) }
             TextField(
-                enabled = false,
+                enabled = true,
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = TextFieldBackground,
                     cursorColor = Color.Gray,
@@ -224,7 +232,7 @@ fun ProfileInfo(navController: NavHostController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
-                    .padding(vertical = 10.dp),
+                    .padding(top = 10.dp),
                 singleLine = true,
                 value = emailText,
                 onValueChange = { emailText = it.take(24) },
@@ -246,46 +254,109 @@ fun ProfileInfo(navController: NavHostController) {
                     Text(
                         text = "Email",
                         fontFamily = NormalFont,
-                        color = PrimaryTextField
+                        color = if(!isErrorEmail) { PrimaryTextField } else { ErrorColor }
                     )
                 },
             )
-            Button(
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = PrimaryButton,
-                    contentColor = PrimaryWhite,
-                    disabledBackgroundColor = SecondaryButton,
-                    disabledContentColor = PrimaryWhite,
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .padding(top = 10.dp),
-                shape = RoundedCornerShape(5.dp),
-                onClick = {
-                    if(nameText.isEmpty()){
-                        isErrorName = true
-                    }
-                    if(lastnameText.isEmpty()){
-                        isErrorLastname = true
-                    }
-                    if(nameText.isNotEmpty() && lastnameText.isNotEmpty()){
-                        isErrorName = false
-                        isErrorLastname = false
-                        User.name = nameText
-                        User.lastname = lastnameText
-                        navController.navigate("profileScreen")
-                    }
-                },
-            ) {
-                Text(
-                    text = "Применить изменения",
-                    color = PrimaryWhite,
-                    style = MaterialTheme.typography.h1,
-                    fontSize = 15.sp,
-                    fontFamily = SemiBoldFont,
-                    textAlign = TextAlign.Center,
-                )
+            if(isErrorEmail){
+                if(errorCode == 0){
+                    Text(
+                        text = "Введенная почта занята",
+                        maxLines = 1,
+                        color = ErrorColor,
+                        style = MaterialTheme.typography.body1,
+                        fontSize = 13.sp,
+                        fontFamily = NormalFont,
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier
+                            .padding(horizontal = 25.dp)
+                            .padding(top = 5.dp)
+                            .padding(bottom = 5.dp)
+                    )
+                }
+            }
+            var check = false
+            var alpha = 0.5f
+            if((nameText != User.name) || (lastnameText != User.lastname)  || (emailText != User.email)) {
+                check = true
+                alpha = 1f
+            }
+            Column(horizontalAlignment = Alignment.End){
+                Button(
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = PrimaryButton,
+                        contentColor = PrimaryWhite,
+                        disabledBackgroundColor = PrimaryButton.copy(alpha),
+                        disabledContentColor = PrimaryWhite,
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                        .padding(top = 10.dp),
+                    shape = RoundedCornerShape(5.dp),
+                    onClick = {
+                        if (nameText.isEmpty()) {
+                            isErrorName = true
+                        }
+                        if (lastnameText.isEmpty()) {
+                            isErrorLastname = true
+                        }
+                        if (emailText.isEmpty()) {
+                            isErrorEmail = true
+                        }
+                        if (nameText.isNotEmpty() && lastnameText.isNotEmpty() && emailText.isNotEmpty()) {
+                            isErrorName = false
+                            isErrorLastname = false
+                            isErrorEmail = false
+                            makeRequest(
+                                context, "http://tautaste.ru/updateUser",
+                                mapOf(
+                                    "id" to User.id.toString(),
+                                    "name" to nameText,
+                                    "lastname" to lastnameText,
+                                    "gender" to User.gender,
+                                    "email" to emailText
+                                )
+                            ) { response ->
+                                val shell =
+                                    Json.decodeFromString<ResponseShell>(response.toString())
+                                if (shell.status == "success") {
+                                    val updateModel =
+                                        Json.decodeFromJsonElement<UpdateModel>(shell.content!!)
+                                    User.name = updateModel.name
+                                    User.lastname = updateModel.lastname
+                                    User.gender = updateModel.gender
+                                    User.email = updateModel.email
+                                    navController.navigate("profileScreen")
+                                } else if (shell.code == 0) {
+                                    errorCode = 0
+                                    isErrorEmail = true
+                                } else if (shell.code == 1) {
+                                    errorCode = 1
+                                    if (nameText.isEmpty()) {
+                                        isErrorName = true
+                                    }
+                                    if (lastnameText.isEmpty()) {
+                                        isErrorLastname = true
+                                    }
+                                } else {
+                                    Toast.makeText(context, "Что-то не так", Toast.LENGTH_SHORT)
+                                        .show()
+                                }
+                            }
+                        }
+                    },
+                    enabled = check,
+                ) {
+                    Text(
+                        text = "Применить изменения",
+                        color = PrimaryWhite.copy(alpha),
+                        style = MaterialTheme.typography.h1,
+                        fontSize = 15.sp,
+                        fontFamily = SemiBoldFont,
+                        textAlign = TextAlign.Center,
+                    )
+                }
             }
         }
     }

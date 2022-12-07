@@ -69,7 +69,6 @@ fun ProfileScreen(navController: NavHostController) {
                 modifier = Modifier
                     .padding(top = 5.dp)
                     .clickable {
-                        //navController.navigate("myPurchasesScreen")
                         navController.navigate("myPurchasesScreen")
                     }
             ) {
