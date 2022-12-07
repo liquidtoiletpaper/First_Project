@@ -122,6 +122,22 @@ fun makeRequest(context: Context, url: String, parameters: Map<String, String>?,
     VolleySingleton.getInstance(context).addToRequestQueue(request)
 }
 
+fun updateRequest(context: Context, url: String, parameters: Map<String, String>?, callback: (response: String?) -> Unit) {
+    val request = object : StringRequest(
+        Method.POST, url,
+        Response.Listener { response ->
+            callback.invoke(response)
+        },
+        Response.ErrorListener { error ->
+            println(error)
+        }) {
+        override fun getParams(): Map<String, String>? {
+            return parameters
+        }
+    }
+    VolleySingleton.getInstance(context).addToRequestQueue(request)
+}
+
 fun requestProducts(context: Context, callback: (response: String?) -> Unit) {
     val url = "http://tautaste.ru/getProducts"
     val queue = Volley.newRequestQueue(context)
@@ -220,7 +236,7 @@ fun MainPage() {
                         BottomNavItem(
                             title = "Catalog",
                             route = "catalogScreen",
-                            icon = Icons.Default.List
+                            icon = Icons.Default.Search
                         ),
                         BottomNavItem(
                             title = "Favs",

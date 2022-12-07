@@ -319,14 +319,11 @@ fun ProfileScreen(navController: NavHostController) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight()
-                    .padding(bottom = 80.dp),
-                verticalArrangement = Arrangement.Bottom
+                    .padding(top = 5.dp),
             ){
                 val openDialog = remember { mutableStateOf(false)  }
                 Column(
                     modifier = Modifier
-                        .padding(top = 5.dp)
                         .fillMaxWidth()
                         .clickable {
                             openDialog.value = true
@@ -414,7 +411,7 @@ fun ProfileScreen(navController: NavHostController) {
                                 colorFilter = ColorFilter.tint(PrimaryWhite)
                             )
                             Text(
-                                text = "Exit",
+                                text = "Log out",
                                 maxLines = 1,
                                 color = PrimaryWhite,
                                 style = MaterialTheme.typography.body1,

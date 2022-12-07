@@ -3,9 +3,11 @@ package ru.liquidtoiletpaper.myapplication.screens.profileScreens
 import android.app.DatePickerDialog
 import android.widget.DatePicker
 import android.widget.Toast
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.animation.*
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -23,14 +25,22 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import kotlinx.coroutines.delay
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
 import ru.liquidtoiletpaper.myapplication.User
 import ru.liquidtoiletpaper.myapplication.makeRequest
+import ru.liquidtoiletpaper.myapplication.models.AuthModel
 import ru.liquidtoiletpaper.myapplication.models.ResponseShell
 import ru.liquidtoiletpaper.myapplication.models.UpdateModel
 import java.util.*
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
+
+
+private val updated = mutableStateOf(false)
 
 @Composable
 fun ProfileInfo(navController: NavHostController) {
@@ -44,7 +54,10 @@ fun ProfileInfo(navController: NavHostController) {
                 contentColor = Color.White,
             ) {
                 IconButton(
-                    onClick = { navController.navigateUp() }
+                    onClick = {
+                        navController.navigateUp()
+                        updated.value = false
+                    }
                 ) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
@@ -73,18 +86,22 @@ fun ProfileInfo(navController: NavHostController) {
             }
         },
     ) { padding ->
+        var ticks by remember { mutableStateOf(0) }
+        LaunchedEffect(Unit) {
+            while(true) {
+                delay(3.seconds)
+                ticks++
+            }
+        }
         Column(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .background(PrimaryPageBackground)
+                .verticalScroll(rememberScrollState())
         ) {
             var errorCode = 0
-            var updated = false
-            if(updated){
-
-            }
             var nameText by rememberSaveable { mutableStateOf(User.name) }
             var isErrorName by rememberSaveable { mutableStateOf(false) }
             var key = false
@@ -93,6 +110,18 @@ fun ProfileInfo(navController: NavHostController) {
                     key = true
                 }
             }
+            Text(
+                text = "Личные данные",
+                maxLines = 1,
+                color = SecondaryText,
+                style = MaterialTheme.typography.h1,
+                fontSize = 15.sp,
+                fontFamily = SemiBoldFont,
+                textAlign = TextAlign.Left,
+                modifier = Modifier
+                    .padding(top = 10.dp)
+                    .padding(horizontal = 30.dp)
+            )
             TextField(
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = TextFieldBackground,
@@ -106,7 +135,7 @@ fun ProfileInfo(navController: NavHostController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
-                    .padding(vertical = 10.dp),
+                    .padding(top = 10.dp),
                 singleLine = true,
                 value = nameText,
                 onValueChange = { nameText = it.take(24) },
@@ -125,22 +154,13 @@ fun ProfileInfo(navController: NavHostController) {
                     ); isErrorName = key
                 },
                 label = {
-                    if(!isErrorName){
-                        Text(
-                            text = "Имя",
-                            fontFamily = NormalFont,
-                            color = PrimaryTextField
-                        )
-                    } else {
-                        Text(
-                            text = "Имя",
-                            fontFamily = NormalFont,
-                            color = ErrorColor
-                        )
-                    }
+                    Text(
+                        text = "Имя",
+                        fontFamily = NormalFont,
+                        color = if(!isErrorName) { PrimaryTextField } else { ErrorColor }
+                    )
                 }
             )
-            BorderLine()
 
             var lastnameText by rememberSaveable { mutableStateOf(User.lastname) }
             var isErrorLastname by rememberSaveable { mutableStateOf(false) }
@@ -175,19 +195,11 @@ fun ProfileInfo(navController: NavHostController) {
                     ); isErrorLastname = key
                 },
                 label = {
-                    if(!isErrorLastname){
-                        Text(
-                            text = "Фамилия",
-                            fontFamily = NormalFont,
-                            color = PrimaryTextField
-                        )
-                    } else {
-                        Text(
-                            text = "Фамилия",
-                            fontFamily = NormalFont,
-                            color = ErrorColor
-                        )
-                    }
+                    Text(
+                        text = "Фамилия",
+                        fontFamily = NormalFont,
+                        color = if(!isErrorLastname) { PrimaryTextField } else { ErrorColor }
+                    )
                 }
             )
             BorderLine()
@@ -261,7 +273,7 @@ fun ProfileInfo(navController: NavHostController) {
             if(isErrorEmail){
                 if(errorCode == 0){
                     Text(
-                        text = "Введенная почта занята",
+                        text = "Введите почту",
                         maxLines = 1,
                         color = ErrorColor,
                         style = MaterialTheme.typography.body1,
@@ -269,7 +281,7 @@ fun ProfileInfo(navController: NavHostController) {
                         fontFamily = NormalFont,
                         textAlign = TextAlign.Start,
                         modifier = Modifier
-                            .padding(horizontal = 25.dp)
+                            .padding(horizontal = 30.dp)
                             .padding(top = 5.dp)
                             .padding(bottom = 5.dp)
                     )
@@ -309,7 +321,7 @@ fun ProfileInfo(navController: NavHostController) {
                             isErrorLastname = false
                             isErrorEmail = false
                             makeRequest(
-                                context, "http://tautaste.ru/updateUser",
+                                context, "http:/tautaste.ru/updateUser",
                                 mapOf(
                                     "id" to User.id.toString(),
                                     "name" to nameText,
@@ -318,16 +330,20 @@ fun ProfileInfo(navController: NavHostController) {
                                     "email" to emailText
                                 )
                             ) { response ->
-                                val shell =
-                                    Json.decodeFromString<ResponseShell>(response.toString())
+                                val shell = Json.decodeFromString<ResponseShell>(response.toString())
                                 if (shell.status == "success") {
-                                    val updateModel =
-                                        Json.decodeFromJsonElement<UpdateModel>(shell.content!!)
-                                    User.name = updateModel.name
-                                    User.lastname = updateModel.lastname
-                                    User.gender = updateModel.gender
-                                    User.email = updateModel.email
-                                    navController.navigate("profileScreen")
+                                    /*
+                                    val authModel = Json.decodeFromJsonElement<UpdateModel>(shell.content!!)
+                                    User.id = User.id
+                                    User.email = authModel.email
+                                    User.name = authModel.name
+                                    User.lastname = authModel.lastname
+                                    User.gender = authModel.gender
+                                     */
+                                    User.email = emailText
+                                    User.name = nameText
+                                    User.lastname = lastnameText
+                                    updated.value = true
                                 } else if (shell.code == 0) {
                                     errorCode = 0
                                     isErrorEmail = true
@@ -339,9 +355,6 @@ fun ProfileInfo(navController: NavHostController) {
                                     if (lastnameText.isEmpty()) {
                                         isErrorLastname = true
                                     }
-                                } else {
-                                    Toast.makeText(context, "Что-то не так", Toast.LENGTH_SHORT)
-                                        .show()
                                 }
                             }
                         }
@@ -356,6 +369,41 @@ fun ProfileInfo(navController: NavHostController) {
                         fontFamily = SemiBoldFont,
                         textAlign = TextAlign.Center,
                     )
+                }
+            }
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            if(updated.value){
+                SlideFromTopAnimation(2500, check = updated) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(PrimaryGreen)
+                            .padding(vertical = 10.dp)
+                            .padding(horizontal = 20.dp),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Done,
+                            contentDescription = "Refreshed",
+                            modifier = Modifier
+                                .height(20.dp),
+                            tint = PrimaryWhite,
+                        )
+                        Text(
+                            text = "Данные обновлены",
+                            maxLines = 1,
+                            color = PrimaryWhite,
+                            style = MaterialTheme.typography.h1,
+                            fontSize = 15.sp,
+                            fontFamily = SemiBoldFont,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .padding(start = 10.dp),
+                        )
+                    }
                 }
             }
         }
@@ -453,4 +501,33 @@ fun MyDatePicker() {
                 mDatePickerDialog.show()
             },
     )
+}
+
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun SlideFromTopAnimation(time: Int, check: MutableState<Boolean>? = null, content: @Composable () -> Unit) {
+    var visible by remember { mutableStateOf(true) }
+    val density = LocalDensity.current
+    AnimatedVisibility(
+        visible = visible,
+        enter = slideInVertically(
+            animationSpec = tween(durationMillis = 200),
+        ) + fadeIn(initialAlpha = 0.3f),
+        exit = slideOutVertically(
+            animationSpec = spring(stiffness = Spring.StiffnessHigh),
+        ) + fadeOut(),
+        content = content,
+        initiallyVisible = false //true - без анимации, false - с анимацией
+    )
+
+    LaunchedEffect(Unit) {
+        delay(time.milliseconds)
+        visible = false
+        if(check!!.value){
+            delay(200)
+            check.value = false
+        }
+    }
+
 }

@@ -678,7 +678,7 @@ fun RegisterPage3(navController: NavController){
                     },
                 ) {
                     Text(
-                        text = "Create genshin impact account",
+                        text = "Create account",
                         color = PrimaryWhite,
                         style = MaterialTheme.typography.h1,
                         fontSize = 15.sp,

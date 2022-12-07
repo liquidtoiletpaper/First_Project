@@ -275,7 +275,12 @@ fun LoginPage(navController: NavController){
                         .padding(top = 20.dp),
                     shape = RoundedCornerShape(5.dp),
                     onClick = {
-                        makeRequest(context, "http:/tautaste.ru/auth", mapOf("email" to emailText, "password" to passwordText)){ response ->
+                        makeRequest(context, "http:/tautaste.ru/auth",
+                            mapOf(
+                            "email" to emailText,
+                            "password" to passwordText
+                            )
+                        ) { response ->
                             val shell = Json.decodeFromString<ResponseShell>(response.toString())
                             if(shell.status == "success") {
                                 val authModel = Json.decodeFromJsonElement<AuthModel>(shell.content!!)
