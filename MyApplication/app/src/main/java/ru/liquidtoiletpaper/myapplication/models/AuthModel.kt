@@ -8,5 +8,6 @@ data class AuthModel(
     val name: String,
     val gender: String,
     val lastname: String,
-    val email: String
+    val email: String,
+    val location: String
 )

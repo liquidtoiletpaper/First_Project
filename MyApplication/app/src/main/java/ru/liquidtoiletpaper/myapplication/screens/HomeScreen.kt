@@ -112,7 +112,7 @@ fun HomeScreen() {
             modifier = Modifier
             .padding(padding)
         ) {
-            requestProduct(2, context) { response ->
+            requestProduct(1, context) { response ->
                 val shell = Json.decodeFromString<ResponseShell>(response.toString())
                 if(shell.status == "success") {
                     val productModel = Json.decodeFromJsonElement<ProductModel>(shell.content!!)
@@ -122,11 +122,13 @@ fun HomeScreen() {
                     Product.description = productModel.description
                     Product.category = productModel.category
                     Product.cost = productModel.cost
-                    Log.d("MyLog", "Result: ${productModel.product_id}")
+                    Log.d("MyLog", "Result: PRISHLO ${Product.product_id}")
                 }else {
+                    Log.d("MyLog", "Result: OSHIBKA")
                     Toast.makeText(context, "Что-то не так", Toast.LENGTH_SHORT).show()
                 }
             }
+            Text(text = Product.name)
         }
     }
 }

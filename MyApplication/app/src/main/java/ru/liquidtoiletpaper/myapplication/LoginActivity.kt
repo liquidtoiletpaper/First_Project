@@ -6,6 +6,7 @@ import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -145,7 +146,7 @@ fun LoginPage(navController: NavController){
                         .padding(top = 15.dp)
                         .padding(horizontal = 20.dp)
                 )
-                var emailText by rememberSaveable { mutableStateOf("email2@yandex.ru") }
+                var emailText by rememberSaveable { mutableStateOf("email2@yandex.com") }
                 var isErrorEmail by rememberSaveable { mutableStateOf(false) }
                 var key = false
                 fun validate(length: Int, minLength: Int, maxLength: Int) {
@@ -275,7 +276,7 @@ fun LoginPage(navController: NavController){
                         .padding(top = 20.dp),
                     shape = RoundedCornerShape(5.dp),
                     onClick = {
-                        makeRequest(context, "http:/tautaste.ru/auth",
+                        makeRequest(context, "https:/tautaste.ru/auth",
                             mapOf(
                             "email" to emailText,
                             "password" to passwordText

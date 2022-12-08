@@ -2,7 +2,6 @@ package ru.liquidtoiletpaper.myapplication.screens.profileScreens
 
 import android.app.DatePickerDialog
 import android.widget.DatePicker
-import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -32,7 +31,6 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
 import ru.liquidtoiletpaper.myapplication.User
 import ru.liquidtoiletpaper.myapplication.makeRequest
-import ru.liquidtoiletpaper.myapplication.models.AuthModel
 import ru.liquidtoiletpaper.myapplication.models.ResponseShell
 import ru.liquidtoiletpaper.myapplication.models.UpdateModel
 import java.util.*
@@ -332,17 +330,12 @@ fun ProfileInfo(navController: NavHostController) {
                             ) { response ->
                                 val shell = Json.decodeFromString<ResponseShell>(response.toString())
                                 if (shell.status == "success") {
-                                    /*
-                                    val authModel = Json.decodeFromJsonElement<UpdateModel>(shell.content!!)
-                                    User.id = User.id
-                                    User.email = authModel.email
-                                    User.name = authModel.name
-                                    User.lastname = authModel.lastname
-                                    User.gender = authModel.gender
-                                     */
-                                    User.email = emailText
-                                    User.name = nameText
-                                    User.lastname = lastnameText
+                                    val updateModel = Json.decodeFromJsonElement<UpdateModel>(shell.content!!)
+                                    User.email = updateModel.email
+                                    User.location = updateModel.location
+                                    User.name = updateModel.name
+                                    User.lastname = updateModel.lastname
+                                    User.gender = updateModel.gender
                                     updated.value = true
                                 } else if (shell.code == 0) {
                                     errorCode = 0

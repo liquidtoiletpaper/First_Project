@@ -7,5 +7,6 @@ data class UpdateModel(
     val name: String,
     val lastname: String,
     val gender: String,
-    val email: String
+    val email: String,
+    val location: String
 )

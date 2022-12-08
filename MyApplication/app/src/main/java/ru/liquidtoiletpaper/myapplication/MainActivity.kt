@@ -114,10 +114,28 @@ fun makeRequest(context: Context, url: String, parameters: Map<String, String>?,
         },
         Response.ErrorListener { error ->
             println(error)
-        }) {
+        }
+    ) {
         override fun getParams(): Map<String, String>? {
             return parameters
         }
+    }
+    VolleySingleton.getInstance(context).addToRequestQueue(request)
+}
+
+fun requestProduct(id: Int, context: Context, callback: (response: String?) -> Unit) {
+    val url = "http://tautaste.ru/getProduct?product_id=$id"
+    val queue = Volley.newRequestQueue(context)
+    val request = object : StringRequest(
+        Method.GET, url,
+        Response.Listener { response ->
+            callback.invoke(response)
+        },
+        Response.ErrorListener { error ->
+            println(error)
+        }
+    ){
+
     }
     VolleySingleton.getInstance(context).addToRequestQueue(request)
 }
@@ -156,24 +174,7 @@ fun requestProducts(context: Context, callback: (response: String?) -> Unit) {
     VolleySingleton.getInstance(context).addToRequestQueue(request)
 }
 
-fun requestProduct(id: Int, context: Context, callback: (response: String?) -> Unit) {
-    val url = "http://tautaste.ru/getProduct?product_id=$id"
-    val queue = Volley.newRequestQueue(context)
-    val request = StringRequest(
-        Request.Method.GET, url,
-        { //result ->
-            //println(result)
-                result -> println(result)
-                Log.d("MyLog", "Result: $result")
-        },
-        { //error ->
-                error -> println(error)
-            //println(error)
-        }
-    )
-    //queue.add(request)
-    VolleySingleton.getInstance(context).addToRequestQueue(request)
-}
+
 
 
 
@@ -257,7 +258,6 @@ fun MainPage() {
                     navController = navController,
                     onItemClick = {
                         navController.navigate(it.route)
-
                     }
                 )
             },
