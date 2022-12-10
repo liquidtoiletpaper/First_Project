@@ -29,7 +29,7 @@ import kotlinx.coroutines.delay
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
-import ru.liquidtoiletpaper.myapplication.User
+import ru.liquidtoiletpaper.myapplication.global.User
 import ru.liquidtoiletpaper.myapplication.makeRequest
 import ru.liquidtoiletpaper.myapplication.models.ResponseShell
 import ru.liquidtoiletpaper.myapplication.models.UpdateModel

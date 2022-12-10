@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import ru.liquidtoiletpaper.myapplication.screens.profileScreens.MyPurchasesList.Companion.purchases
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 @Composable
@@ -131,8 +130,8 @@ fun MyPurchases(navController: NavHostController){
                         .fillMaxWidth()
                         .padding(top = 20.dp),
                 ) {
-                    val purchases = MyPurchasesList.purchases
-                    for (i in purchases) {
+                    /*
+                    for (i in 0..4) {
                         /*
                         val purchaseInfo = listOf(){
                             val purchaseStatus = i.status
@@ -241,6 +240,8 @@ fun MyPurchases(navController: NavHostController){
                         }
                         BorderLine()
                     }
+
+                     */
                 }
             }
         }

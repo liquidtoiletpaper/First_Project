@@ -17,14 +17,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import ru.liquidtoiletpaper.myapplication.R
-import ru.liquidtoiletpaper.myapplication.screens.Order
-import ru.liquidtoiletpaper.myapplication.screens.ProductList
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 @Composable
 fun MyPurchasesOrder(navController: NavHostController) {
-    val purchases = MyPurchasesList.purchases
-    val products = ProductList().products
     Scaffold(
         modifier = Modifier
             .background(PrimaryPageBackground),
@@ -51,7 +47,7 @@ fun MyPurchasesOrder(navController: NavHostController) {
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "Order № ${purchases[0].index}",
+                        text = "Order № 1",
                         color = PrimaryWhite,
                         style = MaterialTheme.typography.h1,
                         fontSize = 18.sp,
@@ -74,6 +70,7 @@ fun MyPurchasesOrder(navController: NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            /*
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
@@ -424,6 +421,7 @@ fun MyPurchasesOrder(navController: NavHostController) {
             ) {
 
             }
+            */
         }
     }
 }

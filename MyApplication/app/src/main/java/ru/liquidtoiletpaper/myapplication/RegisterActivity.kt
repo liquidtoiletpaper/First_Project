@@ -37,6 +37,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import ru.liquidtoiletpaper.myapplication.global.User
 import ru.liquidtoiletpaper.myapplication.models.ResponseShell
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 import java.util.*

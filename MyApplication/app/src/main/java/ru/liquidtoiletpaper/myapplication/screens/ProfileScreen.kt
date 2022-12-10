@@ -23,9 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import ru.liquidtoiletpaper.myapplication.StartActivity
-import ru.liquidtoiletpaper.myapplication.User
+import ru.liquidtoiletpaper.myapplication.global.User
 import ru.liquidtoiletpaper.myapplication.screens.profileScreens.CitiesList
-import ru.liquidtoiletpaper.myapplication.screens.profileScreens.MyPurchasesList
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 @Composable
@@ -101,7 +100,7 @@ fun ProfileScreen(navController: NavHostController) {
                                 .padding(start = 20.dp)
                         )
                         Text(
-                            text = MyPurchasesList.purchases.size.toString(),
+                            text = "0",
                             maxLines = 1,
                             color = DisabledText,
                             style = MaterialTheme.typography.body1,

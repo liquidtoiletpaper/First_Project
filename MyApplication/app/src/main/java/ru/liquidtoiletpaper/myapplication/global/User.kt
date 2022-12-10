@@ -1,4 +1,4 @@
-package ru.liquidtoiletpaper.myapplication
+package ru.liquidtoiletpaper.myapplication.global
 
 object User {
     var id = 0

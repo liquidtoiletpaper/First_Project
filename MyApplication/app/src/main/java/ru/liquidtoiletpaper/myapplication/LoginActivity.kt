@@ -6,7 +6,6 @@ import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -32,8 +31,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.decodeFromJsonElement
+import ru.liquidtoiletpaper.myapplication.global.User
 import ru.liquidtoiletpaper.myapplication.models.AuthModel
 import ru.liquidtoiletpaper.myapplication.models.ResponseShell
 import ru.liquidtoiletpaper.myapplication.ui.theme.*

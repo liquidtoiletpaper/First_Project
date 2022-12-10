@@ -3,11 +3,9 @@ package ru.liquidtoiletpaper.myapplication
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
-import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -38,12 +36,15 @@ import androidx.navigation.compose.rememberNavController
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.decodeFromJsonElement
+import ru.liquidtoiletpaper.myapplication.global.ProductsList
+import ru.liquidtoiletpaper.myapplication.global.User
+import ru.liquidtoiletpaper.myapplication.models.ProductModel
+import ru.liquidtoiletpaper.myapplication.models.ProductsModel
+import ru.liquidtoiletpaper.myapplication.models.ResponseShell
 import ru.liquidtoiletpaper.myapplication.screens.*
 import ru.liquidtoiletpaper.myapplication.screens.profileScreens.*
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
@@ -139,7 +140,8 @@ fun requestProduct(id: Int, context: Context, callback: (response: String?) -> U
     }
     VolleySingleton.getInstance(context).addToRequestQueue(request)
 }
-
+/*
+* */
 fun updateRequest(context: Context, url: String, parameters: Map<String, String>?, callback: (response: String?) -> Unit) {
     val request = object : StringRequest(
         Method.POST, url,
@@ -174,13 +176,35 @@ fun requestProducts(context: Context, callback: (response: String?) -> Unit) {
     VolleySingleton.getInstance(context).addToRequestQueue(request)
 }
 
+fun updateProducts(context: Context){
+    ProductsList.clearProducts()
+    for(i in 1..5){
+        requestProduct(i, context) { response ->
+            val shell = Json.decodeFromString<ResponseShell>(response.toString())
+            if (shell.status == "success") {
+                val product = Product()
+                val productModel = Json.decodeFromJsonElement<ProductModel>(shell.content!!)
+                product.productId = productModel.product_id
+                product.image = productModel.image
+                product.name = productModel.name
+                product.description = productModel.description
+                product.category = productModel.category
+                product.cost = productModel.cost
+                ProductsList.addProducts(product)
+                Log.d("MyLog", product.productId.toString())
+            }
+        }
+    }
+}
 
 
+var productsSize = 0
 
 
 @Composable
 fun MainPage() {
     val context = LocalContext.current
+    updateProducts(context)
     fun requestUserData(id: Int) {
         val url = "http://tautaste.ru/getData?id=$id"
         val queue = Volley.newRequestQueue(context)
@@ -199,7 +223,13 @@ fun MainPage() {
         VolleySingleton.getInstance(context).addToRequestQueue(request)
     }
 
-
+    requestProducts(context) { response ->
+        val shell = Json.decodeFromString<ResponseShell>(response.toString())
+        if(shell.status == "success") {
+            val productsModel = Json.decodeFromJsonElement<ProductsModel>(shell.content!!)
+            productsSize = productsModel.product.size
+        }
+    }
 
     val navController = rememberNavController()
     var key = false
@@ -269,7 +299,63 @@ fun MainPage() {
     }
 }
 
-
+@Composable
+fun ProductItem(product: Product){
+    Column(modifier = Modifier.fillMaxWidth()){
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp)
+                .clickable { }
+        ) {
+            Column(
+                modifier = Modifier
+                    .weight(5f)
+                    .fillMaxWidth()
+                    .padding(start = 10.dp)
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(top = 5.dp),
+                    // product name
+                    text = product.name,
+                    color = PrimaryWhite,
+                    style = MaterialTheme.typography.h1,
+                    fontSize = 16.sp,
+                    fontFamily = SemiBoldFont,
+                    textAlign = TextAlign.Start,
+                    letterSpacing = 0.5.sp,
+                    maxLines = 2
+                )
+                Text(
+                    modifier = Modifier
+                        .padding(top = 5.dp),
+                    // product description
+                    text = product.description,
+                    color = SecondaryText,
+                    style = MaterialTheme.typography.body1,
+                    fontSize = 11.sp,
+                    fontFamily = NormalFont,
+                    textAlign = TextAlign.Justify,
+                    letterSpacing = 0.5.sp,
+                    maxLines = 3
+                )
+                Text(
+                    modifier = Modifier
+                        .padding(top = 10.dp),
+                    // product cost
+                    text = "${product.cost} ₽",
+                    color = PrimaryWhite,
+                    style = MaterialTheme.typography.h1,
+                    fontSize = 14.sp,
+                    fontFamily = SemiBoldFont,
+                    textAlign = TextAlign.Center,
+                    letterSpacing = 0.5.sp
+                )
+            }
+        }
+    }
+}
 
 @Composable
 fun BottomNavigationBar(

@@ -1,16 +1,16 @@
 package ru.liquidtoiletpaper.myapplication.screens
 
-import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -22,12 +22,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Observer
 import androidx.navigation.compose.rememberNavController
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
 import ru.liquidtoiletpaper.myapplication.*
-import ru.liquidtoiletpaper.myapplication.models.AuthModel
+import ru.liquidtoiletpaper.myapplication.global.ProductsList
 import ru.liquidtoiletpaper.myapplication.models.ProductModel
 import ru.liquidtoiletpaper.myapplication.models.ProductsModel
 import ru.liquidtoiletpaper.myapplication.models.ResponseShell
@@ -110,25 +111,22 @@ fun HomeScreen() {
     ) { padding ->
         Column(
             modifier = Modifier
-            .padding(padding)
+                .padding(padding)
+                .verticalScroll(rememberScrollState())
+                .padding(bottom = 20.dp),
         ) {
-            requestProduct(1, context) { response ->
+            requestProducts(context) { response ->
                 val shell = Json.decodeFromString<ResponseShell>(response.toString())
-                if(shell.status == "success") {
-                    val productModel = Json.decodeFromJsonElement<ProductModel>(shell.content!!)
-                    Product.product_id = productModel.product_id
-                    Product.image = productModel.image
-                    Product.name = productModel.name
-                    Product.description = productModel.description
-                    Product.category = productModel.category
-                    Product.cost = productModel.cost
-                    Log.d("MyLog", "Result: PRISHLO ${Product.product_id}")
-                }else {
-                    Log.d("MyLog", "Result: OSHIBKA")
-                    Toast.makeText(context, "Что-то не так", Toast.LENGTH_SHORT).show()
+                if (shell.status == "success") {
+                    val productsModel = Json.decodeFromJsonElement<ProductsModel>(shell.content!!)
+                    productsSize = productsModel.product.size
                 }
             }
-            Text(text = Product.name)
+            for (product in ProductsList.products) {
+                ProductItem(product = product)
+            }
+            //ViewProducts()
         }
     }
+
 }
