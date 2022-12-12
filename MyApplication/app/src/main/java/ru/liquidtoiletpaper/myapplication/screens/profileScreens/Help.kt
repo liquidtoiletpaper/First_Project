@@ -51,12 +51,8 @@ fun Help(navController: NavHostController) {
                 ) {
                     Text(
                         text = "Help",
-                        color = PrimaryWhite,
                         style = MaterialTheme.typography.h1,
-                        fontSize = 16.sp,
-                        fontFamily = SemiBoldFont,
                         textAlign = TextAlign.Center,
-                        letterSpacing = 0.5.sp
                     )
                 }
             }
@@ -87,7 +83,7 @@ fun Help(navController: NavHostController) {
                             .fillMaxWidth()
                             .background(DarkAppBarBackground)
                             .padding(start = 20.dp, end = 10.dp)
-                            .padding(vertical = 10.dp),
+                            .padding(vertical = 12.dp),
                     ) {
                         Row(
                             modifier = Modifier
@@ -102,13 +98,12 @@ fun Help(navController: NavHostController) {
                             Text(
                                 text = "Contact support",
                                 maxLines = 1,
-                                color = PrimaryWhite,
                                 style = MaterialTheme.typography.body1,
-                                fontSize = 14.sp,
                                 fontFamily = NormalFont,
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier
                                     .padding(start = 20.dp)
+                                    .padding(bottom = 4.dp)
                             )
                             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                                 Icon(

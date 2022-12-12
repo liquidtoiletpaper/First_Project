@@ -44,16 +44,15 @@ fun ProfileScreen(navController: NavHostController) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 15.dp)
+                    .padding(vertical = 10.dp)
+                    .padding(bottom = 5.dp)
                     .padding(horizontal = 20.dp)
                     .wrapContentHeight(),
             ) {
                 Text(
                     text = "${User.name} ${User.lastname}",
-                    color = PrimaryWhite,
                     style = MaterialTheme.typography.h1,
-                    fontSize = 26.sp,
-                    fontFamily = SemiBoldFont,
+                    fontSize = 32.sp,
                     textAlign = TextAlign.Start
                 )
             }
@@ -76,7 +75,7 @@ fun ProfileScreen(navController: NavHostController) {
                         .fillMaxWidth()
                         .background(DarkAppBarBackground)
                         .padding(start = 20.dp, end = 10.dp)
-                        .padding(vertical = 10.dp),
+                        .padding(vertical = 12.dp),
                 ) {
                     Row(
                         modifier = Modifier
@@ -91,24 +90,20 @@ fun ProfileScreen(navController: NavHostController) {
                         Text(
                             text = "My purchases",
                             maxLines = 1,
-                            color = PrimaryWhite,
                             style = MaterialTheme.typography.body1,
-                            fontSize = 14.sp,
-                            fontFamily = NormalFont,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .padding(start = 20.dp)
+                                .padding(bottom = 4.dp)
                         )
                         Text(
                             text = "0",
                             maxLines = 1,
-                            color = DisabledText,
-                            style = MaterialTheme.typography.body1,
-                            fontSize = 14.sp,
-                            fontFamily = NormalFont,
+                            style = MaterialTheme.typography.subtitle1,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .padding(start = 5.dp)
+                                .padding(bottom = 4.dp)
                         )
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                             Image(
@@ -132,7 +127,7 @@ fun ProfileScreen(navController: NavHostController) {
                         .fillMaxWidth()
                         .background(DarkAppBarBackground)
                         .padding(start = 20.dp, end = 10.dp)
-                        .padding(vertical = 10.dp),
+                        .padding(vertical = 12.dp),
                 ) {
                     Row(
                         modifier = Modifier
@@ -147,13 +142,11 @@ fun ProfileScreen(navController: NavHostController) {
                         Text(
                             text = "Choose city",
                             maxLines = 1,
-                            color = PrimaryWhite,
                             style = MaterialTheme.typography.body1,
-                            fontSize = 14.sp,
-                            fontFamily = NormalFont,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .padding(start = 20.dp)
+                                .padding(bottom = 4.dp)
                         )
                         Row(
                             Modifier.fillMaxWidth(),
@@ -163,13 +156,11 @@ fun ProfileScreen(navController: NavHostController) {
                             Text(
                                 text = CitiesList.getSelected(),
                                 maxLines = 1,
-                                color = DisabledText,
-                                style = MaterialTheme.typography.body1,
-                                fontSize = 12.sp,
-                                fontFamily = NormalFont,
+                                style = MaterialTheme.typography.subtitle1,
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier
-                                    .padding(end = 5.dp)
+                                    .padding(start = 5.dp)
+                                    .padding(bottom = 4.dp)
                             )
                             Image(
                                 imageVector = Icons.Default.KeyboardArrowRight,
@@ -192,7 +183,7 @@ fun ProfileScreen(navController: NavHostController) {
                         .fillMaxWidth()
                         .background(DarkAppBarBackground)
                         .padding(start = 20.dp, end = 10.dp)
-                        .padding(vertical = 10.dp),
+                        .padding(vertical = 12.dp),
                 ) {
                     Row(
                         modifier = Modifier
@@ -207,13 +198,11 @@ fun ProfileScreen(navController: NavHostController) {
                         Text(
                             text = "Reviews",
                             maxLines = 1,
-                            color = PrimaryWhite,
                             style = MaterialTheme.typography.body1,
-                            fontSize = 14.sp,
-                            fontFamily = NormalFont,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .padding(start = 20.dp)
+                                .padding(bottom = 4.dp)
                         )
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                             Image(
@@ -237,7 +226,7 @@ fun ProfileScreen(navController: NavHostController) {
                         .fillMaxWidth()
                         .background(DarkAppBarBackground)
                         .padding(start = 20.dp, end = 10.dp)
-                        .padding(vertical = 10.dp),
+                        .padding(vertical = 12.dp),
                 ) {
                     Row(
                         modifier = Modifier
@@ -252,13 +241,11 @@ fun ProfileScreen(navController: NavHostController) {
                         Text(
                             text = "Profile info",
                             maxLines = 1,
-                            color = PrimaryWhite,
                             style = MaterialTheme.typography.body1,
-                            fontSize = 14.sp,
-                            fontFamily = NormalFont,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .padding(start = 20.dp)
+                                .padding(bottom = 4.dp)
                         )
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                             Image(
@@ -282,7 +269,7 @@ fun ProfileScreen(navController: NavHostController) {
                         .fillMaxWidth()
                         .background(DarkAppBarBackground)
                         .padding(start = 20.dp, end = 10.dp)
-                        .padding(vertical = 10.dp),
+                        .padding(vertical = 12.dp),
                 ) {
                     Row(
                         modifier = Modifier
@@ -297,13 +284,11 @@ fun ProfileScreen(navController: NavHostController) {
                         Text(
                             text = "Help",
                             maxLines = 1,
-                            color = PrimaryWhite,
                             style = MaterialTheme.typography.body1,
-                            fontSize = 14.sp,
-                            fontFamily = NormalFont,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .padding(start = 20.dp)
+                                .padding(bottom = 4.dp)
                         )
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                             Image(
@@ -340,20 +325,14 @@ fun ProfileScreen(navController: NavHostController) {
                             title = {
                                 Text(
                                     text = "Are you sure?",
-                                    color = PrimaryWhite,
                                     style = MaterialTheme.typography.h1,
-                                    fontSize = 15.sp,
-                                    fontFamily = SemiBoldFont
                                 )
                             },
                             text = {
                                 Text(
                                     text = "After exiting your account you should login again",
                                     maxLines = 3,
-                                    color = DisabledText,
-                                    style = MaterialTheme.typography.body1,
-                                    fontSize = 12.sp,
-                                    fontFamily = NormalFont
+                                    style = MaterialTheme.typography.subtitle1,
                                 )
                             },
                             confirmButton = {
@@ -366,11 +345,8 @@ fun ProfileScreen(navController: NavHostController) {
                                         .padding(horizontal = 15.dp)
                                         .padding(vertical = 15.dp),
                                     text = "Exit",
-                                    maxLines = 3,
-                                    color = PrimaryWhite,
+                                    maxLines = 1,
                                     style = MaterialTheme.typography.body1,
-                                    fontSize = 15.sp,
-                                    fontFamily = NormalFont
                                 )
                             },
                             dismissButton = {
@@ -382,11 +358,8 @@ fun ProfileScreen(navController: NavHostController) {
                                         .padding(horizontal = 15.dp)
                                         .padding(vertical = 15.dp),
                                     text = "Cancel",
-                                    maxLines = 3,
-                                    color = PrimaryWhite,
+                                    maxLines = 1,
                                     style = MaterialTheme.typography.body1,
-                                    fontSize = 15.sp,
-                                    fontFamily = NormalFont
                                 )
                             }
                         )
@@ -397,7 +370,7 @@ fun ProfileScreen(navController: NavHostController) {
                             .fillMaxWidth()
                             .background(DarkAppBarBackground)
                             .padding(start = 20.dp, end = 10.dp)
-                            .padding(vertical = 10.dp),
+                            .padding(vertical = 12.dp),
                     ) {
                         Row(
                             modifier = Modifier
@@ -412,13 +385,11 @@ fun ProfileScreen(navController: NavHostController) {
                             Text(
                                 text = "Log out",
                                 maxLines = 1,
-                                color = PrimaryWhite,
                                 style = MaterialTheme.typography.body1,
-                                fontSize = 14.sp,
-                                fontFamily = NormalFont,
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier
                                     .padding(start = 20.dp)
+                                    .padding(bottom = 4.dp)
                             )
                             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                                 Image(

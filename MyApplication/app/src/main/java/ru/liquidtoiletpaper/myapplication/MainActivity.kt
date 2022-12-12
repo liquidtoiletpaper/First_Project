@@ -17,9 +17,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -37,6 +39,8 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
@@ -140,24 +144,6 @@ fun requestProduct(id: Int, context: Context, callback: (response: String?) -> U
     }
     VolleySingleton.getInstance(context).addToRequestQueue(request)
 }
-/*
-* */
-fun updateRequest(context: Context, url: String, parameters: Map<String, String>?, callback: (response: String?) -> Unit) {
-    val request = object : StringRequest(
-        Method.POST, url,
-        Response.Listener { response ->
-            callback.invoke(response)
-        },
-        Response.ErrorListener { error ->
-            println(error)
-        }) {
-        override fun getParams(): Map<String, String>? {
-            return parameters
-        }
-    }
-    VolleySingleton.getInstance(context).addToRequestQueue(request)
-}
-
 fun requestProducts(context: Context, callback: (response: String?) -> Unit) {
     val url = "http://tautaste.ru/getProducts"
     val queue = Volley.newRequestQueue(context)
@@ -299,15 +285,29 @@ fun MainPage() {
     }
 }
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ProductItem(product: Product){
-    Column(modifier = Modifier.fillMaxWidth()){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth(),
+    ){
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 20.dp)
                 .clickable { }
+                .padding(horizontal = 20.dp)
+                .padding(vertical = 10.dp)
         ) {
+            GlideImage(
+                modifier = Modifier
+                    .weight(3f)
+                    .align(alignment = CenterVertically),
+                model = "https://tautaste.ru/images?image=${product.image}",
+                contentDescription = product.image,
+                contentScale = ContentScale.Fit
+            )
             Column(
                 modifier = Modifier
                     .weight(5f)
@@ -315,16 +315,11 @@ fun ProductItem(product: Product){
                     .padding(start = 10.dp)
             ) {
                 Text(
-                    modifier = Modifier
-                        .padding(top = 5.dp),
+                    modifier = Modifier,
                     // product name
                     text = product.name,
-                    color = PrimaryWhite,
                     style = MaterialTheme.typography.h1,
-                    fontSize = 16.sp,
-                    fontFamily = SemiBoldFont,
                     textAlign = TextAlign.Start,
-                    letterSpacing = 0.5.sp,
                     maxLines = 2
                 )
                 Text(
@@ -332,25 +327,17 @@ fun ProductItem(product: Product){
                         .padding(top = 5.dp),
                     // product description
                     text = product.description,
-                    color = SecondaryText,
-                    style = MaterialTheme.typography.body1,
-                    fontSize = 11.sp,
-                    fontFamily = NormalFont,
-                    textAlign = TextAlign.Justify,
-                    letterSpacing = 0.5.sp,
-                    maxLines = 3
+                    style = MaterialTheme.typography.body2,
+                    textAlign = TextAlign.Start,
+                    maxLines = 2,
                 )
                 Text(
                     modifier = Modifier
                         .padding(top = 10.dp),
                     // product cost
                     text = "${product.cost} ₽",
-                    color = PrimaryWhite,
-                    style = MaterialTheme.typography.h1,
-                    fontSize = 14.sp,
-                    fontFamily = SemiBoldFont,
+                    style = MaterialTheme.typography.h5,
                     textAlign = TextAlign.Center,
-                    letterSpacing = 0.5.sp
                 )
             }
         }
@@ -387,9 +374,8 @@ fun BottomNavigationBar(
                         Text(
                             text = item.title,
                             textAlign = TextAlign.Center,
-                            fontFamily = NormalFont,
                             style = MaterialTheme.typography.body1,
-                            fontSize = 11.sp
+                            fontSize = 14.sp
                         )
                     }
                 }
@@ -434,7 +420,8 @@ fun DropdownMenu(){
                 Text(
                     text = "Пол",
                     fontFamily = NormalFont,
-                    color = PrimaryTextField
+                    color = PrimaryTextField,
+                    style = Typography.subtitle2,
                 )
             },
             trailingIcon = {
@@ -460,6 +447,7 @@ fun DropdownMenu(){
                     ) {
                         Text(
                             text = label,
+                            style = Typography.body1
                         )
                     }
                 }
