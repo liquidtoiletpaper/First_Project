@@ -17,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -66,20 +67,27 @@ fun ProfileInfo(navController: NavHostController) {
                 }
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(end = 40.dp),
+                        .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
                         text = "Profile info",
-                        color = PrimaryWhite,
-                        style = MaterialTheme.typography.h1,
-                        fontSize = 16.sp,
-                        fontFamily = SemiBoldFont,
+                        style = MaterialTheme.typography.h5,
                         textAlign = TextAlign.Center,
-                        letterSpacing = 0.5.sp
                     )
+                    IconButton(
+                        onClick = {  },
+                        enabled = false
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            modifier = Modifier
+                                .alpha(0f),
+                            tint = PrimaryWhite,
+                        )
+                    }
                 }
             }
         },

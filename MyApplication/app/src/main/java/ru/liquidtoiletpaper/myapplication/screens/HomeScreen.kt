@@ -1,5 +1,6 @@
 package ru.liquidtoiletpaper.myapplication.screens
 
+import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -14,6 +15,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -28,7 +30,10 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
 import ru.liquidtoiletpaper.myapplication.*
+import ru.liquidtoiletpaper.myapplication.global.FilteredProductsList
 import ru.liquidtoiletpaper.myapplication.global.ProductsList
+import ru.liquidtoiletpaper.myapplication.global.User
+import ru.liquidtoiletpaper.myapplication.models.AuthModel
 import ru.liquidtoiletpaper.myapplication.models.ProductModel
 import ru.liquidtoiletpaper.myapplication.models.ProductsModel
 import ru.liquidtoiletpaper.myapplication.models.ResponseShell
@@ -67,45 +72,82 @@ fun HomeScreen() {
                         )
                     }
                 }
-                OutlinedTextField(
-                    colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = TextFieldBackground,
-                        cursorColor = Color.White,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 5.dp)
-                        .padding(top = 5.dp)
-                        .border(width = 1.dp, color = SecondaryButton, shape = Shapes.small),
-                    singleLine = true,
+                Row(modifier = Modifier.fillMaxWidth()){
+                    OutlinedTextField(
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = TextFieldBackground,
+                            cursorColor = Color.White,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                        ),
+                        modifier = Modifier
+                            .padding(start = 5.dp)
+                            .padding(top = 5.dp)
+                            .border(width = 1.dp, color = SecondaryButton, shape = Shapes.small),
+                        singleLine = true,
+                        value = searchText,
+                        onValueChange = { searchText = it.take(128) },
+                        placeholder = {
+                            Image(
+                                imageVector = Icons.Filled.Search,
+                                contentDescription = "",
+                                colorFilter = ColorFilter.tint(PrimaryTextField)
+                            )
+                            Text(
+                                "Search",
+                                fontFamily = NormalFont,
+                                modifier = Modifier
+                                    .padding(start = 30.dp)
+                            )
+                        },
+                        shape = RoundedCornerShape(5.dp),
+                        isError = isErrorSearch,
+                        keyboardActions = KeyboardActions {
+                            validate(
+                                searchText.length,
+                                6,
+                                72
+                            ); isErrorSearch = key
+                        }
+                    )
+                    if (searchText != "") {
+                        IconButton(
+                            modifier = Modifier.wrapContentHeight(),
+                            onClick = {
+                                searchText = ""
+                                makeRequest(
+                                    context,
+                                    "https://tautaste.ru/search",
+                                    mapOf("search" to searchText)
+                                ) { response ->
+                                    val shell = Json.decodeFromString<ResponseShell>(response.toString())
+                                    if (shell.status == "success") {
+                                        val searchModel = Json.decodeFromJsonElement<ProductsModel>(shell.content!!)
+                                        for (i in searchModel.product) {
+                                            val product = Product()
+                                            product.productId = i.product_id
+                                            product.image = i.image
+                                            product.name = i.name
+                                            product.description = i.description
+                                            product.category = i.category
+                                            product.cost = i.cost
+                                            ProductsList.addProducts(product)
+                                        }
+                                    } else if (shell.code == 0) {
 
-                    value = searchText,
-                    onValueChange = { searchText = it.take(128) },
-                    placeholder = {
-                        Image(
-                            imageVector = Icons.Filled.Search,
-                            contentDescription = "",
-                            colorFilter = ColorFilter.tint(PrimaryTextField)
-                        )
-                        Text(
-                            "Search",
-                            fontFamily = NormalFont,
-                            modifier = Modifier
-                                .padding(start = 30.dp)
-                        )
-                    },
-                    shape = RoundedCornerShape(5.dp),
-                    isError = isErrorSearch,
-                    keyboardActions = KeyboardActions {
-                        validate(
-                            searchText.length,
-                            6,
-                            72
-                        ); isErrorSearch = key
+                                    }
+                                }
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Search,
+                                contentDescription = "Back",
+                                modifier = Modifier,
+                                tint = PrimaryButton
+                            )
+                        }
                     }
-                )
+                }
             }
         },
     ) { padding ->

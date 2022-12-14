@@ -45,7 +45,6 @@ fun ProfileScreen(navController: NavHostController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 10.dp)
-                    .padding(bottom = 5.dp)
                     .padding(horizontal = 20.dp)
                     .wrapContentHeight(),
             ) {
@@ -94,7 +93,6 @@ fun ProfileScreen(navController: NavHostController) {
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .padding(start = 20.dp)
-                                .padding(bottom = 4.dp)
                         )
                         Text(
                             text = "0",
@@ -103,7 +101,6 @@ fun ProfileScreen(navController: NavHostController) {
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .padding(start = 5.dp)
-                                .padding(bottom = 4.dp)
                         )
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                             Image(
@@ -146,7 +143,6 @@ fun ProfileScreen(navController: NavHostController) {
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .padding(start = 20.dp)
-                                .padding(bottom = 4.dp)
                         )
                         Row(
                             Modifier.fillMaxWidth(),
@@ -160,7 +156,6 @@ fun ProfileScreen(navController: NavHostController) {
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier
                                     .padding(start = 5.dp)
-                                    .padding(bottom = 4.dp)
                             )
                             Image(
                                 imageVector = Icons.Default.KeyboardArrowRight,
@@ -202,7 +197,6 @@ fun ProfileScreen(navController: NavHostController) {
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .padding(start = 20.dp)
-                                .padding(bottom = 4.dp)
                         )
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                             Image(
@@ -245,7 +239,6 @@ fun ProfileScreen(navController: NavHostController) {
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .padding(start = 20.dp)
-                                .padding(bottom = 4.dp)
                         )
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                             Image(
@@ -288,7 +281,6 @@ fun ProfileScreen(navController: NavHostController) {
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .padding(start = 20.dp)
-                                .padding(bottom = 4.dp)
                         )
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                             Image(
@@ -389,7 +381,6 @@ fun ProfileScreen(navController: NavHostController) {
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier
                                     .padding(start = 20.dp)
-                                    .padding(bottom = 4.dp)
                             )
                             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                                 Image(

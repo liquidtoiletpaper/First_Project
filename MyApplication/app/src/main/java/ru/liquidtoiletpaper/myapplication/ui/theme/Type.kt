@@ -1,27 +1,23 @@
 package ru.liquidtoiletpaper.myapplication.ui.theme
 
 import androidx.compose.material.Typography
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import ru.liquidtoiletpaper.myapplication.R
-
+const val light = R.font.clearsans_regular
+const val regular = R.font.clearsans_medium
 val fonts = FontFamily(
-    //Font(R.font.oswald_medium, weight = FontWeight.Normal),
-    //Font(R.font.oswald_light, weight = FontWeight.Thin)
-    Font(R.font.jetbrainsmono_medium, weight = FontWeight.Normal),
-    Font(R.font.jetbrainsmono_light, weight = FontWeight.Thin)
+    Font(regular, weight = FontWeight.SemiBold),
+    Font(light, weight = FontWeight.Normal)
 )
 val SemiBoldFont = FontFamily(
-    //Font(R.font.oswald_medium, weight = FontWeight.Normal)
-    Font(R.font.jetbrainsmono_medium, weight = FontWeight.Normal)
+    Font(regular, weight = FontWeight.SemiBold)
 )
 val NormalFont = FontFamily(
-    //Font(R.font.oswald_light, weight = FontWeight.Thin)
-    Font(R.font.jetbrainsmono_light, weight = FontWeight.Thin)
+    Font(light, weight = FontWeight.Normal)
 )
 
 
@@ -56,28 +52,24 @@ val Typography = Typography(
     ),
     body1 = TextStyle(
         fontFamily = NormalFont,
-        fontWeight = FontWeight.Thin,
         fontSize = 16.sp,
         color = PrimaryWhite,
         letterSpacing = 0.5.sp,
     ),
     body2 = TextStyle(
         fontFamily = NormalFont,
-        fontWeight = FontWeight.Thin,
         fontSize = 16.sp,
         color = SecondaryText,
         letterSpacing = 0.5.sp,
     ),
     subtitle1 = TextStyle(
         fontFamily = NormalFont,
-        fontWeight = FontWeight.Thin,
         fontSize = 16.sp,
         color = DisabledText,
         letterSpacing = 0.5.sp,
     ),
     subtitle2 = TextStyle(
         fontFamily = NormalFont,
-        fontWeight = FontWeight.Thin,
         fontSize = 14.sp,
         color = DisabledText,
         letterSpacing = 0.5.sp,

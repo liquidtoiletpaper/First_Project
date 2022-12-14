@@ -8,6 +8,10 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.*
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -41,6 +45,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import kotlinx.coroutines.delay
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
@@ -52,6 +57,7 @@ import ru.liquidtoiletpaper.myapplication.models.ResponseShell
 import ru.liquidtoiletpaper.myapplication.screens.*
 import ru.liquidtoiletpaper.myapplication.screens.profileScreens.*
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
+import kotlin.time.Duration.Companion.milliseconds
 
 class MainActivity : ComponentActivity() {
 
@@ -98,7 +104,7 @@ fun Navigation(navController: NavHostController) {
     NavHost(navController = navController, startDestination = "homeScreen") {
         composable("mainScreen") { MainPage() }
         composable("homeScreen") { HomeScreen() }
-        composable("catalogScreen") { CatalogScreen() }
+        composable("catalogScreen") { CatalogScreen(navController) }
         composable("favoritesScreen") { FavoritesScreen() }
         composable("cartScreen") { CartScreen(navController) }
         composable("profileScreen") { ProfileScreen(navController) }
@@ -454,4 +460,26 @@ fun DropdownMenu(){
             }
         }
     }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun VExpandAnimation(time: Int, check: MutableState<Boolean>? = null, content: @Composable () -> Unit) {
+    var visible by remember { mutableStateOf(true) }
+    val density = LocalDensity.current
+    AnimatedVisibility(
+        visible = visible,
+        enter = expandVertically(
+            animationSpec = tween(durationMillis = 200),
+        ) + fadeIn(initialAlpha = 0.3f),
+        exit = shrinkVertically(
+            animationSpec = spring(stiffness = Spring.StiffnessHigh),
+        ) + fadeOut(),
+        content = content,
+        initiallyVisible = false //true - без анимации, false - с анимацией
+    )
+
+    LaunchedEffect(Unit) {
+    }
+
 }

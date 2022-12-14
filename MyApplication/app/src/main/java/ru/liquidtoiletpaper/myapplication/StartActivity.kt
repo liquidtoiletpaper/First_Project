@@ -131,12 +131,11 @@ fun StartPage(navController: NavController){
                     horizontalArrangement = Arrangement.Center,
                 ) {
                     Text(
-                        text = "GENSHIN IMPACT",
-                        color = PrimaryWhite,
+                        text = "PIVO FAN PUB",
                         style = MaterialTheme.typography.h1,
-                        fontSize = 30.sp,
-                        fontFamily = SemiBoldFont,
-                        textAlign = TextAlign.Center
+                        fontSize = 32.sp,
+                        textAlign = TextAlign.Center,
+                        maxLines = 1
                     )
 
                 }
@@ -169,19 +168,15 @@ fun StartPage(navController: NavController){
             ){
                 Text(
                     text = "Welcome to the club",
-                    color = PrimaryWhite,
                     style = MaterialTheme.typography.h1,
-                    fontSize = 25.sp,
-                    fontFamily = SemiBoldFont,
+                    fontSize = 28.sp,
                     textAlign = TextAlign.Center
                 )
                 Text(
-                    text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris lacinia eros risus.",
+                    text = "Extra old!",
                     maxLines = 2,
-                    color = SecondaryText,
-                    style = MaterialTheme.typography.body1,
-                    fontSize = 12.sp,
-                    fontFamily = NormalFont,
+                    fontSize = 15.sp,
+                    style = MaterialTheme.typography.body2,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .padding(horizontal = 20.dp)
@@ -206,10 +201,7 @@ fun StartPage(navController: NavController){
                 ){
                     Text(
                         text = "Register",
-                        color = PrimaryWhite,
-                        style = MaterialTheme.typography.h1,
-                        fontSize = 15.sp,
-                        fontFamily = SemiBoldFont,
+                        style = MaterialTheme.typography.h5,
                         textAlign = TextAlign.Center,
                     )
                 }
@@ -231,10 +223,7 @@ fun StartPage(navController: NavController){
                 ){
                     Text(
                         text = "Login",
-                        color = PrimaryWhite,
-                        style = MaterialTheme.typography.h1,
-                        fontSize = 15.sp,
-                        fontFamily = SemiBoldFont,
+                        style = MaterialTheme.typography.h5,
                         textAlign = TextAlign.Center
                     )
                 }

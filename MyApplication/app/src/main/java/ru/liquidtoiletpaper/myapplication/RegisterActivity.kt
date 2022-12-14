@@ -119,7 +119,7 @@ fun RegisterPage1(navController: NavController){
                     text = "Enter your E-mail",
                     color = PrimaryWhite,
                     style = MaterialTheme.typography.h1,
-                    fontSize = 25.sp,
+                    fontSize = 28.sp,
                     fontFamily = SemiBoldFont,
                     textAlign = TextAlign.Center
                 )
@@ -133,10 +133,7 @@ fun RegisterPage1(navController: NavController){
                 Text(
                     text = "E-mail",
                     maxLines = 1,
-                    color = SecondaryText,
-                    style = MaterialTheme.typography.h1,
-                    fontSize = 15.sp,
-                    fontFamily = SemiBoldFont,
+                    style = MaterialTheme.typography.subtitle1,
                     textAlign = TextAlign.Left,
                     modifier = Modifier
                         .padding(top = 25.dp)
@@ -169,8 +166,8 @@ fun RegisterPage1(navController: NavController){
                     placeholder = {
                         Text(
                             text = "E-mail",
-                            fontFamily = NormalFont,
-                            color = PrimaryTextField
+                            color = PrimaryTextField,
+                            style = Typography.body1
                         )
                     },
                     shape = RoundedCornerShape(5.dp),
@@ -233,10 +230,7 @@ fun RegisterPage1(navController: NavController){
                 ) {
                     Text(
                         text = "Enter",
-                        color = PrimaryWhite,
-                        style = MaterialTheme.typography.h1,
-                        fontSize = 15.sp,
-                        fontFamily = SemiBoldFont,
+                        style = MaterialTheme.typography.h5,
                         textAlign = TextAlign.Center,
                     )
                 }
@@ -281,10 +275,8 @@ fun RegisterPage2(navController: NavController){
             ) {
                 Text(
                     text = "Register",
-                    color = PrimaryWhite,
                     style = MaterialTheme.typography.h1,
-                    fontSize = 25.sp,
-                    fontFamily = SemiBoldFont,
+                    fontSize = 28.sp,
                     textAlign = TextAlign.Center
                 )
             }
@@ -296,10 +288,8 @@ fun RegisterPage2(navController: NavController){
                 Text(
                     text = "Введите свои данные",
                     maxLines = 1,
+                    style = MaterialTheme.typography.h5,
                     color = SecondaryText,
-                    style = MaterialTheme.typography.h1,
-                    fontSize = 15.sp,
-                    fontFamily = SemiBoldFont,
                     textAlign = TextAlign.Left,
                     modifier = Modifier
                         .padding(top = 15.dp)
@@ -332,7 +322,7 @@ fun RegisterPage2(navController: NavController){
                     placeholder = {
                         Text(
                             text = "What's your name?",
-                            fontFamily = NormalFont,
+                            style = Typography.body1,
                             color = PrimaryTextField
                         )
                     },
@@ -372,7 +362,7 @@ fun RegisterPage2(navController: NavController){
                     placeholder = {
                         Text(
                             text = "Lastname",
-                            fontFamily = NormalFont,
+                            style = Typography.body1,
                             color = PrimaryTextField
                         )
                     },
@@ -416,7 +406,12 @@ fun RegisterPage2(navController: NavController){
 
                     value = passwordText,
                     onValueChange = { passwordText = it.take(32) },
-                    placeholder = { Text("Password", fontFamily = NormalFont, color = PrimaryTextField) },
+                    placeholder = {
+                        Text(
+                            text = "Password",
+                            style = Typography.body1,
+                            color = PrimaryTextField)
+                                  },
                     shape = RoundedCornerShape(5.dp),
                     visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
@@ -449,11 +444,8 @@ fun RegisterPage2(navController: NavController){
                 )
                 Text(
                     text = "Password must be from 4 to 72 char",
-                    maxLines = 1,
-                    color = SecondaryText,
-                    style = MaterialTheme.typography.body1,
-                    fontSize = 12.sp,
-                    fontFamily = NormalFont,
+                    maxLines = 2,
+                    style = MaterialTheme.typography.subtitle2,
                     textAlign = TextAlign.Left,
                     modifier = Modifier
                         .padding(top = 20.dp)
@@ -494,10 +486,7 @@ fun RegisterPage2(navController: NavController){
                 ) {
                     Text(
                         text = "Enter",
-                        color = PrimaryWhite,
-                        style = MaterialTheme.typography.h1,
-                        fontSize = 15.sp,
-                        fontFamily = SemiBoldFont,
+                        style = MaterialTheme.typography.h5,
                         textAlign = TextAlign.Center,
                     )
                 }
@@ -542,10 +531,8 @@ fun RegisterPage3(navController: NavController){
             ) {
                 Text(
                     text = "Enter your date of birth",
-                    color = PrimaryWhite,
                     style = MaterialTheme.typography.h1,
-                    fontSize = 25.sp,
-                    fontFamily = SemiBoldFont,
+                    fontSize = 28.sp,
                     textAlign = TextAlign.Center,
                     maxLines = 2
                 )
@@ -558,10 +545,7 @@ fun RegisterPage3(navController: NavController){
                 Text(
                     text = "Date of birth",
                     maxLines = 1,
-                    color = SecondaryText,
-                    style = MaterialTheme.typography.h1,
-                    fontSize = 15.sp,
-                    fontFamily = SemiBoldFont,
+                    style = MaterialTheme.typography.h6,
                     textAlign = TextAlign.Left,
                     modifier = Modifier
                         .padding(top = 15.dp)
@@ -615,7 +599,8 @@ fun RegisterPage3(navController: NavController){
                     placeholder = {
                         Text(
                             text = "01.01.1991",
-                            fontFamily = NormalFont
+                            fontFamily = NormalFont,
+                            style = Typography.body2
                         )
                     },
                     shape = RoundedCornerShape(5.dp),
@@ -680,20 +665,14 @@ fun RegisterPage3(navController: NavController){
                 ) {
                     Text(
                         text = "Create account",
-                        color = PrimaryWhite,
-                        style = MaterialTheme.typography.h1,
-                        fontSize = 15.sp,
-                        fontFamily = SemiBoldFont,
+                        style = MaterialTheme.typography.h5,
                         textAlign = TextAlign.Center,
                     )
                 }
                 Text(
                     text = "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.",
                     maxLines = 5,
-                    color = SecondaryText,
-                    style = MaterialTheme.typography.body1,
-                    fontSize = 11.sp,
-                    fontFamily = NormalFont,
+                    style = MaterialTheme.typography.subtitle2,
                     textAlign = TextAlign.Left,
                     modifier = Modifier
                         .padding(top = 10.dp)

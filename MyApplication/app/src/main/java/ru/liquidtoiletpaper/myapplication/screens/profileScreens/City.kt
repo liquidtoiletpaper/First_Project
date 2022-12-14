@@ -7,6 +7,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.ripple.rememberRipple
@@ -14,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -43,20 +45,27 @@ fun City(navController: NavHostController) {
                 }
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(end = 40.dp),
+                        .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
                         text = "City",
-                        color = PrimaryWhite,
-                        style = MaterialTheme.typography.h1,
-                        fontSize = 16.sp,
-                        fontFamily = SemiBoldFont,
+                        style = MaterialTheme.typography.h5,
                         textAlign = TextAlign.Center,
-                        letterSpacing = 0.5.sp
                     )
+                    IconButton(
+                        onClick = {  },
+                        enabled = false
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Close,
+                            contentDescription = "Back",
+                            modifier = Modifier
+                                .alpha(0f),
+                            tint = PrimaryWhite,
+                        )
+                    }
                 }
             }
         },

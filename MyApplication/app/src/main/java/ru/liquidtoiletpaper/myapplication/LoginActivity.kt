@@ -109,19 +109,14 @@ fun LoginPage(navController: NavController){
             ) {
                 Text(
                     text = "Welcome back!",
-                    color = PrimaryWhite,
                     style = MaterialTheme.typography.h1,
-                    fontSize = 25.sp,
-                    fontFamily = SemiBoldFont,
+                    fontSize = 28.sp,
                     textAlign = TextAlign.Center
                 )
                 Text(
                     text = "Lorem ipsum dolor sit amet, consectetur",
                     maxLines = 2,
-                    color = SecondaryText,
-                    style = MaterialTheme.typography.body1,
-                    fontSize = 12.sp,
-                    fontFamily = NormalFont,
+                    style = MaterialTheme.typography.subtitle2,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .padding(horizontal = 20.dp)
@@ -136,10 +131,7 @@ fun LoginPage(navController: NavController){
                 Text(
                     text = "Enter account information",
                     maxLines = 1,
-                    color = SecondaryText,
-                    style = MaterialTheme.typography.h1,
-                    fontSize = 15.sp,
-                    fontFamily = SemiBoldFont,
+                    style = MaterialTheme.typography.h6,
                     textAlign = TextAlign.Left,
                     modifier = Modifier
                         .padding(top = 15.dp)
@@ -172,7 +164,7 @@ fun LoginPage(navController: NavController){
                     placeholder = {
                         Text(
                             text = "Email",
-                            fontFamily = NormalFont,
+                            style = Typography.body2,
                             color = PrimaryTextField
                         )
                             },
@@ -214,7 +206,7 @@ fun LoginPage(navController: NavController){
                     placeholder = {
                         Text(
                             "Password",
-                            fontFamily = NormalFont,
+                            style = Typography.body2,
                             color = PrimaryTextField
                         )
                     },
@@ -258,9 +250,8 @@ fun LoginPage(navController: NavController){
                         },
                     textAlign = TextAlign.End,
                     text = "Forgot password?",
-                    fontFamily = NormalFont,
+                    style = Typography.subtitle2,
                     color = LinkText,
-                    fontSize = 12.sp,
                 )
                 Button(
                     colors = ButtonDefaults.buttonColors(
@@ -304,10 +295,7 @@ fun LoginPage(navController: NavController){
                 ) {
                     Text(
                         text = "Login",
-                        color = PrimaryWhite,
-                        style = MaterialTheme.typography.h1,
-                        fontSize = 15.sp,
-                        fontFamily = SemiBoldFont,
+                        style = MaterialTheme.typography.h5,
                         textAlign = TextAlign.Center,
                     )
                 }
