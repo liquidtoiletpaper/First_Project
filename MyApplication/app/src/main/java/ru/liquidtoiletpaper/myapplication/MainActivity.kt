@@ -55,6 +55,7 @@ import ru.liquidtoiletpaper.myapplication.models.ProductModel
 import ru.liquidtoiletpaper.myapplication.models.ProductsModel
 import ru.liquidtoiletpaper.myapplication.models.ResponseShell
 import ru.liquidtoiletpaper.myapplication.screens.*
+import ru.liquidtoiletpaper.myapplication.screens.catalogScreens.CategorySearch
 import ru.liquidtoiletpaper.myapplication.screens.profileScreens.*
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 import kotlin.time.Duration.Companion.milliseconds
@@ -114,6 +115,7 @@ fun Navigation(navController: NavHostController) {
         composable("profileInfoScreen") { ProfileInfo(navController) }
         composable("helpScreen") { Help(navController) }
         composable("reviewsScreen") { Reviews(navController) }
+        composable("categorySearchScreen") { CategorySearch(navController) }
     }
 }
 
@@ -170,7 +172,7 @@ fun requestProducts(context: Context, callback: (response: String?) -> Unit) {
 
 fun updateProducts(context: Context){
     ProductsList.clearProducts()
-    for(i in 1..5){
+    for(i in 1..7){
         requestProduct(i, context) { response ->
             val shell = Json.decodeFromString<ResponseShell>(response.toString())
             if (shell.status == "success") {
@@ -465,21 +467,24 @@ fun DropdownMenu(){
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun VExpandAnimation(time: Int, check: MutableState<Boolean>? = null, content: @Composable () -> Unit) {
-    var visible by remember { mutableStateOf(true) }
+    var visible by remember { mutableStateOf(check!!.value) }
     val density = LocalDensity.current
     AnimatedVisibility(
         visible = visible,
         enter = expandVertically(
-            animationSpec = tween(durationMillis = 200),
+            animationSpec = tween(durationMillis = 50),
         ) + fadeIn(initialAlpha = 0.3f),
         exit = shrinkVertically(
             animationSpec = spring(stiffness = Spring.StiffnessHigh),
         ) + fadeOut(),
         content = content,
-        initiallyVisible = false //true - без анимации, false - с анимацией
+        initiallyVisible = true //true - без анимации, false - с анимацией
     )
 
     LaunchedEffect(Unit) {
+        if(check!!.value){
+            delay(time.milliseconds)
+        }
     }
 
 }

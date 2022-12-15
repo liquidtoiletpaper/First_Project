@@ -1,11 +1,13 @@
 package ru.liquidtoiletpaper.myapplication.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -13,38 +15,59 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
 import ru.liquidtoiletpaper.myapplication.*
 import ru.liquidtoiletpaper.myapplication.R
+import ru.liquidtoiletpaper.myapplication.global.FilteredProductsList
 import ru.liquidtoiletpaper.myapplication.global.ProductsList
 import ru.liquidtoiletpaper.myapplication.models.ProductModel
 import ru.liquidtoiletpaper.myapplication.models.ResponseShell
+import ru.liquidtoiletpaper.myapplication.screens.catalogScreens.CategorySearch
+import ru.liquidtoiletpaper.myapplication.screens.profileScreens.BorderLine
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CatalogScreen(navController: NavController) {
     val context = LocalContext.current
+    val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
 
-    Scaffold(
+    LazyColumn(
+        //state = rememberForeverLazyListState(key = "Catalog"),
+        state = listState,
         modifier = Modifier
-            .background(PrimaryPageBackground),
-        bottomBar = {
-
-        },
-        topBar = {
+    ) {
+        stickyHeader {
             TopAppBar(
                 backgroundColor = DarkAppBarBackground,
                 contentColor = Color.White,
             ) {
+                if(catalogItem1IsOpen.value){
+                    IconButton(
+                        onClick = {
+                            catalogItem1IsOpen.value = !catalogItem1IsOpen.value
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            modifier = Modifier,
+                            tint = PrimaryWhite,
+                        )
+                    }
+                }
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -56,24 +79,32 @@ fun CatalogScreen(navController: NavController) {
                         style = MaterialTheme.typography.h5,
                         textAlign = TextAlign.Center,
                     )
+                    if(catalogItem1IsOpen.value){
+                        IconButton(
+                            onClick = {  },
+                            enabled = false
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.ArrowBack,
+                                contentDescription = "Back",
+                                modifier = Modifier
+                                    .alpha(0f),
+                                tint = PrimaryWhite,
+                            )
+                        }
+                    }
                 }
-
             }
         }
-    ) { padding ->
-        LazyColumn(
-            state = rememberForeverLazyListState(key = "Catalog"),
-            modifier = Modifier
-                .padding(padding)
-        ) {
+        if(!catalogItem1IsOpen.value){
             item {
-                CatalogTitle(title = "Компьютерные комплектующие")
-                if(catalogTitleIsOpen.value){
-                    VExpandAnimation(time = 200, check = catalogTitleIsOpen){
+                CatalogTitle(title = "Компьютерные комплектующие", catalogTitle1IsOpen)
+                if(catalogTitle1IsOpen.value){
+                    VExpandAnimation(time = 50, check = catalogTitle1IsOpen){
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(start = 20.dp)
+                                .padding(start = 40.dp)
                         ) {
                             CatalogItem(R.drawable.ic_video_card, "Видеокарты", "1", navController)
                             CatalogItem(R.drawable.ic_cpu, "Процессоры", "2", navController)
@@ -104,25 +135,46 @@ fun CatalogScreen(navController: NavController) {
                         }
                     }
                 }
+                CatalogTitle(title = "Разное", catalogTitle2IsOpen)
+                if(catalogTitle2IsOpen.value){
+                    Column(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 40.dp)
+                    ){
+                        CatalogItem(image = R.drawable.icon_papich, title = "Ручной аскет", category = "4", navController = navController)
+                        CatalogItem(image = R.drawable.ic_moon, title = "Луна", category = "4", navController = navController)
+                        CatalogItem(image = R.drawable.ic_launcher_background, title = "Кусочек", category = "4", navController = navController)
+                        CatalogItem(image = R.drawable.ic_launcher_foreground, title = "Это че", category = "4", navController = navController)
+                    }
+                }
+            }
+        }
+        if(catalogItem1IsOpen.value){
+            item {
+                CategorySearch(navController = navController)
+                BackHandler(true) {
+                    catalogItem1IsOpen.value = false
+                }
             }
         }
     }
+
 }
-private val catalogTitleIsOpen = mutableStateOf(false)
+
+private val catalogTitle1IsOpen = mutableStateOf(false)
+private val catalogTitle2IsOpen = mutableStateOf(false)
+private val catalogItem1IsOpen = mutableStateOf(false)
 
 @Composable
-fun CatalogTitle(title: String){
-    var mExpanded by remember { mutableStateOf(false) }
-    val icon = if (mExpanded)
+fun CatalogTitle(title: String, openCheck: MutableState<Boolean>){
+    val icon = if (openCheck.value)
         Icons.Filled.KeyboardArrowUp
     else
         Icons.Filled.KeyboardArrowDown
     Column(
         modifier = Modifier
-            .padding(top = 5.dp)
             .clickable {
-                mExpanded = !mExpanded
-                catalogTitleIsOpen.value = !catalogTitleIsOpen.value
+                openCheck.value = !openCheck.value
             }
     ) {
         Column(
@@ -155,6 +207,7 @@ fun CatalogTitle(title: String){
                 }
             }
         }
+        BorderLine()
     }
 }
 
@@ -164,32 +217,24 @@ fun CatalogItem(image: Int, title: String, category: String, navController: NavC
     val context = LocalContext.current
     Column(
         modifier = Modifier
-            .padding(top = 10.dp)
             .clickable {
-                ProductsList.clearProducts()
-                for (i in 1..5) {
-                    requestProduct(i, context) { response ->
-                        val shell = Json.decodeFromString<ResponseShell>(response.toString())
-                        if (shell.status == "success") {
-                            val product = Product()
-                            val productModel =
-                                Json.decodeFromJsonElement<ProductModel>(shell.content!!)
-                            product.productId = productModel.product_id
-                            product.image = productModel.image
-                            product.name = productModel.name
-                            product.description = productModel.description
-                            product.category = productModel.category
-                            product.cost = productModel.cost
-                            if (product.category == category) {
-                                ProductsList.addProducts(product)
-                            }
-                        }
+                FilteredProductsList.clearProducts()
+                for (i in ProductsList.products) {
+                    val product = Product()
+                    product.productId = i.productId
+                    product.image = i.image
+                    product.name = i.name
+                    product.description = i.description
+                    product.category = i.category
+                    product.cost = i.cost
+                    if (product.category == category) {
+                        FilteredProductsList.addProducts(product)
                     }
                 }
-                navController.navigate("homeScreen")
+                catalogItem1IsOpen.value = true
             }
     ) {
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(DarkAppBarBackground)
@@ -199,7 +244,8 @@ fun CatalogItem(image: Int, title: String, category: String, navController: NavC
         ) {
             Row(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .fillMaxHeight(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
@@ -225,53 +271,7 @@ fun CatalogItem(image: Int, title: String, category: String, navController: NavC
                 }
             }
         }
-    }
-}
-
-
-@Composable
-fun CategoryItem(){
-    Column(
-        modifier = Modifier
-            .padding(top = 5.dp)
-            .clickable {
-
-            }
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(DarkAppBarBackground)
-                .padding(start = 20.dp, end = 10.dp)
-                .padding(vertical = 12.dp),
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    imageVector = Icons.Default.Star,
-                    contentDescription = "",
-                    colorFilter = ColorFilter.tint(PrimaryWhite)
-                )
-                Text(
-                    text = "Reviews",
-                    maxLines = 1,
-                    style = MaterialTheme.typography.body1,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .padding(start = 20.dp)
-                )
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                    Image(
-                        imageVector = Icons.Default.KeyboardArrowRight,
-                        contentDescription = "",
-                        colorFilter = ColorFilter.tint(SecondaryText),
-                    )
-                }
-            }
-        }
+        BorderLine()
     }
 }
 

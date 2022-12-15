@@ -157,17 +157,9 @@ fun HomeScreen() {
                 .verticalScroll(rememberScrollState())
                 .padding(bottom = 20.dp),
         ) {
-            requestProducts(context) { response ->
-                val shell = Json.decodeFromString<ResponseShell>(response.toString())
-                if (shell.status == "success") {
-                    val productsModel = Json.decodeFromJsonElement<ProductsModel>(shell.content!!)
-                    productsSize = productsModel.product.size
-                }
-            }
             for (product in ProductsList.products) {
                 ProductItem(product = product)
             }
-            //ViewProducts()
         }
     }
 
