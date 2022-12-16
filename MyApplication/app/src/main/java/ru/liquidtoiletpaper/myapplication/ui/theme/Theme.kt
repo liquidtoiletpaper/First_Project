@@ -10,8 +10,8 @@ import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorPalette = darkColors(
-    background = Color.Transparent,
-    surface = Color.White,
+    background = PrimaryPageBackground,
+    surface = PrimaryPageBackground,
     onPrimary = Color.White,
     onSecondary = Color.White,
     onBackground = Color.White,
@@ -19,8 +19,8 @@ private val DarkColorPalette = darkColors(
 )
 
 private val LightColorPalette = lightColors(
-    background = Color.Transparent,
-    surface = Color.White,
+    background = PrimaryPageBackground,
+    surface = PrimaryPageBackground,
     onPrimary = Color.White,
     onSecondary = Color.White,
     onBackground = Color.White,
@@ -32,7 +32,7 @@ fun MyApplicationTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val colors = LightColorPalette
+    val colors = DarkColorPalette
 
     MaterialTheme(
         colors = colors,

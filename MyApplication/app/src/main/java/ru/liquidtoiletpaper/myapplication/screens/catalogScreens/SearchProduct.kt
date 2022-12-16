@@ -12,7 +12,7 @@ import ru.liquidtoiletpaper.myapplication.ProductItem
 import ru.liquidtoiletpaper.myapplication.global.FilteredProductsList
 
 @Composable
-fun CategorySearch(navController: NavController){
+fun SearchProduct(navController: NavController){
     val context = LocalContext.current
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
@@ -21,10 +21,6 @@ fun CategorySearch(navController: NavController){
         modifier = Modifier
             .fillMaxWidth()
     ){
-        for(product in FilteredProductsList.products){
-            item {
-                ProductItem(product = product)
-            }
-        }
+
     }
 }

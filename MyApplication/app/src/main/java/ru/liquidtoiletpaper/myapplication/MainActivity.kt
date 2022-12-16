@@ -236,8 +236,7 @@ fun MainPage() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .fillMaxHeight()
-            .background(PrimaryPageBackground),
+            .fillMaxHeight(),
     ) {
 
         Column(
