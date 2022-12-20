@@ -1,10 +1,7 @@
 package ru.liquidtoiletpaper.myapplication.screens
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import androidx.compose.animation.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -22,6 +19,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -51,14 +49,15 @@ import ru.liquidtoiletpaper.myapplication.models.ProductSearchViewModel
 import ru.liquidtoiletpaper.myapplication.models.ProductsModel
 import ru.liquidtoiletpaper.myapplication.models.ResponseShell
 import ru.liquidtoiletpaper.myapplication.screens.catalogScreens.CategorySearch
+import ru.liquidtoiletpaper.myapplication.screens.catalogScreens.ItemProduct
 import ru.liquidtoiletpaper.myapplication.screens.profileScreens.BorderLine
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 
-private val searchIsOpen = mutableStateOf(false)
+val searchIsOpen = mutableStateOf(false)
 private val catalogTitle1IsOpen = mutableStateOf(false)
 private val catalogTitle2IsOpen = mutableStateOf(false)
-private val catalogItem1IsOpen = mutableStateOf(false)
+val catalogItem1IsOpen = mutableStateOf(false)
 
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalAnimationApi::class)
@@ -81,7 +80,10 @@ fun CatalogScreen(navController: NavController) {
                 backgroundColor = DarkAppBarBackground,
                 contentColor = Color.White,
                 title = {
-                    Box(Modifier.weight(1f)) {
+                    Box(
+                        Modifier
+                            .weight(1f)
+                            .padding(end = 20.dp)) {
                         if (catalogItem1IsOpen.value) {
                             IconButton(
                                 onClick = {
@@ -131,71 +133,87 @@ fun CatalogScreen(navController: NavController) {
             )
         }
         if(searchIsOpen.value){
-            Column(){
-                ProductSearchUI(navController = navController, productSearchViewModel = ProductSearchViewModel())
+            AnimatedVisibility(
+                visible = searchIsOpen.value,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ){
+                ProductSearchUI(
+                    navController = navController,
+                    productSearchViewModel = ProductSearchViewModel()
+                )
                 BackHandler(true) {
                     searchIsOpen.value = false
                 }
             }
         }
-
-        if(!catalogItem1IsOpen.value){
+        AnimatedVisibility(
+            visible = !catalogItem1IsOpen.value,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ){
             LazyColumn(){
                 item(key = "searchString") {
 
                 }
                 item(key = "pc parts") {
                     CatalogTitle(title = "Компьютерные комплектующие", catalogTitle1IsOpen)
-                    if (catalogTitle1IsOpen.value) {
-                        VExpandAnimation(time = 50, check = catalogTitle1IsOpen) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(start = 40.dp)
-                            ) {
-                                CatalogItem(
-                                    R.drawable.ic_video_card,
-                                    "Видеокарты",
-                                    "1",
-                                    navController
-                                )
-                                CatalogItem(
-                                    R.drawable.ic_cpu,
-                                    "Процессоры",
-                                    "2",
-                                    navController
-                                )
-                                CatalogItem(
-                                    R.drawable.ic_power_supply,
-                                    "Блоки питания",
-                                    "3",
-                                    navController
-                                )
-                                CatalogItem(
-                                    R.drawable.ic_motherboard,
-                                    "Материнские платы",
-                                    "1",
-                                    navController
-                                )
-                                CatalogItem(
-                                    R.drawable.ic_ssd,
-                                    "Жёсткие диски (SSD)",
-                                    "1",
-                                    navController
-                                )
-                                CatalogItem(
-                                    R.drawable.ic_cooler,
-                                    "Кулеры для процессоров",
-                                    "1",
-                                    navController
-                                )
-                            }
+                    AnimatedVisibility(
+                        visible = catalogTitle1IsOpen.value,
+                        enter = expandVertically(),
+                        exit = shrinkVertically()
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 40.dp)
+                        ) {
+                            CatalogItem(
+                                R.drawable.ic_video_card,
+                                "Видеокарты",
+                                "1",
+                                navController
+                            )
+                            CatalogItem(
+                                R.drawable.ic_cpu,
+                                "Процессоры",
+                                "2",
+                                navController
+                            )
+                            CatalogItem(
+                                R.drawable.ic_power_supply,
+                                "Блоки питания",
+                                "3",
+                                navController
+                            )
+                            CatalogItem(
+                                R.drawable.ic_motherboard,
+                                "Материнские платы",
+                                "1",
+                                navController
+                            )
+                            CatalogItem(
+                                R.drawable.ic_ssd,
+                                "Жёсткие диски (SSD)",
+                                "1",
+                                navController
+                            )
+                            CatalogItem(
+                                R.drawable.ic_cooler,
+                                "Кулеры для процессоров",
+                                "1",
+                                navController
+                            )
                         }
                     }
                 }
                 item(key = "other") {
                     CatalogTitle(title = "Разное", catalogTitle2IsOpen)
-                    if(catalogTitle2IsOpen.value){
+                    AnimatedVisibility(
+                        visible = catalogTitle2IsOpen.value,
+                        enter = expandVertically(),
+                        exit = shrinkVertically()
+                    ) {
                         Column(modifier = Modifier
                             .fillMaxWidth()
                             .padding(start = 40.dp)
@@ -229,7 +247,7 @@ fun CatalogScreen(navController: NavController) {
                 }
             }
         }
-        if(catalogItem1IsOpen.value){
+        if(catalogItem1IsOpen.value) {
             CategorySearch(navController = navController)
             BackHandler(true) {
                 catalogItem1IsOpen.value = false
@@ -503,16 +521,20 @@ fun SearchBarUI(
             )
 
             if (matchesFound) {
-                Text("Results", modifier = Modifier
-                    .padding(top = 10.dp)
-                    .padding(vertical = 5.dp)
-                    .padding(horizontal = 20.dp), style = Typography.h5)
-                results()
+                LazyColumn(){
+                    item{
+                        Text("Results", modifier = Modifier
+                            .padding(top = 10.dp)
+                            .padding(vertical = 10.dp)
+                            .padding(horizontal = 20.dp), style = Typography.h1)
+                        Divider()
+                        results()
+                    }
+                }
             } else {
                 if (searchText.isNotEmpty()) {
                     NoSearchResults()
                 }
-
             }
         }
     }
@@ -531,13 +553,56 @@ fun Products(products: List<Product>?, onClick: (Product) -> Unit) {
 
 @Composable
 fun ProductRow(product: Product, onClick: () -> Unit) {
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .padding(vertical = 10.dp)
-        .padding(horizontal = 20.dp)
-        .clickable { onClick() }) {
-        Text(product.name, style = Typography.body1)
-        Spacer(modifier = Modifier.height(2.dp))
+    var icon = 0
+    when (product.category) {
+        "1" -> {
+            icon = R.drawable.ic_video_card
+        }
+        "2" -> {
+            icon = R.drawable.ic_cpu
+        }
+        "3" -> {
+            icon = R.drawable.ic_power_supply
+        }
+        "4" -> {
+            icon = R.drawable.ic_motherboard
+        }
+        "5" -> {
+            icon = R.drawable.ic_ssd
+        }
+        "6" -> {
+            icon = R.drawable.ic_cooler
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
+    ){
+        Column(
+            modifier = Modifier
+                .padding(vertical = 15.dp)
+                .padding(horizontal = 20.dp)
+        ) {
+            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = CenterVertically) {
+                Image(
+                    painter = painterResource(id = icon),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .padding(end = 15.dp)
+                        .weight(1f)
+                )
+                Text(
+                    product.name,
+                    style = Typography.body1,
+                    maxLines = 2,
+                    modifier = Modifier
+                        .weight(5f)
+                )
+            }
+            Spacer(modifier = Modifier.height(2.dp))
+        }
     }
 }
 
@@ -553,13 +618,20 @@ fun ProductSearchUI(navController: NavController, productSearchViewModel: Produc
         onSearchTextChanged = { productSearchViewModel.onSearchTextChanged(it) },
         onClearClick = { productSearchViewModel.onClearClick() },
         onNavigateBack = {
-            navController.popBackStack()
+            searchIsOpen.value = false
         },
         matchesFound = productSearchModelState.products.isNotEmpty()
     ) {
-
-        Products(products = productSearchModelState.products) {
-            navController.navigate("homeScreen")
+        AnimatedVisibility(
+            visible = true,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            Column(){
+                Products(products = productSearchModelState.products) {
+                    navController.navigate("itemProduct")
+                }
+            }
         }
     }
 }
@@ -570,6 +642,6 @@ fun NoSearchResults() {
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center,
         horizontalAlignment = CenterHorizontally
     ) {
-        Text("No matches found")
+        Text("Ничего не найдено")
     }
 }

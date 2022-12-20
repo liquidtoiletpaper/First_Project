@@ -23,7 +23,7 @@ fun CategorySearch(navController: NavController){
     ){
         for(product in FilteredProductsList.products){
             item {
-                ProductItem(product = product)
+                ProductItem(product = product, navController)
             }
         }
     }

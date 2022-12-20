@@ -56,6 +56,7 @@ import ru.liquidtoiletpaper.myapplication.models.ProductsModel
 import ru.liquidtoiletpaper.myapplication.models.ResponseShell
 import ru.liquidtoiletpaper.myapplication.screens.*
 import ru.liquidtoiletpaper.myapplication.screens.catalogScreens.CategorySearch
+import ru.liquidtoiletpaper.myapplication.screens.catalogScreens.ItemProduct
 import ru.liquidtoiletpaper.myapplication.screens.profileScreens.*
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 import kotlin.time.Duration.Companion.milliseconds
@@ -104,7 +105,7 @@ class MainActivity : ComponentActivity() {
 fun Navigation(navController: NavHostController) {
     NavHost(navController = navController, startDestination = "homeScreen") {
         composable("mainScreen") { MainPage() }
-        composable("homeScreen") { HomeScreen() }
+        composable("homeScreen") { HomeScreen(navController) }
         composable("catalogScreen") { CatalogScreen(navController) }
         composable("favoritesScreen") { FavoritesScreen() }
         composable("cartScreen") { CartScreen(navController) }
@@ -116,6 +117,8 @@ fun Navigation(navController: NavHostController) {
         composable("helpScreen") { Help(navController) }
         composable("reviewsScreen") { Reviews(navController) }
         composable("categorySearchScreen") { CategorySearch(navController) }
+        composable("searchProductScreen") { CategorySearch(navController) }
+        composable("itemProduct") { ItemProduct(navController) }
     }
 }
 
@@ -294,7 +297,7 @@ fun MainPage() {
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ProductItem(product: Product){
+fun ProductItem(product: Product, navController: NavController){
     Column(
         modifier = Modifier
             .fillMaxWidth(),
@@ -303,7 +306,9 @@ fun ProductItem(product: Product){
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 20.dp)
-                .clickable { }
+                .clickable {
+                    navController.navigate("itemProduct")
+                }
                 .padding(horizontal = 20.dp)
                 .padding(vertical = 10.dp)
         ) {
@@ -366,9 +371,9 @@ fun BottomNavigationBar(
         elevation = 5.dp
     ) {
         items.forEach { item ->
-            val selected = item.route == backStackEntry.value?.destination?.route
+            val selected = (item.route == backStackEntry.value?.destination?.route)
             BottomNavigationItem(
-                selected = item.route == navController.currentDestination?.route,
+                selected = selected,
                 onClick = { onItemClick(item) },
                 selectedContentColor = PrimaryWhite,
                 unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),

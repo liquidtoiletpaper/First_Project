@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Observer
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -40,9 +41,8 @@ import ru.liquidtoiletpaper.myapplication.models.ResponseShell
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController) {
     val context = LocalContext.current
-    val navController = rememberNavController()
     var key = false
     fun validate(length: Int, minLength: Int, maxLength: Int) {
         if (length < minLength || length > maxLength) {
@@ -158,7 +158,7 @@ fun HomeScreen() {
                 .padding(bottom = 20.dp),
         ) {
             for (product in ProductsList.products) {
-                ProductItem(product = product)
+                ProductItem(product = product, navController)
             }
         }
     }
