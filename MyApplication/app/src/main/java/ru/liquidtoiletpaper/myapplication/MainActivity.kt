@@ -294,7 +294,7 @@ fun MainPage() {
         }
     }
 }
-
+val productItem = Product()
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ProductItem(product: Product, navController: NavController){
@@ -307,6 +307,12 @@ fun ProductItem(product: Product, navController: NavController){
                 .fillMaxWidth()
                 .padding(top = 20.dp)
                 .clickable {
+                    productItem.productId = product.productId
+                    productItem.name = product.name
+                    productItem.image = product.image
+                    productItem.cost = product.cost
+                    productItem.description = product.description
+                    productItem.category = product.category
                     navController.navigate("itemProduct")
                 }
                 .padding(horizontal = 20.dp)

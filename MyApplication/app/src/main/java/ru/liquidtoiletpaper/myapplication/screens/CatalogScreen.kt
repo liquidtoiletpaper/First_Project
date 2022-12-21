@@ -305,7 +305,6 @@ fun CatalogTitle(title: String, openCheck: MutableState<Boolean>){
     }
 }
 
-
 @Composable
 fun CatalogItem(image: Int, title: String, category: String, navController: NavController){
     val context = LocalContext.current

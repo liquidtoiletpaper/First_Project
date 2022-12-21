@@ -36,6 +36,20 @@ val Typography = Typography(
         color = SecondaryText,
         letterSpacing = 0.5.sp,
     ),
+    h3 = TextStyle(
+        fontFamily = SemiBoldFont,
+        fontWeight = FontWeight.Normal,
+        fontSize = 19.sp,
+        color = PrimaryWhite,
+        letterSpacing = 0.5.sp,
+    ),
+    h4 = TextStyle(
+        fontFamily = SemiBoldFont,
+        fontWeight = FontWeight.Normal,
+        fontSize = 18.sp,
+        color = PrimaryWhite,
+        letterSpacing = 0.5.sp,
+    ),
     h5 = TextStyle(
         fontFamily = SemiBoldFont,
         fontWeight = FontWeight.Normal,
@@ -72,6 +86,35 @@ val Typography = Typography(
         fontFamily = NormalFont,
         fontSize = 14.sp,
         color = DisabledText,
+        letterSpacing = 0.5.sp,
+    ),
+)
+
+val HugeTypography = Typography(
+    h1 = TextStyle(
+        fontFamily = SemiBoldFont,
+        fontWeight = FontWeight.Normal,
+        fontSize = 26.sp,
+        color = PrimaryWhite,
+        letterSpacing = 0.5.sp,
+    ),
+    h2 = TextStyle(
+        fontFamily = SemiBoldFont,
+        fontWeight = FontWeight.Normal,
+        fontSize = 24.sp,
+        color = PrimaryWhite,
+        letterSpacing = 0.5.sp,
+    ),
+    body1 = TextStyle(
+        fontFamily = NormalFont,
+        fontSize = 18.sp,
+        color = PrimaryWhite,
+        letterSpacing = 0.5.sp,
+    ),
+    body2 = TextStyle(
+        fontFamily = NormalFont,
+        fontSize = 18.sp,
+        color = SecondaryText,
         letterSpacing = 0.5.sp,
     ),
 )
