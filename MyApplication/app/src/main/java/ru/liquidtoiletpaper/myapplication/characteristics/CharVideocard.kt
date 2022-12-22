@@ -1,6 +1,7 @@
-package ru.liquidtoiletpaper.myapplication.charachteristics
+package ru.liquidtoiletpaper.myapplication.characteristics
 
 class CharVideocard {
+    var product_id = 0
     var country = ""
     var warranty = 0
     var model = ""
@@ -8,6 +9,6 @@ class CharVideocard {
     var width = 0
     var brand = ""
     var graphicsController = ""
-    var memorySize = ""
+    var memorySize = 0
     var memoryType = ""
 }

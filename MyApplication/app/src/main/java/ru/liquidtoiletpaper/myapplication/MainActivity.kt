@@ -49,8 +49,10 @@ import kotlinx.coroutines.delay
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
+import ru.liquidtoiletpaper.myapplication.characteristics.Characteristics
 import ru.liquidtoiletpaper.myapplication.global.ProductsList
 import ru.liquidtoiletpaper.myapplication.global.User
+import ru.liquidtoiletpaper.myapplication.models.CharModel
 import ru.liquidtoiletpaper.myapplication.models.ProductModel
 import ru.liquidtoiletpaper.myapplication.models.ProductsModel
 import ru.liquidtoiletpaper.myapplication.models.ResponseShell
@@ -155,6 +157,24 @@ fun requestProduct(id: Int, context: Context, callback: (response: String?) -> U
     }
     VolleySingleton.getInstance(context).addToRequestQueue(request)
 }
+
+fun requestProductCharacteristics(id: Int, context: Context, callback: (response: String?) -> Unit) {
+    val url = "http://tautaste.ru/getProductCharacteristics?product_id=$id"
+    val queue = Volley.newRequestQueue(context)
+    val request = object : StringRequest(
+        Method.GET, url,
+        Response.Listener { response ->
+            callback.invoke(response)
+        },
+        Response.ErrorListener { error ->
+            println(error)
+        }
+    ){
+
+    }
+    VolleySingleton.getInstance(context).addToRequestQueue(request)
+}
+
 fun requestProducts(context: Context, callback: (response: String?) -> Unit) {
     val url = "http://tautaste.ru/getProducts"
     val queue = Volley.newRequestQueue(context)

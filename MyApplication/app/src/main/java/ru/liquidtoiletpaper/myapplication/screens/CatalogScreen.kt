@@ -543,6 +543,12 @@ fun SearchBarUI(
 fun Products(products: List<Product>?, onClick: (Product) -> Unit) {
     products?.forEach { product ->
         ProductRow(product = product) {
+            productItem.productId = product.productId
+            productItem.name = product.name
+            productItem.image = product.image
+            productItem.cost = product.cost
+            productItem.description = product.description
+            productItem.category = product.category
             onClick(product)
         }
         Divider()

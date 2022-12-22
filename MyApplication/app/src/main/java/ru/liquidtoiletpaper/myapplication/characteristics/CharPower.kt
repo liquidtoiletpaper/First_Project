@@ -1,4 +1,4 @@
-package ru.liquidtoiletpaper.myapplication.charachteristics
+package ru.liquidtoiletpaper.myapplication.characteristics
 
 class CharPower {
     var country = ""
