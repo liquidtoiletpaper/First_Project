@@ -105,6 +105,13 @@ val HugeTypography = Typography(
         color = PrimaryWhite,
         letterSpacing = 0.5.sp,
     ),
+    h3 = TextStyle(
+        fontFamily = SemiBoldFont,
+        fontWeight = FontWeight.Normal,
+        fontSize = 22.sp,
+        color = PrimaryWhite,
+        letterSpacing = 0.5.sp,
+    ),
     body1 = TextStyle(
         fontFamily = NormalFont,
         fontSize = 18.sp,
