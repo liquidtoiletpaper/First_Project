@@ -17,5 +17,6 @@ val PrimaryGreen = Color(0xff27ae60)
 val PrimaryBorder = Color(0xff42454c)
 val PrimarySelected = Color(0xff3498db)
 
+val FavColor = Color(0xfff63944)
 val ErrorColor = Color(0xffd84a4e)
 val LinkText = Color(0xff21a1d6)

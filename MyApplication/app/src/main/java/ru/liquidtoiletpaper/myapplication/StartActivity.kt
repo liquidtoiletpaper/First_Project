@@ -131,7 +131,7 @@ fun StartPage(navController: NavController){
                     horizontalArrangement = Arrangement.Center,
                 ) {
                     Text(
-                        text = "PIVO FAN PUB",
+                        text = "ZXC PUB",
                         style = MaterialTheme.typography.h1,
                         fontSize = 32.sp,
                         textAlign = TextAlign.Center,
