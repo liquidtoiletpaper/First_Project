@@ -109,7 +109,7 @@ fun Navigation(navController: NavHostController) {
         composable("mainScreen") { MainPage() }
         composable("homeScreen") { HomeScreen(navController) }
         composable("catalogScreen") { CatalogScreen(navController) }
-        composable("favoritesScreen") { FavoritesScreen() }
+        composable("favoritesScreen") { FavoritesScreen(navController) }
         composable("cartScreen") { CartScreen(navController) }
         composable("profileScreen") { ProfileScreen(navController) }
         composable("myPurchasesScreen") { MyPurchases(navController) }

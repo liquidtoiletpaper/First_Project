@@ -2,9 +2,6 @@ package ru.liquidtoiletpaper.myapplication.screens.catalogScreens
 
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -19,33 +16,28 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
-import ru.liquidtoiletpaper.myapplication.characteristics.CharVideocard
 import ru.liquidtoiletpaper.myapplication.characteristics.Characteristics
-import ru.liquidtoiletpaper.myapplication.global.FavProductsList
-import ru.liquidtoiletpaper.myapplication.global.ProductsCharacteristicsList
+import ru.liquidtoiletpaper.myapplication.global.FavId
 import ru.liquidtoiletpaper.myapplication.models.CharModel
 import ru.liquidtoiletpaper.myapplication.models.ResponseShell
 import ru.liquidtoiletpaper.myapplication.productItem
 import ru.liquidtoiletpaper.myapplication.requestProductCharacteristics
-import ru.liquidtoiletpaper.myapplication.screens.profileScreens.BorderLine
+import ru.liquidtoiletpaper.myapplication.screens.Product
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 val productChar = Characteristics()
 val charIsOpen = mutableStateOf(false)
 val charRows = mutableStateListOf<Characteristics>()
-val inFav = mutableStateOf(false)
 @Composable
 fun ItemProduct(navController: NavController){
     charRows.clear()
@@ -253,6 +245,13 @@ fun CharScreen(navController: NavController){
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ItemProductScreen(navController: NavController){
+    val product1 = Product()
+    product1.productId = productItem.productId
+    product1.name = productItem.name
+    product1.image = productItem.image
+    product1.cost = productItem.cost
+    product1.description = productItem.description
+    product1.category = productItem.category
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -300,29 +299,32 @@ fun ItemProductScreen(navController: NavController){
                             modifier = Modifier
                                 .weight(1f)
                         ){
-                            val icon: ImageVector =
-                                if (productItem in FavProductsList.products) {
-                                    Icons.Filled.Favorite
-                                } else {
-                                    Icons.Filled.FavoriteBorder
+                            if(product1.productId !in FavId.ids){
+                                IconButton(
+                                    onClick = {
+                                        FavId.addProducts(product1.productId)
+                                    },
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.FavoriteBorder,
+                                        contentDescription = "Fav",
+                                        modifier = Modifier,
+                                        tint = PrimaryWhite,
+                                    )
                                 }
-                            val tint: Color = if (productItem in FavProductsList.products) {
-                                FavColor
                             } else {
-                                PrimaryWhite
-                            }
-
-                            IconButton(
-                                onClick = {
-
-                                },
-                            ) {
-                                Icon(
-                                    imageVector = icon,
-                                    contentDescription = "Fav",
-                                    modifier = Modifier,
-                                    tint = tint,
-                                )
+                                IconButton(
+                                    onClick = {
+                                        FavId.removeProducts(product1.productId)
+                                    },
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Favorite,
+                                        contentDescription = "Fav",
+                                        modifier = Modifier,
+                                        tint = FavColor,
+                                    )
+                                }
                             }
                         }
                     },

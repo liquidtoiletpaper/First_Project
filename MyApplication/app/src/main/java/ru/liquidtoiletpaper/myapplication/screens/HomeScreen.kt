@@ -31,9 +31,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
 import ru.liquidtoiletpaper.myapplication.*
-import ru.liquidtoiletpaper.myapplication.global.FilteredProductsList
-import ru.liquidtoiletpaper.myapplication.global.ProductsList
-import ru.liquidtoiletpaper.myapplication.global.User
+import ru.liquidtoiletpaper.myapplication.global.*
 import ru.liquidtoiletpaper.myapplication.models.AuthModel
 import ru.liquidtoiletpaper.myapplication.models.ProductModel
 import ru.liquidtoiletpaper.myapplication.models.ProductsModel
@@ -162,5 +160,4 @@ fun HomeScreen(navController: NavController) {
             }
         }
     }
-
 }
