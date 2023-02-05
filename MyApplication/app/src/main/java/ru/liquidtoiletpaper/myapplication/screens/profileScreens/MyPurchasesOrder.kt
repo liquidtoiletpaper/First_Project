@@ -1,5 +1,6 @@
 package ru.liquidtoiletpaper.myapplication.screens.profileScreens
 
+import android.graphics.drawable.Drawable
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -17,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import ru.liquidtoiletpaper.myapplication.R
+import ru.liquidtoiletpaper.myapplication.global.User
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 @Composable
@@ -70,7 +72,6 @@ fun MyPurchasesOrder(navController: NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            /*
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
@@ -83,7 +84,7 @@ fun MyPurchasesOrder(navController: NavHostController) {
                         .fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    if(!purchases[0].status) {
+                    if(true) {
                         Icon(
                             modifier = Modifier
                                 .size(80.dp),
@@ -94,7 +95,7 @@ fun MyPurchasesOrder(navController: NavHostController) {
                         Text(
                             modifier = Modifier
                                 .padding(top = 15.dp),
-                            text = "№ ${purchases[0].index}",
+                            text = "№ 1111",
                             color = PrimaryWhite,
                             style = MaterialTheme.typography.h1,
                             fontSize = 22.sp,
@@ -124,7 +125,7 @@ fun MyPurchasesOrder(navController: NavHostController) {
                         Text(
                             modifier = Modifier
                                 .padding(top = 15.dp),
-                            text = "№ ${purchases[0].index}",
+                            text = "№ 1111",
                             color = PrimaryWhite,
                             style = MaterialTheme.typography.h1,
                             fontSize = 22.sp,
@@ -145,22 +146,23 @@ fun MyPurchasesOrder(navController: NavHostController) {
                         )
                     }
                 }
-                for(i in products.indices){
+                for(i in 0..1){
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 20.dp)
                             .clickable { }
                     ) {
-                            Image(
+                            /*Image(
                                 modifier = Modifier
                                     .weight(3f)
                                     .align(alignment = CenterVertically),
                                 // product image
-                                painter = painterResource(id = products[i].image),
+                                painter = painterResource(id = ),
                                 contentDescription = "purchase image",
                                 contentScale = ContentScale.Fit,
-                            )
+                            )*/
+                        Box(modifier = Modifier.weight(3f).background(PrimaryBorder))
 
                         Column(
                             modifier = Modifier
@@ -172,7 +174,7 @@ fun MyPurchasesOrder(navController: NavHostController) {
                                 modifier = Modifier
                                     .padding(top = 5.dp),
                                 // product name
-                                text = products[i].name,
+                                text = "product name",
                                 color = PrimaryWhite,
                                 style = MaterialTheme.typography.h1,
                                 fontSize = 16.sp,
@@ -185,7 +187,7 @@ fun MyPurchasesOrder(navController: NavHostController) {
                                 modifier = Modifier
                                     .padding(top = 5.dp),
                                 // product description
-                                text = products[i].description,
+                                text = "product descriptiom",
                                 color = SecondaryText,
                                 style = MaterialTheme.typography.body1,
                                 fontSize = 11.sp,
@@ -198,7 +200,7 @@ fun MyPurchasesOrder(navController: NavHostController) {
                                 modifier = Modifier
                                     .padding(top = 10.dp),
                                 // product cost
-                                text = "${products[i].cost} $",
+                                text = "product cost $",
                                 color = PrimaryWhite,
                                 style = MaterialTheme.typography.h1,
                                 fontSize = 14.sp,
@@ -245,7 +247,7 @@ fun MyPurchasesOrder(navController: NavHostController) {
                             // user name
                             modifier = Modifier
                                 .weight(2f),
-                            text = "Tom Angelo",
+                            text = "${User.name}  ${User.lastname}",
                             color = PrimaryWhite,
                             style = MaterialTheme.typography.body1,
                             fontSize = 14.sp,
@@ -273,10 +275,9 @@ fun MyPurchasesOrder(navController: NavHostController) {
                             maxLines = 1
                         )
                         Text(
-                            // user name
                             modifier = Modifier
                                 .weight(2f),
-                            text = "angelotommy@mail.com",
+                            text = User.email,
                             color = PrimaryWhite,
                             style = MaterialTheme.typography.body1,
                             fontSize = 14.sp,
@@ -319,9 +320,8 @@ fun MyPurchasesOrder(navController: NavHostController) {
                             letterSpacing = 0.5.sp,
                             maxLines = 1
                         )
-                        if(!purchases[0].status){
+                        if(true){
                             Text(
-                                // user name
                                 modifier = Modifier
                                     .weight(2f),
                                 text = "Canceled",
@@ -335,7 +335,6 @@ fun MyPurchasesOrder(navController: NavHostController) {
                             )
                         } else {
                             Text(
-                                // user name
                                 modifier = Modifier
                                     .weight(2f),
                                 text = "Accepted",
@@ -367,10 +366,9 @@ fun MyPurchasesOrder(navController: NavHostController) {
                             maxLines = 1
                         )
                         Text(
-                            // user name
                             modifier = Modifier
                                 .weight(2f),
-                            text = "${purchases[0].value} $",
+                            text = "стоимость товаров $",
                             color = PrimaryWhite,
                             style = MaterialTheme.typography.body1,
                             fontSize = 14.sp,
@@ -398,10 +396,9 @@ fun MyPurchasesOrder(navController: NavHostController) {
                             maxLines = 1
                         )
                         Text(
-                            // user name
                             modifier = Modifier
                                 .weight(2f),
-                            text = "${purchases[0].value} $",
+                            text = "общая стоимость $",
                             color = PrimaryWhite,
                             style = MaterialTheme.typography.body1,
                             fontSize = 14.sp,
@@ -421,7 +418,6 @@ fun MyPurchasesOrder(navController: NavHostController) {
             ) {
 
             }
-            */
         }
     }
 }

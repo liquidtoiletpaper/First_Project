@@ -121,6 +121,7 @@ fun Navigation(navController: NavHostController) {
         composable("categorySearchScreen") { CategorySearch(navController) }
         composable("searchProductScreen") { CategorySearch(navController) }
         composable("itemProduct") { ItemProduct(navController) }
+        composable("itemOrder") { ItemOrder(navController) }
     }
 }
 
@@ -142,7 +143,7 @@ fun makeRequest(context: Context, url: String, parameters: Map<String, String>?,
 }
 
 fun requestProduct(id: Int, context: Context, callback: (response: String?) -> Unit) {
-    val url = "http://tautaste.ru/getProduct?product_id=$id"
+    val url = "https://tautaste.ru/getProduct?product_id=$id"
     val queue = Volley.newRequestQueue(context)
     val request = object : StringRequest(
         Method.GET, url,
@@ -159,7 +160,7 @@ fun requestProduct(id: Int, context: Context, callback: (response: String?) -> U
 }
 
 fun requestProductCharacteristics(id: Int, context: Context, callback: (response: String?) -> Unit) {
-    val url = "http://tautaste.ru/getProductCharacteristics?product_id=$id"
+    val url = "https://tautaste.ru/getProductCharacteristics?product_id=$id"
     val queue = Volley.newRequestQueue(context)
     val request = object : StringRequest(
         Method.GET, url,
@@ -176,16 +177,14 @@ fun requestProductCharacteristics(id: Int, context: Context, callback: (response
 }
 
 fun requestProducts(context: Context, callback: (response: String?) -> Unit) {
-    val url = "http://tautaste.ru/getProducts"
+    val url = "https://tautaste.ru/getProducts"
     val queue = Volley.newRequestQueue(context)
     val request = StringRequest(
         Request.Method.GET, url,
         { //result ->
             //println(result)
-                result -> Log.d("MyLog", "Result: $result")
         },
         { //error ->
-                error -> Log.d("MyLog", "Error: $error")
             //println(error)
         }
     )
@@ -208,7 +207,6 @@ fun updateProducts(context: Context){
                 product.category = productModel.category
                 product.cost = productModel.cost
                 ProductsList.addProducts(product)
-                Log.d("MyLog", product.productId.toString())
             }
         }
     }
@@ -223,16 +221,14 @@ fun MainPage() {
     val context = LocalContext.current
     updateProducts(context)
     fun requestUserData(id: Int) {
-        val url = "http://tautaste.ru/getData?id=$id"
+        val url = "https://tautaste.ru/getData?id=$id"
         val queue = Volley.newRequestQueue(context)
         val request = StringRequest(
             Request.Method.GET, url,
             { //result ->
                 //println(result)
-                result -> Log.d("MyLog", "Result: $result")
             },
             { //error ->
-                error -> Log.d("MyLog", "Error: $error")
                 //println(error)
             }
         )

@@ -1,6 +1,5 @@
 package ru.liquidtoiletpaper.myapplication.screens.catalogScreens
 
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,7 +26,9 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
 import ru.liquidtoiletpaper.myapplication.characteristics.Characteristics
+import ru.liquidtoiletpaper.myapplication.global.CartList
 import ru.liquidtoiletpaper.myapplication.global.FavId
+import ru.liquidtoiletpaper.myapplication.global.ProdIds
 import ru.liquidtoiletpaper.myapplication.models.CharModel
 import ru.liquidtoiletpaper.myapplication.models.ResponseShell
 import ru.liquidtoiletpaper.myapplication.productItem
@@ -353,6 +354,11 @@ fun ItemProductScreen(navController: NavController){
                     }
                     Column() {
                         val clicked = remember { mutableStateOf(true) }
+                        var text = "В корзину"
+                        if (product1 in CartList.products){
+                            text = "Добавлено"
+                            clicked.value = false
+                        }
                         Button(
                             enabled = clicked.value,
                             colors = ButtonDefaults.buttonColors(
@@ -366,12 +372,12 @@ fun ItemProductScreen(navController: NavController){
                                 .padding(end = 20.dp),
                             shape = RoundedCornerShape(5.dp),
                             onClick = {
-                                Toast.makeText(context, "Товар добавлен", Toast.LENGTH_SHORT).show()
-                                clicked.value = false
+                                CartList.addProducts(product1)
+                                ProdIds.addProducts(product1.productId)
                             },
                         ) {
                             Text(
-                                text = "В корзину",
+                                text = text,
                                 color = PrimaryWhite,
                                 style = MaterialTheme.typography.h5,
                                 textAlign = TextAlign.Center,

@@ -327,7 +327,7 @@ fun ProfileInfo(navController: NavHostController) {
                             isErrorLastname = false
                             isErrorEmail = false
                             makeRequest(
-                                context, "http:/tautaste.ru/updateUser",
+                                context, "https:/tautaste.ru/updateUser",
                                 mapOf(
                                     "id" to User.id.toString(),
                                     "name" to nameText,

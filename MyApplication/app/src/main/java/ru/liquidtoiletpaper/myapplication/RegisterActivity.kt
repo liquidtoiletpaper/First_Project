@@ -640,7 +640,7 @@ fun RegisterPage3(navController: NavController){
                         .padding(top = 25.dp),
                     shape = RoundedCornerShape(5.dp),
                     onClick = {
-                        makeRequest(context, "http:/tautaste.ru/reg", mapOf("email" to User.email, "name" to User.name, "lastname" to User.lastname, "password" to User.password)){ response ->
+                        makeRequest(context, "https:/tautaste.ru/reg", mapOf("email" to User.email, "name" to User.name, "lastname" to User.lastname, "password" to User.password)){ response ->
                             val shell = Json.decodeFromString<ResponseShell>(response.toString())
                             if(shell.status == "success") {
                                 /*

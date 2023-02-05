@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import ru.liquidtoiletpaper.myapplication.screens.ItemOrder
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 @Composable
@@ -139,6 +140,7 @@ fun MyPurchases(navController: NavHostController){
                         .fillMaxWidth()
                         .padding(top = 20.dp),
                 ) {
+                    ItemOrder(navController = navController)
                     /*
                     for (i in 0..4) {
                         /*
