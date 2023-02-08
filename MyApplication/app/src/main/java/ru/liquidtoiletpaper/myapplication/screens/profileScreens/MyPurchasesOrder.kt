@@ -17,7 +17,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import ru.liquidtoiletpaper.myapplication.ProductItem
 import ru.liquidtoiletpaper.myapplication.R
+import ru.liquidtoiletpaper.myapplication.global.CartList
 import ru.liquidtoiletpaper.myapplication.global.User
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
@@ -146,69 +148,14 @@ fun MyPurchasesOrder(navController: NavHostController) {
                         )
                     }
                 }
-                for(i in 0..1){
+                for(product in CartList.products){
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 20.dp)
                             .clickable { }
                     ) {
-                            /*Image(
-                                modifier = Modifier
-                                    .weight(3f)
-                                    .align(alignment = CenterVertically),
-                                // product image
-                                painter = painterResource(id = ),
-                                contentDescription = "purchase image",
-                                contentScale = ContentScale.Fit,
-                            )*/
-                        Box(modifier = Modifier.weight(3f).background(PrimaryBorder))
-
-                        Column(
-                            modifier = Modifier
-                                .weight(5f)
-                                .fillMaxWidth()
-                                .padding(start = 10.dp)
-                        ) {
-                            Text(
-                                modifier = Modifier
-                                    .padding(top = 5.dp),
-                                // product name
-                                text = "product name",
-                                color = PrimaryWhite,
-                                style = MaterialTheme.typography.h1,
-                                fontSize = 16.sp,
-                                fontFamily = SemiBoldFont,
-                                textAlign = TextAlign.Start,
-                                letterSpacing = 0.5.sp,
-                                maxLines = 2
-                            )
-                            Text(
-                                modifier = Modifier
-                                    .padding(top = 5.dp),
-                                // product description
-                                text = "product descriptiom",
-                                color = SecondaryText,
-                                style = MaterialTheme.typography.body1,
-                                fontSize = 11.sp,
-                                fontFamily = NormalFont,
-                                textAlign = TextAlign.Justify,
-                                letterSpacing = 0.5.sp,
-                                maxLines = 3
-                            )
-                            Text(
-                                modifier = Modifier
-                                    .padding(top = 10.dp),
-                                // product cost
-                                text = "product cost $",
-                                color = PrimaryWhite,
-                                style = MaterialTheme.typography.h1,
-                                fontSize = 14.sp,
-                                fontFamily = SemiBoldFont,
-                                textAlign = TextAlign.Center,
-                                letterSpacing = 0.5.sp
-                            )
-                        }
+                        ProductItem(product = product, navController = navController)
                     }
                 }
                 Column(
@@ -247,7 +194,7 @@ fun MyPurchasesOrder(navController: NavHostController) {
                             // user name
                             modifier = Modifier
                                 .weight(2f),
-                            text = "${User.name}  ${User.lastname}",
+                            text = "${User.name} ${User.lastname}",
                             color = PrimaryWhite,
                             style = MaterialTheme.typography.body1,
                             fontSize = 14.sp,
@@ -368,7 +315,7 @@ fun MyPurchasesOrder(navController: NavHostController) {
                         Text(
                             modifier = Modifier
                                 .weight(2f),
-                            text = "стоимость товаров $",
+                            text = "${CartList.calculateValue()}",
                             color = PrimaryWhite,
                             style = MaterialTheme.typography.body1,
                             fontSize = 14.sp,
@@ -398,7 +345,7 @@ fun MyPurchasesOrder(navController: NavHostController) {
                         Text(
                             modifier = Modifier
                                 .weight(2f),
-                            text = "общая стоимость $",
+                            text = "${CartList.calculateValue()}",
                             color = PrimaryWhite,
                             style = MaterialTheme.typography.body1,
                             fontSize = 14.sp,

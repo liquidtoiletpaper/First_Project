@@ -48,10 +48,10 @@ import com.bumptech.glide.integration.compose.GlideImage
 import kotlinx.coroutines.delay
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.decodeFromJsonElement
 import ru.liquidtoiletpaper.myapplication.characteristics.Characteristics
-import ru.liquidtoiletpaper.myapplication.global.ProductsList
-import ru.liquidtoiletpaper.myapplication.global.User
+import ru.liquidtoiletpaper.myapplication.global.*
 import ru.liquidtoiletpaper.myapplication.models.CharModel
 import ru.liquidtoiletpaper.myapplication.models.ProductModel
 import ru.liquidtoiletpaper.myapplication.models.ProductsModel
@@ -192,6 +192,74 @@ fun requestProducts(context: Context, callback: (response: String?) -> Unit) {
     VolleySingleton.getInstance(context).addToRequestQueue(request)
 }
 
+fun requestCartProducts(context: Context, callback: (response: String?) -> Unit) {
+    val url = "https://tautaste.ru/getCartProducts?id=${User.id}"
+    val queue = Volley.newRequestQueue(context)
+    val request = object: StringRequest(
+        Method.GET, url,
+        Response.Listener { response ->
+            callback.invoke(response)
+        },
+        Response.ErrorListener { error ->
+            println(error)
+        }
+    ){
+
+    }
+    VolleySingleton.getInstance(context).addToRequestQueue(request)
+}
+
+fun requestFavProducts(context: Context, callback: (response: String?) -> Unit) {
+    val url = "https://tautaste.ru/getFavProducts?id=${User.id}"
+    val queue = Volley.newRequestQueue(context)
+    val request = object: StringRequest(
+        Method.GET, url,
+        Response.Listener { response ->
+            callback.invoke(response)
+        },
+        Response.ErrorListener { error ->
+            println(error)
+        }
+    ){
+
+    }
+    VolleySingleton.getInstance(context).addToRequestQueue(request)
+}
+
+fun addFavProducts(context: Context, id: Int, callback: (response: String?) -> Unit) {
+    val url = "https://tautaste.ru/addFavProducts?id=${User.id}&product_id=${id}"
+    val queue = Volley.newRequestQueue(context)
+    val request = object: StringRequest(
+        Method.GET, url,
+        Response.Listener { response ->
+            callback.invoke(response)
+        },
+        Response.ErrorListener { error ->
+            println(error)
+        }
+    ){
+
+    }
+    VolleySingleton.getInstance(context).addToRequestQueue(request)
+}
+
+fun removeFavProducts(context: Context, id: Int, callback: (response: String?) -> Unit) {
+    val url = "https://tautaste.ru/removeFavProducts?id=${User.id}&product_id=${id}"
+    val queue = Volley.newRequestQueue(context)
+    val request = object: StringRequest(
+        Method.GET, url,
+        Response.Listener { response ->
+            callback.invoke(response)
+        },
+        Response.ErrorListener { error ->
+            println(error)
+        }
+    ){
+
+    }
+    VolleySingleton.getInstance(context).addToRequestQueue(request)
+}
+
 fun updateProducts(context: Context){
     ProductsList.clearProducts()
     for(i in 1..7){
@@ -241,6 +309,33 @@ fun MainPage() {
         if(shell.status == "success") {
             val productsModel = Json.decodeFromJsonElement<ProductsModel>(shell.content!!)
             productsSize = productsModel.product.size
+        }
+    }
+
+    FavId.clearProducts()
+    requestFavProducts(context) { response ->
+        val shell = Json.decodeFromString<ResponseShell>(response.toString())
+        if (shell.status == "success") {
+            val favProductModel = Json.decodeFromJsonElement<JsonArray>(shell.content!!)
+            for(i in favProductModel){
+                FavId.addProducts(Integer.parseInt(i.toString()))
+            }
+        }
+    }
+
+    ProdIds.clearProducts()
+    requestCartProducts(context) { response ->
+        val shell = Json.decodeFromString<ResponseShell>(response.toString())
+        if (shell.status == "success") {
+            val cartProductModel = Json.decodeFromJsonElement<JsonArray>(shell.content!!)
+            Log.d("MyLog", cartProductModel.toString())
+            for(i in cartProductModel){
+                if(Integer.parseInt(i.toString()) !in ProdIds.products) { ProdIds.addProducts(Integer.parseInt(i.toString())) }
+                else{ ProdIds.amplify(Integer.parseInt(i.toString())) }
+                if(ProductsList.products[Integer.parseInt(i.toString())] !in CartList.products){ CartList.addProducts(ProductsList.products[Integer.parseInt(i.toString())]) }
+            }
+            Log.d("MyLog", "CartList: " + CartList.products.size)
+            Log.d("MyLog", "ProdIds: " + ProdIds.products.toString())
         }
     }
 

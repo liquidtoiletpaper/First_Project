@@ -179,9 +179,6 @@ fun CartScreen(navController: NavHostController) {
                     for(product in CartList.products) {
                         if(product.productId in temp) {
                             fun calculateAmount(id: Int?): Int {
-                                Log.d("MyLog", temp.toString())
-                                Log.d("MyLog", id.toString())
-                                Log.d("MyLog", "ids: ${ProdIds.products}")
                                 val amount = ProdIds.products.get(product.productId)
                                 return amount!!.toInt()
                             }
@@ -200,6 +197,7 @@ fun CartScreen(navController: NavHostController) {
                                 ) {
                                     Text(
                                         text = "Всего: ${ProdIds.calculateValue(product.productId)}",
+                                        //text = "Всего: ${ProdIds.calculateValue(product.productId)}",
                                         style = Typography.h5,
                                         modifier = Modifier
                                             .weight(6f)

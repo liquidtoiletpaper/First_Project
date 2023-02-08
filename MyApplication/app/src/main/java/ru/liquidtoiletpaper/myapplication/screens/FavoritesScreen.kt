@@ -1,5 +1,6 @@
 package ru.liquidtoiletpaper.myapplication.screens
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -24,10 +25,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import ru.liquidtoiletpaper.myapplication.ProductItem
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.decodeFromJsonElement
+import ru.liquidtoiletpaper.myapplication.*
 import ru.liquidtoiletpaper.myapplication.global.FavId
 import ru.liquidtoiletpaper.myapplication.global.ProductsList
-import ru.liquidtoiletpaper.myapplication.productItem
+import ru.liquidtoiletpaper.myapplication.models.CharModel
+import ru.liquidtoiletpaper.myapplication.models.FavProductsModel
+import ru.liquidtoiletpaper.myapplication.models.ResponseShell
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 @Composable
@@ -110,7 +117,18 @@ fun FavoritesScreen(navController: NavController) {
                             ) {
                                 IconButton(
                                     onClick = {
-                                        FavId.removeProducts(id)
+                                        removeFavProducts(context, id){
+                                            FavId.clearProducts()
+                                            requestFavProducts(context) { response ->
+                                                val shell = Json.decodeFromString<ResponseShell>(response.toString())
+                                                if (shell.status == "success") {
+                                                    val favProductModel = Json.decodeFromJsonElement<JsonArray>(shell.content!!)
+                                                    for(i in favProductModel){
+                                                        FavId.addProducts(Integer.parseInt(i.toString()))
+                                                    }
+                                                }
+                                            }
+                                        }
                                     },
                                 ) {
                                     Icon(

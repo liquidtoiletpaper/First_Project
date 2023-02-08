@@ -1,13 +1,8 @@
 package ru.liquidtoiletpaper.myapplication.screens
 
-import android.content.Intent
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -15,7 +10,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -24,16 +18,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
-import ru.liquidtoiletpaper.myapplication.*
-import ru.liquidtoiletpaper.myapplication.global.*
-import ru.liquidtoiletpaper.myapplication.models.AuthModel
-import ru.liquidtoiletpaper.myapplication.models.ProductModel
+import ru.liquidtoiletpaper.myapplication.ProductItem
+import ru.liquidtoiletpaper.myapplication.global.ProductsList
+import ru.liquidtoiletpaper.myapplication.makeRequest
 import ru.liquidtoiletpaper.myapplication.models.ProductsModel
 import ru.liquidtoiletpaper.myapplication.models.ResponseShell
 import ru.liquidtoiletpaper.myapplication.ui.theme.*

@@ -24,7 +24,9 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.decodeFromJsonElement
+import ru.liquidtoiletpaper.myapplication.addFavProducts
 import ru.liquidtoiletpaper.myapplication.characteristics.Characteristics
 import ru.liquidtoiletpaper.myapplication.global.CartList
 import ru.liquidtoiletpaper.myapplication.global.FavId
@@ -32,6 +34,7 @@ import ru.liquidtoiletpaper.myapplication.global.ProdIds
 import ru.liquidtoiletpaper.myapplication.models.CharModel
 import ru.liquidtoiletpaper.myapplication.models.ResponseShell
 import ru.liquidtoiletpaper.myapplication.productItem
+import ru.liquidtoiletpaper.myapplication.requestFavProducts
 import ru.liquidtoiletpaper.myapplication.requestProductCharacteristics
 import ru.liquidtoiletpaper.myapplication.screens.Product
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
@@ -303,7 +306,18 @@ fun ItemProductScreen(navController: NavController){
                             if(product1.productId !in FavId.ids){
                                 IconButton(
                                     onClick = {
-                                        FavId.addProducts(product1.productId)
+                                        addFavProducts(context, product1.productId){
+                                            FavId.clearProducts()
+                                            requestFavProducts(context) { response ->
+                                                val shell = Json.decodeFromString<ResponseShell>(response.toString())
+                                                if (shell.status == "success") {
+                                                    val favProductModel = Json.decodeFromJsonElement<JsonArray>(shell.content!!)
+                                                    for(i in favProductModel){
+                                                        FavId.addProducts(Integer.parseInt(i.toString()))
+                                                    }
+                                                }
+                                            }
+                                        }
                                     },
                                 ) {
                                     Icon(
@@ -354,6 +368,9 @@ fun ItemProductScreen(navController: NavController){
                     }
                     Column() {
                         val clicked = remember { mutableStateOf(true) }
+                        if(product1.productId in ProdIds.products){
+                            clicked.value = false
+                        }
                         var text = "В корзину"
                         if (product1 in CartList.products){
                             text = "Добавлено"
