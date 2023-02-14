@@ -21,7 +21,7 @@ object ProdIds {
         val value =  ProductsList.products.find {
             it.productId == id
         }
-        return value!!.cost * products[id]!!
+        return value!!.cost * products.get(id)!!
     }
     fun clearProducts(){
         products.clear()

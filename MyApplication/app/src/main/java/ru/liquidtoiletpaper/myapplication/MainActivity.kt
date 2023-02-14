@@ -39,12 +39,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.test.core.app.ActivityScenario.launch
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -61,6 +64,7 @@ import ru.liquidtoiletpaper.myapplication.screens.catalogScreens.CategorySearch
 import ru.liquidtoiletpaper.myapplication.screens.catalogScreens.ItemProduct
 import ru.liquidtoiletpaper.myapplication.screens.profileScreens.*
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
+import kotlin.concurrent.thread
 import kotlin.time.Duration.Companion.milliseconds
 
 class MainActivity : ComponentActivity() {
@@ -181,14 +185,11 @@ fun requestProducts(context: Context, callback: (response: String?) -> Unit) {
     val queue = Volley.newRequestQueue(context)
     val request = StringRequest(
         Request.Method.GET, url,
-        { //result ->
-            //println(result)
+        {
         },
-        { //error ->
-            //println(error)
+        {
         }
     )
-    //queue.add(request)
     VolleySingleton.getInstance(context).addToRequestQueue(request)
 }
 
@@ -304,11 +305,13 @@ fun MainPage() {
         VolleySingleton.getInstance(context).addToRequestQueue(request)
     }
 
-    requestProducts(context) { response ->
-        val shell = Json.decodeFromString<ResponseShell>(response.toString())
-        if(shell.status == "success") {
-            val productsModel = Json.decodeFromJsonElement<ProductsModel>(shell.content!!)
-            productsSize = productsModel.product.size
+    val thread1 = thread(start = false) {
+        requestProducts(context) { response ->
+            val shell = Json.decodeFromString<ResponseShell>(response.toString())
+            if (shell.status == "success") {
+                val productsModel = Json.decodeFromJsonElement<ProductsModel>(shell.content!!)
+                productsSize = productsModel.product.size
+            }
         }
     }
 
@@ -324,20 +327,39 @@ fun MainPage() {
     }
 
     ProdIds.clearProducts()
-    requestCartProducts(context) { response ->
-        val shell = Json.decodeFromString<ResponseShell>(response.toString())
-        if (shell.status == "success") {
-            val cartProductModel = Json.decodeFromJsonElement<JsonArray>(shell.content!!)
-            Log.d("MyLog", cartProductModel.toString())
-            for(i in cartProductModel){
-                if(Integer.parseInt(i.toString()) !in ProdIds.products) { ProdIds.addProducts(Integer.parseInt(i.toString())) }
-                else{ ProdIds.amplify(Integer.parseInt(i.toString())) }
-                if(ProductsList.products[Integer.parseInt(i.toString())] !in CartList.products){ CartList.addProducts(ProductsList.products[Integer.parseInt(i.toString())]) }
+    val thread2 = thread(start = false) {
+        requestCartProducts(context) { response ->
+            val shell = Json.decodeFromString<ResponseShell>(response.toString())
+            if (shell.status == "success") {
+                val cartProductModel = shell.content?.let {
+                    Json.decodeFromJsonElement<JsonArray>(
+                        it
+                    )
+                }
+                Log.d("MyLog", "cartProductModel: $cartProductModel")
+                if (cartProductModel != null) {
+                    for(i in cartProductModel){
+                        val p = ProductsList.products.find {
+                            it.productId == Integer.parseInt(i.toString())
+                        }
+                        if(Integer.parseInt(i.toString()) !in ProdIds.products) { ProdIds.addProducts(Integer.parseInt(i.toString())) } else{ ProdIds.amplify(Integer.parseInt(i.toString())) }
+                        if(p !in CartList.products) {
+                            if (p != null) {
+                                CartList.addProducts(p)
+                            }
+                            if (p != null) {
+                                Log.d("MyLog", "CartList: " + p.productId)
+                            }
+                        }
+                    }
+                }
+                Log.d("MyLog", "ProdIds: " + ProdIds.products.toString())
             }
-            Log.d("MyLog", "CartList: " + CartList.products.size)
-            Log.d("MyLog", "ProdIds: " + ProdIds.products.toString())
         }
     }
+    thread1.start()
+    thread1.join()
+    thread2.start()
 
     val navController = rememberNavController()
     var key = false

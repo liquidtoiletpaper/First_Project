@@ -29,6 +29,7 @@ import ru.liquidtoiletpaper.myapplication.productItem
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 @Composable
 fun CartScreen(navController: NavHostController) {
+    Log.d("MyLog", CartList.products.toString())
     val context = LocalContext.current
     Scaffold(
         topBar = {
@@ -176,10 +177,17 @@ fun CartScreen(navController: NavHostController) {
                     for(prod in ProductsList.products){
                         temp.add(prod.productId)
                     }
+                    for(p in CartList.products) {
+                        Log.d("MyLog", p.productId.toString())
+                    }
                     for(product in CartList.products) {
                         if(product.productId in temp) {
+                            Log.d("MyLog", product.name)
+                            Log.d("MyLog", "temp $temp")
                             fun calculateAmount(id: Int?): Int {
                                 val amount = ProdIds.products.get(product.productId)
+                                Log.d("MyLog", "amount $amount")
+                                Log.d("MyLog", "amount id ${product.productId}")
                                 return amount!!.toInt()
                             }
                             Column(
@@ -188,7 +196,6 @@ fun CartScreen(navController: NavHostController) {
                             ) {
                                 ProductsList.findProduct(product.productId)
                                     ?.let { ProductItem(product = it, navController) }
-                                temp.remove(product.productId)
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -299,6 +306,9 @@ fun CartScreen(navController: NavHostController) {
                                 }
                             }
                             Divider()
+                            temp.remove(product.productId)
+                            Log.d("MyLog", "temp 2 $temp")
+                            Log.d("MyLog", product.productId.toString())
                         }
                     }
                 }
