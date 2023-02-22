@@ -19,6 +19,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
@@ -26,22 +27,22 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.decodeFromJsonElement
-import ru.liquidtoiletpaper.myapplication.addFavProducts
+import ru.liquidtoiletpaper.myapplication.*
 import ru.liquidtoiletpaper.myapplication.characteristics.Characteristics
 import ru.liquidtoiletpaper.myapplication.global.CartList
 import ru.liquidtoiletpaper.myapplication.global.FavId
 import ru.liquidtoiletpaper.myapplication.global.ProdIds
+import ru.liquidtoiletpaper.myapplication.global.ProductsList
 import ru.liquidtoiletpaper.myapplication.models.CharModel
 import ru.liquidtoiletpaper.myapplication.models.ResponseShell
-import ru.liquidtoiletpaper.myapplication.productItem
-import ru.liquidtoiletpaper.myapplication.requestFavProducts
-import ru.liquidtoiletpaper.myapplication.requestProductCharacteristics
 import ru.liquidtoiletpaper.myapplication.screens.Product
+import ru.liquidtoiletpaper.myapplication.screens.profileScreens.SlideFromTopAnimation
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 
 val productChar = Characteristics()
 val charIsOpen = mutableStateOf(false)
 val charRows = mutableStateListOf<Characteristics>()
+val updatedAdd = mutableStateOf(false)
 @Composable
 fun ItemProduct(navController: NavController){
     charRows.clear()
@@ -306,7 +307,7 @@ fun ItemProductScreen(navController: NavController){
                             if(product1.productId !in FavId.ids){
                                 IconButton(
                                     onClick = {
-                                        addFavProducts(context, product1.productId){
+                                        addFavProducts(context, product1.productId) {
                                             FavId.clearProducts()
                                             requestFavProducts(context) { response ->
                                                 val shell = Json.decodeFromString<ResponseShell>(response.toString())
@@ -372,16 +373,23 @@ fun ItemProductScreen(navController: NavController){
                             clicked.value = false
                         }
                         var text = "В корзину"
-                        if (product1 in CartList.products){
-                            text = "Добавлено"
-                            clicked.value = false
+                        if (!ProdIds.products.contains(product1.productId) || ProdIds.products[product1.productId] == 0){
+                            text = "В корзину"
+                            clicked.value = true
                         }
+                        if (ProdIds.products.contains(product1.productId)){
+                            if(ProdIds.products[product1.productId]!! != 0){
+                                text = "Добавлено"
+                                clicked.value = false
+                            }
+                        }
+
                         Button(
                             enabled = clicked.value,
                             colors = ButtonDefaults.buttonColors(
                                 backgroundColor = PrimaryButton,
                                 contentColor = PrimaryWhite,
-                                disabledBackgroundColor = SecondaryButton,
+                                disabledBackgroundColor = PrimaryGreen,
                                 disabledContentColor = PrimaryWhite
                             ),
                             modifier = Modifier
@@ -389,8 +397,45 @@ fun ItemProductScreen(navController: NavController){
                                 .padding(end = 20.dp),
                             shape = RoundedCornerShape(5.dp),
                             onClick = {
+                                addCartProducts(context, product1.productId) {
+                                    updatedAdd.value = true
+                                }
                                 CartList.addProducts(product1)
                                 ProdIds.addProducts(product1.productId)
+                                if (!ProdIds.products.contains(product1.productId) || ProdIds.products[product1.productId] == 0){
+                                    text = "В корзину"
+                                    clicked.value = true
+                                }
+                                if (ProdIds.products.contains(product1.productId)){
+                                    if(ProdIds.products[product1.productId]!! != 0){
+                                        text = "Добавлено"
+                                        clicked.value = false
+                                    }
+                                }
+                                /*
+                                CartList.clearProducts()
+                                ProdIds.clearProducts()
+                                requestCartProducts(context) { response ->
+                                    val shell = Json.decodeFromString<ResponseShell>(response.toString())
+                                    if (shell.status == "success") {
+                                        val cartProductModel = Json.decodeFromJsonElement<JsonArray>(shell.content!!)
+
+                                        for(i in cartProductModel){
+                                            val p = ProductsList.products.find {
+                                                it.productId == Integer.parseInt(i.toString())
+                                            }
+                                            if (p != null) {
+                                                CartList.addProducts(p)
+                                                if(ProdIds.products.contains(p.productId)) {
+                                                    ProdIds.amplify(p.productId)
+                                                } else {
+                                                    ProdIds.addProducts(p.productId)
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                 */
                             },
                         ) {
                             Text(
@@ -561,6 +606,41 @@ fun ItemProductScreen(navController: NavController){
                             productChar.cpu_frequency?.let { it1 -> CharRow(title = "Базовая частота процессора", char = it1.toString(), char2 = "ГГц") }
                             productChar.ps_power?.let { it1 -> CharRow(title = "Мощность", char = it1.toString(), char2 = "Вт") }
                         }
+                    }
+                }
+            }
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+        ){
+            if(updatedAdd.value){
+                SlideFromTopAnimation(2000, check = updatedAdd) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(PrimaryGreen)
+                            .padding(vertical = 10.dp)
+                            .padding(horizontal = 20.dp),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Done,
+                            contentDescription = "Refreshed",
+                            modifier = Modifier
+                                .height(20.dp),
+                            tint = PrimaryWhite,
+                        )
+                        Text(
+                            text = "Товар добавлен",
+                            maxLines = 1,
+                            color = PrimaryWhite,
+                            style = MaterialTheme.typography.h1,
+                            fontSize = 15.sp,
+                            fontFamily = SemiBoldFont,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .padding(start = 10.dp),
+                        )
                     }
                 }
             }

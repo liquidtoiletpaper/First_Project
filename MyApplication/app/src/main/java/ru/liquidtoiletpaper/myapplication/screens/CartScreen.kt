@@ -2,30 +2,36 @@ package ru.liquidtoiletpaper.myapplication.screens
 
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import ru.liquidtoiletpaper.myapplication.ProductItem
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.decodeFromJsonElement
+import ru.liquidtoiletpaper.myapplication.*
 import ru.liquidtoiletpaper.myapplication.global.CartList
 import ru.liquidtoiletpaper.myapplication.global.FavId
 import ru.liquidtoiletpaper.myapplication.global.ProdIds
 import ru.liquidtoiletpaper.myapplication.global.ProductsList
-import ru.liquidtoiletpaper.myapplication.productItem
+import ru.liquidtoiletpaper.myapplication.models.ResponseShell
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 @Composable
 fun CartScreen(navController: NavHostController) {
@@ -168,17 +174,14 @@ fun CartScreen(navController: NavHostController) {
                 }
             }
         } else {
-            LazyColumn(
+            Column(
                 modifier = Modifier
                     .padding(padding)
+                    .verticalScroll(rememberScrollState())
             ) {
-                item {
                     val temp = mutableListOf<Int>()
                     for(prod in ProductsList.products){
                         temp.add(prod.productId)
-                    }
-                    for(p in CartList.products) {
-                        Log.d("MyLog", p.productId.toString())
                     }
                     for(product in CartList.products) {
                         if(product.productId in temp) {
@@ -219,8 +222,10 @@ fun CartScreen(navController: NavHostController) {
                                             modifier = Modifier,
                                             onClick = {
                                                 if(ProdIds.products[product.productId]!! > 1) {
-                                                    CartList.removeProducts(product)
-                                                    ProdIds.reduce(product.productId)
+                                                    removeCartProducts(context, product.productId) {
+                                                        CartList.removeProducts(product)
+                                                        ProdIds.reduce(product.productId)
+                                                    }
                                                 }
                                             },
                                         ) {
@@ -240,9 +245,10 @@ fun CartScreen(navController: NavHostController) {
                                         IconButton(
                                             modifier = Modifier,
                                             onClick = {
-                                                CartList.addProducts(product)
-                                                Log.d("MyLog", ProdIds.products.toString())
-                                                ProdIds.amplify(product.productId)
+                                                addCartProducts(context, product.productId) {
+                                                    CartList.addProducts(product)
+                                                    ProdIds.amplify(product.productId)
+                                                }
                                             },
                                         ) {
                                             Icon(
@@ -253,53 +259,106 @@ fun CartScreen(navController: NavHostController) {
                                             )
                                         }
                                     }
-                                    Box(
+                                }
+                                val openDialog = remember { mutableStateOf(false)  }
+                                if (openDialog.value) {
+                                    AlertDialog(
                                         modifier = Modifier
-                                            .weight(1f)
-                                            .align(alignment = Alignment.CenterVertically)
-                                    ) {
-                                        IconButton(
-                                            onClick = {
-                                                CartList.removeAllProducts(product)
-                                                ProdIds.removeProducts(product.productId)
-                                            },
-                                        ) {
-                                            Icon(
-                                                imageVector = Icons.Default.Delete,
-                                                contentDescription = "Fav",
-                                                modifier = Modifier,
-                                                tint = FavColor,
+                                            .padding(bottom = 20.dp),
+                                        backgroundColor = DarkAppBarBackground,
+                                        shape = RoundedCornerShape(5.dp),
+                                        onDismissRequest = {
+                                            openDialog.value = false
+                                        },
+                                        title = {
+                                            Text(
+                                                text = "Удалить продукт с корзины?",
+                                                style = MaterialTheme.typography.h1,
+                                            )
+                                        },
+                                        text = {
+                                            Text(
+                                                text = "Вы можете снова добавить его позже",
+                                                maxLines = 5,
+                                                style = MaterialTheme.typography.subtitle1,
+                                            )
+                                        },
+                                        confirmButton = {
+                                            Text(
+                                                modifier = Modifier
+                                                    .weight(1f)
+                                                    .clickable {
+                                                        removeAllCartProducts(context, product.productId){
+
+                                                        }
+                                                        CartList.removeAllProducts(product)
+                                                        ProdIds.removeProducts(product.productId)
+                                                        /*
+                                                        CartList.clearProducts()
+                                                        ProdIds.clearProducts()
+                                                        requestCartProducts(context) { response ->
+                                                            val shell = Json.decodeFromString<ResponseShell>(response.toString())
+                                                            if (shell.status == "success") {
+                                                                val cartProductModel = Json.decodeFromJsonElement<JsonArray>(shell.content!!)
+
+                                                                for(i in cartProductModel){
+                                                                    val p = ProductsList.products.find {
+                                                                        it.productId == Integer.parseInt(i.toString())
+                                                                    }
+                                                                    if (p != null) {
+                                                                        CartList.addProducts(p)
+                                                                        if(ProdIds.products.contains(p.productId)) {
+                                                                            ProdIds.amplify(p.productId)
+                                                                        } else {
+                                                                            ProdIds.addProducts(p.productId)
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                         */
+                                                    }
+                                                    .padding(horizontal = 15.dp)
+                                                    .padding(vertical = 15.dp),
+                                                text = "Удалить",
+                                                color = ErrorColor,
+                                                maxLines = 1,
+                                                style = MaterialTheme.typography.body1,
+                                            )
+                                        },
+                                        dismissButton = {
+                                            Text(
+                                                modifier = Modifier
+                                                    .weight(1f)
+                                                    .clickable {
+                                                        openDialog.value = false
+                                                    }
+                                                    .padding(horizontal = 15.dp)
+                                                    .padding(vertical = 15.dp),
+                                                text = "Отмена",
+                                                maxLines = 1,
+                                                style = MaterialTheme.typography.body1,
                                             )
                                         }
-                                    }
+                                    )
                                 }
-                                val clicked = remember { mutableStateOf(true) }
                                 Button(
-                                    enabled = clicked.value,
                                     colors = ButtonDefaults.buttonColors(
-                                        backgroundColor = PrimaryButton,
+                                        backgroundColor = ErrorColor,
                                         contentColor = PrimaryWhite,
-                                        disabledBackgroundColor = SecondaryButton,
-                                        disabledContentColor = PrimaryWhite
                                     ),
                                     modifier = Modifier
-                                        .padding(vertical = 8.dp)
-                                        .padding(end = 5.dp)
-                                        .weight(7f),
+                                        .fillMaxWidth()
+                                        .padding(vertical = 10.dp)
+                                        .padding(horizontal = 20.dp),
                                     shape = RoundedCornerShape(5.dp),
                                     onClick = {
-                                        Toast.makeText(
-                                            context,
-                                            "Товар добавлен",
-                                            Toast.LENGTH_SHORT
-                                        )
-                                            .show()
-                                        clicked.value = false
+                                        openDialog.value = true
                                     },
                                 ) {
                                     Icon(
-                                        imageVector = Icons.Outlined.ShoppingCart,
-                                        contentDescription = "Fav",
+                                        imageVector = Icons.Outlined.Delete,
+                                        contentDescription = "Delete",
                                         modifier = Modifier,
                                         tint = PrimaryWhite,
                                     )
@@ -311,7 +370,7 @@ fun CartScreen(navController: NavHostController) {
                             Log.d("MyLog", product.productId.toString())
                         }
                     }
-                }
+
             }
         }
     }

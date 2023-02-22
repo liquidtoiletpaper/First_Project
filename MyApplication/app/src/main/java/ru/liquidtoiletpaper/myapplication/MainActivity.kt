@@ -210,6 +210,57 @@ fun requestCartProducts(context: Context, callback: (response: String?) -> Unit)
     VolleySingleton.getInstance(context).addToRequestQueue(request)
 }
 
+fun addCartProducts(context: Context, id: Int, callback: (response: String?) -> Unit) {
+    val url = "https://tautaste.ru/addCartProducts?id=${User.id}&product_id=${id}"
+    val queue = Volley.newRequestQueue(context)
+    val request = object: StringRequest(
+        Method.GET, url,
+        Response.Listener { response ->
+            callback.invoke(response)
+        },
+        Response.ErrorListener { error ->
+            println(error)
+        }
+    ){
+
+    }
+    VolleySingleton.getInstance(context).addToRequestQueue(request)
+}
+
+fun removeCartProducts(context: Context, id: Int, callback: (response: String?) -> Unit) {
+    val url = "https://tautaste.ru/removeCartProducts?id=${User.id}&product_id=${id}"
+    val queue = Volley.newRequestQueue(context)
+    val request = object: StringRequest(
+        Method.GET, url,
+        Response.Listener { response ->
+            callback.invoke(response)
+        },
+        Response.ErrorListener { error ->
+            println(error)
+        }
+    ){
+
+    }
+    VolleySingleton.getInstance(context).addToRequestQueue(request)
+}
+
+fun removeAllCartProducts(context: Context, id: Int, callback: (response: String?) -> Unit) {
+    val url = "https://tautaste.ru/removeAllCartProducts?id=${User.id}&product_id=${id}"
+    val queue = Volley.newRequestQueue(context)
+    val request = object: StringRequest(
+        Method.GET, url,
+        Response.Listener { response ->
+            callback.invoke(response)
+        },
+        Response.ErrorListener { error ->
+            println(error)
+        }
+    ){
+
+    }
+    VolleySingleton.getInstance(context).addToRequestQueue(request)
+}
+
 fun requestFavProducts(context: Context, callback: (response: String?) -> Unit) {
     val url = "https://tautaste.ru/getFavProducts?id=${User.id}"
     val queue = Volley.newRequestQueue(context)
@@ -305,6 +356,7 @@ fun MainPage() {
         VolleySingleton.getInstance(context).addToRequestQueue(request)
     }
 
+
     val thread1 = thread(start = false) {
         requestProducts(context) { response ->
             val shell = Json.decodeFromString<ResponseShell>(response.toString())
@@ -326,6 +378,7 @@ fun MainPage() {
         }
     }
 
+    CartList.clearProducts()
     ProdIds.clearProducts()
     val thread2 = thread(start = false) {
         requestCartProducts(context) { response ->
@@ -336,31 +389,24 @@ fun MainPage() {
                         it
                     )
                 }
-                Log.d("MyLog", "cartProductModel: $cartProductModel")
                 if (cartProductModel != null) {
                     for(i in cartProductModel){
                         val p = ProductsList.products.find {
                             it.productId == Integer.parseInt(i.toString())
                         }
                         if(Integer.parseInt(i.toString()) !in ProdIds.products) { ProdIds.addProducts(Integer.parseInt(i.toString())) } else{ ProdIds.amplify(Integer.parseInt(i.toString())) }
-                        if(p !in CartList.products) {
-                            if (p != null) {
-                                CartList.addProducts(p)
-                            }
-                            if (p != null) {
-                                Log.d("MyLog", "CartList: " + p.productId)
-                            }
+                        if (p != null) {
+                            CartList.addProducts(p)
                         }
                     }
                 }
-                Log.d("MyLog", "ProdIds: " + ProdIds.products.toString())
             }
         }
     }
     thread1.start()
     thread1.join()
     thread2.start()
-
+    Log.d("MyLog", "ProdIds: ${ProdIds.products}")
     val navController = rememberNavController()
     var key = false
     fun validate(length: Int, minLength: Int, maxLength: Int) {
