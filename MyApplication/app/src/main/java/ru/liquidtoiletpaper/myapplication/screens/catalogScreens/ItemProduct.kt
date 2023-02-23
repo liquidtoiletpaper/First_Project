@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -308,17 +309,9 @@ fun ItemProductScreen(navController: NavController){
                                 IconButton(
                                     onClick = {
                                         addFavProducts(context, product1.productId) {
-                                            FavId.clearProducts()
-                                            requestFavProducts(context) { response ->
-                                                val shell = Json.decodeFromString<ResponseShell>(response.toString())
-                                                if (shell.status == "success") {
-                                                    val favProductModel = Json.decodeFromJsonElement<JsonArray>(shell.content!!)
-                                                    for(i in favProductModel){
-                                                        FavId.addProducts(Integer.parseInt(i.toString()))
-                                                    }
-                                                }
-                                            }
+
                                         }
+                                        FavId.addProducts(product1.productId)
                                     },
                                 ) {
                                     Icon(
@@ -331,6 +324,9 @@ fun ItemProductScreen(navController: NavController){
                             } else {
                                 IconButton(
                                     onClick = {
+                                        removeFavProducts(context, product1.productId) {
+
+                                        }
                                         FavId.removeProducts(product1.productId)
                                     },
                                 ) {
@@ -373,6 +369,7 @@ fun ItemProductScreen(navController: NavController){
                             clicked.value = false
                         }
                         var text = "В корзину"
+                        var alpha = 1f
                         if (!ProdIds.products.contains(product1.productId) || ProdIds.products[product1.productId] == 0){
                             text = "В корзину"
                             clicked.value = true
@@ -381,6 +378,7 @@ fun ItemProductScreen(navController: NavController){
                             if(ProdIds.products[product1.productId]!! != 0){
                                 text = "Добавлено"
                                 clicked.value = false
+                                alpha = 0.7f
                             }
                         }
 
@@ -389,12 +387,13 @@ fun ItemProductScreen(navController: NavController){
                             colors = ButtonDefaults.buttonColors(
                                 backgroundColor = PrimaryButton,
                                 contentColor = PrimaryWhite,
-                                disabledBackgroundColor = PrimaryGreen,
+                                disabledBackgroundColor = PrimaryButton,
                                 disabledContentColor = PrimaryWhite
                             ),
                             modifier = Modifier
                                 .padding(vertical = 8.dp)
-                                .padding(end = 20.dp),
+                                .padding(end = 20.dp)
+                                .alpha(alpha),
                             shape = RoundedCornerShape(5.dp),
                             onClick = {
                                 addCartProducts(context, product1.productId) {
@@ -408,6 +407,7 @@ fun ItemProductScreen(navController: NavController){
                                 }
                                 if (ProdIds.products.contains(product1.productId)){
                                     if(ProdIds.products[product1.productId]!! != 0){
+                                        alpha = 0.7f
                                         text = "Добавлено"
                                         clicked.value = false
                                     }

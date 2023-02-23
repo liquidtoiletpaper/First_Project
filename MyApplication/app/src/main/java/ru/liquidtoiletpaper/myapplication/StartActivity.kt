@@ -182,7 +182,9 @@ fun StartPage(navController: NavController){
                         .padding(horizontal = 20.dp)
                         .padding(top = 5.dp)
                 )
+                var enable = remember { mutableStateOf(true) }
                 Button(
+                    enabled = enable.value,
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = PrimaryButton,
                         contentColor = PrimaryWhite,

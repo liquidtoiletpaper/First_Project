@@ -288,6 +288,7 @@ fun CartScreen(navController: NavHostController) {
                                                 modifier = Modifier
                                                     .weight(1f)
                                                     .clickable {
+                                                        openDialog.value = false
                                                         removeAllCartProducts(context, product.productId){
 
                                                         }

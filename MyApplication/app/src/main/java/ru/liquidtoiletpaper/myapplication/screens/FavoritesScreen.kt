@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
@@ -30,7 +31,9 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.decodeFromJsonElement
 import ru.liquidtoiletpaper.myapplication.*
+import ru.liquidtoiletpaper.myapplication.global.CartList
 import ru.liquidtoiletpaper.myapplication.global.FavId
+import ru.liquidtoiletpaper.myapplication.global.ProdIds
 import ru.liquidtoiletpaper.myapplication.global.ProductsList
 import ru.liquidtoiletpaper.myapplication.models.CharModel
 import ru.liquidtoiletpaper.myapplication.models.FavProductsModel
@@ -84,30 +87,42 @@ fun FavoritesScreen(navController: NavController) {
                                 .padding(horizontal = 20.dp)
                         ) {
                             val clicked = remember { mutableStateOf(true) }
+                            var text = "В корзину"
+                            var alpha = 1f
+                            val prod = ProductsList.findProduct(id)
+                            if(ProdIds.products.contains(id) && ProdIds.products[id]!! > 0){
+                                text = "Добавлено"
+                                clicked.value = false
+                                alpha = 0.7f
+                            }
                             Button(
                                 enabled = clicked.value,
                                 colors = ButtonDefaults.buttonColors(
                                     backgroundColor = PrimaryButton,
                                     contentColor = PrimaryWhite,
-                                    disabledBackgroundColor = SecondaryButton,
-                                    disabledContentColor = PrimaryWhite
+                                    disabledBackgroundColor = PrimaryButton,
+                                    disabledContentColor = PrimaryGreen
                                 ),
                                 modifier = Modifier
                                     .padding(vertical = 8.dp)
                                     .padding(end = 20.dp)
-                                    .weight(7f),
+                                    .weight(7f)
+                                    .alpha(alpha),
                                 shape = RoundedCornerShape(5.dp),
                                 onClick = {
-                                    Toast.makeText(context, "Товар добавлен", Toast.LENGTH_SHORT)
-                                        .show()
+                                    if(prod != null){
+                                        addCartProducts(context, prod.productId){
+
+                                        }
+                                        CartList.addProducts(prod)
+                                        ProdIds.addProducts(prod.productId)
+                                    }
                                     clicked.value = false
                                 },
                             ) {
-                                Icon(
-                                    imageVector = Icons.Outlined.ShoppingCart,
-                                    contentDescription = "Fav",
-                                    modifier = Modifier,
-                                    tint = PrimaryWhite,
+                                Text(
+                                    text = text,
+                                    style = Typography.body1
                                 )
                             }
                             Box(
