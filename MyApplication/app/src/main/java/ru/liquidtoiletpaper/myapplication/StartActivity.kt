@@ -182,13 +182,13 @@ fun StartPage(navController: NavController){
                         .padding(horizontal = 20.dp)
                         .padding(top = 5.dp)
                 )
-                var enable = remember { mutableStateOf(true) }
+                var enable1 = remember { mutableStateOf(true) }
                 Button(
-                    enabled = enable.value,
+                    enabled = enable1.value,
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = PrimaryButton,
                         contentColor = PrimaryWhite,
-                        disabledBackgroundColor = SecondaryButton,
+                        disabledBackgroundColor = PrimaryButton,
                         disabledContentColor = PrimaryWhite
                     ),
                     modifier = Modifier
@@ -197,6 +197,7 @@ fun StartPage(navController: NavController){
                         .padding(top = 20.dp),
                     shape = RoundedCornerShape(5.dp),
                     onClick = {
+                        enable1.value = false
                         //context.startActivity(Intent(context, RegisterActivity::class.java))
                         navController.navigate("registerPage1")
                     },
@@ -207,7 +208,9 @@ fun StartPage(navController: NavController){
                         textAlign = TextAlign.Center,
                     )
                 }
+                var enable2 = remember { mutableStateOf(true) }
                 Button(
+                    enabled = enable2.value,
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = SecondaryButton,
                         contentColor = PrimaryWhite,
@@ -219,6 +222,7 @@ fun StartPage(navController: NavController){
                         .padding(horizontal = 20.dp),
                     shape = RoundedCornerShape(5.dp),
                     onClick = {
+                        enable2.value = false
                         //context.startActivity(Intent(context, LoginActivity::class.java))
                         navController.navigate("loginPage")
                     },

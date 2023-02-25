@@ -20,9 +20,11 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -62,6 +64,7 @@ import ru.liquidtoiletpaper.myapplication.models.ResponseShell
 import ru.liquidtoiletpaper.myapplication.screens.*
 import ru.liquidtoiletpaper.myapplication.screens.catalogScreens.CategorySearch
 import ru.liquidtoiletpaper.myapplication.screens.catalogScreens.ItemProduct
+import ru.liquidtoiletpaper.myapplication.screens.catalogScreens.charIsOpen
 import ru.liquidtoiletpaper.myapplication.screens.profileScreens.*
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 import kotlin.concurrent.thread
@@ -97,7 +100,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MainPage()
+                    //MainPage(navController = NavController(LocalContext.current))
+                    Main()
                 }
                 LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
 
@@ -110,7 +114,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Navigation(navController: NavHostController) {
     NavHost(navController = navController, startDestination = "homeScreen") {
-        composable("mainScreen") { MainPage() }
         composable("homeScreen") { HomeScreen(navController) }
         composable("catalogScreen") { CatalogScreen(navController) }
         composable("favoritesScreen") { FavoritesScreen(navController) }
@@ -126,6 +129,15 @@ fun Navigation(navController: NavHostController) {
         composable("searchProductScreen") { CategorySearch(navController) }
         composable("itemProduct") { ItemProduct(navController) }
         composable("itemOrder") { ItemOrder(navController) }
+        composable("orderActivity") { OrderPay(navController) }
+    }
+}
+
+@Composable
+fun Navigation2(navController: NavHostController) {
+    NavHost(navController = navController, startDestination = "mainScreen") {
+        composable("mainScreen") { MainPage(navController) }
+        composable("orderActivity") { OrderPay(navController) }
     }
 }
 
@@ -206,6 +218,25 @@ fun requestCartProducts(context: Context, callback: (response: String?) -> Unit)
         }
     ){
 
+    }
+    VolleySingleton.getInstance(context).addToRequestQueue(request)
+}
+
+fun newOrder(context: Context, parameters: Map<String, String>?, callback: (response: String?) -> Unit) {
+    val url = "https://tautaste.ru/newOrder"
+    val queue = Volley.newRequestQueue(context)
+    val request = object : StringRequest(
+        Method.POST, url,
+        Response.Listener { response ->
+            callback.invoke(response)
+        },
+        Response.ErrorListener { error ->
+            println(error)
+        }
+    ) {
+        override fun getParams(): Map<String, String>? {
+            return parameters
+        }
     }
     VolleySingleton.getInstance(context).addToRequestQueue(request)
 }
@@ -337,7 +368,100 @@ var productsSize = 0
 
 
 @Composable
-fun MainPage() {
+fun Main() {
+    val navController = rememberNavController()
+    Navigation2(navController = navController)
+}
+
+
+@Composable
+fun OrderPay(navController: NavController) {
+    val context = LocalContext.current
+    Scaffold(
+        modifier = Modifier
+            .background(PrimaryPageBackground),
+        topBar = {
+            TopAppBar(
+                backgroundColor = DarkAppBarBackground,
+                contentColor = Color.White,
+            ) {
+                IconButton(
+                    onClick = { navController.navigateUp() }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        modifier = Modifier,
+                        tint = PrimaryWhite,
+                    )
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "Оплата заказа",
+                        style = MaterialTheme.typography.h5,
+                        textAlign = TextAlign.Center,
+                    )
+                    IconButton(
+                        onClick = {  },
+                        enabled = false
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            modifier = Modifier
+                                .alpha(0f),
+                            tint = PrimaryWhite,
+                        )
+                    }
+                }
+            }
+        },
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .padding(padding)
+        ){
+            Column(
+                modifier = Modifier
+                    .clickable {
+                        charIsOpen.value = true
+                    }
+                    .padding(horizontal = 20.dp)
+                    .padding(vertical = 10.dp)
+            ){
+                Row(
+                    verticalAlignment = CenterVertically
+                ){
+                    Column(
+                        modifier = Modifier
+                            .weight(10f)
+                    ){
+                        Text(
+                            text = "Товаров: ${CartList.products.size}",
+                            textAlign = TextAlign.Start,
+                            style = Typography.h1
+                        )
+                    }
+                    Icon(
+                        imageVector = Icons.Filled.KeyboardArrowRight,
+                        contentDescription = "Open",
+                        modifier = Modifier
+                            .weight(1f),
+                        tint = SecondaryText,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun MainPage(navController: NavController) {
     val context = LocalContext.current
     updateProducts(context)
     fun requestUserData(id: Int) {
@@ -372,8 +496,10 @@ fun MainPage() {
         val shell = Json.decodeFromString<ResponseShell>(response.toString())
         if (shell.status == "success") {
             val favProductModel = Json.decodeFromJsonElement<JsonArray>(shell.content!!)
-            for(i in favProductModel){
-                FavId.addProducts(Integer.parseInt(i.toString()))
+            if(favProductModel.isNotEmpty()){
+                for(i in favProductModel){
+                    FavId.addProducts(Integer.parseInt(i.toString()))
+                }
             }
         }
     }

@@ -331,6 +331,13 @@ fun ProfileScreen(navController: NavHostController) {
                                 Text(
                                     modifier = Modifier
                                         .clickable {
+                                            User.id = 0
+                                            User.email = ""
+                                            User.location = ""
+                                            User.gender = ""
+                                            User.name = ""
+                                            User.lastname = ""
+                                            User.password = ""
                                             activity?.finish()
                                             StartActivity()
                                         }

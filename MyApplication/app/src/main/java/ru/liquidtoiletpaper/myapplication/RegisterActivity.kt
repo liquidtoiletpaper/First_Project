@@ -37,7 +37,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromJsonElement
 import ru.liquidtoiletpaper.myapplication.global.User
+import ru.liquidtoiletpaper.myapplication.models.AuthModel
 import ru.liquidtoiletpaper.myapplication.models.ResponseShell
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 import java.util.*
@@ -186,12 +188,13 @@ fun RegisterPage1(navController: NavController){
                     }
                 )
 
-
+                var enable = remember { mutableStateOf(true) }
                 Button(
+                    enabled = enable.value,
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = PrimaryButton,
                         contentColor = PrimaryWhite,
-                        disabledBackgroundColor = SecondaryButton,
+                        disabledBackgroundColor = PrimaryButton,
                         disabledContentColor = PrimaryWhite
                     ),
                     modifier = Modifier
@@ -200,6 +203,7 @@ fun RegisterPage1(navController: NavController){
                         .padding(top = 20.dp),
                     shape = RoundedCornerShape(5.dp),
                     onClick = {
+                        enable.value = false
                         if("@" in emailText){
                             val fullEmail = emailText.split("@")
                             val firstEmail = fullEmail[0]
@@ -267,7 +271,6 @@ fun RegisterPage2(navController: NavController){
                     )
                 }
             }
-            // Колонна с кнопками
             Column(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -451,11 +454,13 @@ fun RegisterPage2(navController: NavController){
                         .padding(top = 20.dp)
                         .padding(horizontal = 20.dp)
                 )
+                var enable = remember { mutableStateOf(true) }
                 Button(
+                    enabled = enable.value,
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = PrimaryButton,
                         contentColor = PrimaryWhite,
-                        disabledBackgroundColor = SecondaryButton,
+                        disabledBackgroundColor = PrimaryButton,
                         disabledContentColor = PrimaryWhite
                     ),
                     modifier = Modifier
@@ -464,6 +469,7 @@ fun RegisterPage2(navController: NavController){
                         .padding(top = 10.dp),
                     shape = RoundedCornerShape(5.dp),
                     onClick = {
+                        enable.value = false
                         if(nameText.isEmpty()){
                             isErrorName = true
                         }
@@ -626,12 +632,13 @@ fun RegisterPage3(navController: NavController){
                         },
                 )
 
-
+                var enable = remember { mutableStateOf(true) }
                 Button(
+                    enabled = enable.value,
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = PrimaryButton,
                         contentColor = PrimaryWhite,
-                        disabledBackgroundColor = SecondaryButton,
+                        disabledBackgroundColor = PrimaryButton,
                         disabledContentColor = PrimaryWhite
                     ),
                     modifier = Modifier
@@ -640,15 +647,22 @@ fun RegisterPage3(navController: NavController){
                         .padding(top = 25.dp),
                     shape = RoundedCornerShape(5.dp),
                     onClick = {
-                        makeRequest(context, "https:/tautaste.ru/reg", mapOf("email" to User.email, "name" to User.name, "lastname" to User.lastname, "password" to User.password)){ response ->
+                        enable.value = false
+                        makeRequest(context, "https:/tautaste.ru/reg",
+                            mapOf(
+                                "email" to User.email,
+                                "name" to User.name,
+                                "lastname" to User.lastname,
+                                "password" to User.password
+                            )){ response ->
                             val shell = Json.decodeFromString<ResponseShell>(response.toString())
                             if(shell.status == "success") {
                                 /*
-                                val regModel = Json.decodeFromJsonElement<RegModel>(shell.content!!)
+                                val regModel = Json.decodeFromJsonElement<AuthModel>(shell.content!!)
                                 User.name = regModel.name
                                 User.lastname = regModel.lastname
                                 User.email = regModel.email
-                                User.password = regModel.password
+                                User.gender = regModel.gender
                                  */
                                 context.startActivity(Intent(context, MainActivity::class.java))
                             }else if (shell.code == 0){

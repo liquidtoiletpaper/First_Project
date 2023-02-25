@@ -253,11 +253,13 @@ fun LoginPage(navController: NavController){
                     style = Typography.subtitle2,
                     color = LinkText,
                 )
+                var enable = remember { mutableStateOf(true) }
                 Button(
+                    enabled = enable.value,
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = PrimaryButton,
                         contentColor = PrimaryWhite,
-                        disabledBackgroundColor = SecondaryButton,
+                        disabledBackgroundColor = PrimaryButton,
                         disabledContentColor = PrimaryWhite
                     ),
                     modifier = Modifier
@@ -266,6 +268,7 @@ fun LoginPage(navController: NavController){
                         .padding(top = 20.dp),
                     shape = RoundedCornerShape(5.dp),
                     onClick = {
+                        enable.value = false
                         makeRequest(context, "https:/tautaste.ru/auth",
                             mapOf(
                             "email" to emailText,

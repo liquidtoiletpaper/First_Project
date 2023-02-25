@@ -1,41 +1,42 @@
 package ru.liquidtoiletpaper.myapplication.screens
 
 import android.util.Log
-import android.widget.Toast
-import androidx.compose.foundation.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.ShoppingCart
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.decodeFromJsonElement
 import ru.liquidtoiletpaper.myapplication.*
 import ru.liquidtoiletpaper.myapplication.global.CartList
-import ru.liquidtoiletpaper.myapplication.global.FavId
 import ru.liquidtoiletpaper.myapplication.global.ProdIds
 import ru.liquidtoiletpaper.myapplication.global.ProductsList
+import ru.liquidtoiletpaper.myapplication.global.User
 import ru.liquidtoiletpaper.myapplication.models.ResponseShell
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 @Composable
 fun CartScreen(navController: NavHostController) {
-    Log.d("MyLog", CartList.products.toString())
     val context = LocalContext.current
     Scaffold(
         topBar = {
@@ -69,10 +70,13 @@ fun CartScreen(navController: NavHostController) {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Column() {
+                    Column(
+                        modifier = Modifier
+                            .weight(10f)
+                    ) {
                         Text(
                             modifier = Modifier
-                                .padding(vertical = 10.dp)
+                                .padding(top = 10.dp)
                                 .padding(start = 20.dp),
                             text = "Товаров: ${CartList.products.size}",
                             textAlign = TextAlign.Start,
@@ -80,30 +84,69 @@ fun CartScreen(navController: NavHostController) {
                         )
                         Text(
                             modifier = Modifier
-                                .padding(vertical = 10.dp)
+                                .padding(bottom = 10.dp)
+                                .padding(top = 5.dp)
                                 .padding(start = 20.dp),
                             text = "${CartList.calculateValue()} ₽",
                             textAlign = TextAlign.Start,
                             style = Typography.h1,
                         )
                     }
-                    Column() {
+                    Column(
+                        modifier = Modifier
+                            .weight(8f)
+                    ) {
                         val clicked = remember { mutableStateOf(true) }
                         var text = "Оплатить"
+                        val currentDate = LocalDate.now()
+                        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                        val formattedDate = currentDate.format(formatter)
+                        val ids = mutableListOf<Int>()
+                        for(i in CartList.products) {
+                            ids.add(i.productId)
+                        }
+                        ids.sort()
+
                         Button(
-                            enabled = clicked.value,
                             colors = ButtonDefaults.buttonColors(
                                 backgroundColor = PrimaryButton,
                                 contentColor = PrimaryWhite,
-                                disabledBackgroundColor = SecondaryButton,
+                                disabledBackgroundColor = PrimaryButton,
                                 disabledContentColor = PrimaryWhite
                             ),
                             modifier = Modifier
                                 .padding(vertical = 8.dp)
-                                .padding(end = 20.dp),
+                                .padding(end = 20.dp)
+                                .fillMaxWidth(),
                             shape = RoundedCornerShape(5.dp),
                             onClick = {
-
+                                /*
+                                if(clicked.value){
+                                    newOrder(context,mapOf(
+                                        "user_id" to User.id.toString(),
+                                        "products" to ids.toString(),
+                                        "value" to CartList.calculateValue().toString(),
+                                        "mail_index" to User.email,
+                                        "city" to User.name,
+                                        "pay_info" to ids.toString(),
+                                        "date" to formattedDate,
+                                        "size" to CartList.products.size.toString(),
+                                        "status" to "проверка"
+                                    )){ response ->
+                                        Log.d("MyLog", response.toString())
+                                        val shell = Json.decodeFromString<ResponseShell>(response.toString())
+                                        if(shell.status == "success"){
+                                            Log.d("MyLog", "newOrder: " +
+                                                    "${User.id.toString()} ${ids.toString()}, ${CartList.calculateValue().toString()} " +
+                                                    "${User.email.toString()} ${ids.toString()} ${User.lastname.toString()} " +
+                                                    "$formattedDate ${CartList.products.size.toString()}")
+                                        } else {
+                                            Log.d("MyLog", "пизда")
+                                        }
+                                    }
+                                }
+                                 */
+                                navController.navigate("orderActivity")
                             },
                         ) {
                             Text(
@@ -185,12 +228,8 @@ fun CartScreen(navController: NavHostController) {
                     }
                     for(product in CartList.products) {
                         if(product.productId in temp) {
-                            Log.d("MyLog", product.name)
-                            Log.d("MyLog", "temp $temp")
                             fun calculateAmount(id: Int?): Int {
                                 val amount = ProdIds.products.get(product.productId)
-                                Log.d("MyLog", "amount $amount")
-                                Log.d("MyLog", "amount id ${product.productId}")
                                 return amount!!.toInt()
                             }
                             Column(
@@ -289,7 +328,10 @@ fun CartScreen(navController: NavHostController) {
                                                     .weight(1f)
                                                     .clickable {
                                                         openDialog.value = false
-                                                        removeAllCartProducts(context, product.productId){
+                                                        removeAllCartProducts(
+                                                            context,
+                                                            product.productId
+                                                        ) {
 
                                                         }
                                                         CartList.removeAllProducts(product)
@@ -367,8 +409,6 @@ fun CartScreen(navController: NavHostController) {
                             }
                             Divider()
                             temp.remove(product.productId)
-                            Log.d("MyLog", "temp 2 $temp")
-                            Log.d("MyLog", product.productId.toString())
                         }
                     }
 
