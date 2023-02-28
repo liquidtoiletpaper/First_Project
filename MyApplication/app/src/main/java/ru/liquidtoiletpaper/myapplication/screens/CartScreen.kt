@@ -12,20 +12,25 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.decodeFromJsonElement
 import ru.liquidtoiletpaper.myapplication.*
+import ru.liquidtoiletpaper.myapplication.R
 import ru.liquidtoiletpaper.myapplication.global.CartList
 import ru.liquidtoiletpaper.myapplication.global.ProdIds
 import ru.liquidtoiletpaper.myapplication.global.ProductsList
@@ -34,7 +39,9 @@ import ru.liquidtoiletpaper.myapplication.models.ResponseShell
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import kotlin.concurrent.thread
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun CartScreen(navController: NavHostController) {
     val context = LocalContext.current
@@ -162,7 +169,9 @@ fun CartScreen(navController: NavHostController) {
             }
         }
     ) { padding ->
-        if(CartList.products.isEmpty()){
+        var cartCheck by remember { mutableStateOf(false) }
+        var stopCheck by remember { mutableStateOf(false) }
+        if(CartList.products.isEmpty() && cartCheck){
             Column(
                 modifier = Modifier
                     .padding(padding)
@@ -216,18 +225,65 @@ fun CartScreen(navController: NavHostController) {
                     )
                 }
             }
+        } else if(CartList.products.isEmpty() && !cartCheck){
+            // Loading screen
+            Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
+                GlideImage(
+                    modifier = Modifier
+                        .padding(top = 120.dp)
+                        .size(150.dp),
+                    model = R.drawable.downloadinggif,
+                    contentDescription = "downloading",
+                    contentScale = ContentScale.Fit
+                )
+            }
         } else {
-            Column(
-                modifier = Modifier
-                    .padding(padding)
-                    .verticalScroll(rememberScrollState())
-            ) {
+            val thread1 = thread(start = false){
+                CartList.clearProducts()
+                ProdIds.clearProducts()
+                requestCartProducts(context) { response ->
+                    val shell = Json.decodeFromString<ResponseShell>(response.toString())
+                    if (shell.status == "success") {
+                        val cartProductModel = shell.content?.let {
+                            Json.decodeFromJsonElement<JsonArray>(
+                                it
+                            )
+                        }
+                        if (cartProductModel != null) {
+                            for (i in cartProductModel) {
+                                val p = ProductsList.products.find {
+                                    it.productId == Integer.parseInt(i.toString())
+                                }
+                                if (Integer.parseInt(i.toString()) !in ProdIds.products) {
+                                    ProdIds.addProducts(Integer.parseInt(i.toString()))
+                                } else {
+                                    ProdIds.amplify(Integer.parseInt(i.toString()))
+                                }
+                                if (p != null) {
+                                    CartList.addProducts(p)
+                                }
+                            }
+                        }
+                    }
+                    cartCheck = true
+                    stopCheck = true
+                }
+            }
+            if(!stopCheck){
+                thread1.start()
+            }
+            if(cartCheck){
+                Column(
+                    modifier = Modifier
+                        .padding(padding)
+                        .verticalScroll(rememberScrollState())
+                ) {
                     val temp = mutableListOf<Int>()
-                    for(prod in ProductsList.products){
+                    for (prod in ProductsList.products) {
                         temp.add(prod.productId)
                     }
-                    for(product in CartList.products) {
-                        if(product.productId in temp) {
+                    for (product in CartList.products) {
+                        if (product.productId in temp) {
                             fun calculateAmount(id: Int?): Int {
                                 val amount = ProdIds.products.get(product.productId)
                                 return amount!!.toInt()
@@ -260,7 +316,7 @@ fun CartScreen(navController: NavHostController) {
                                         IconButton(
                                             modifier = Modifier,
                                             onClick = {
-                                                if(ProdIds.products[product.productId]!! > 1) {
+                                                if (ProdIds.products[product.productId]!! > 1) {
                                                     removeCartProducts(context, product.productId) {
                                                         CartList.removeProducts(product)
                                                         ProdIds.reduce(product.productId)
@@ -299,7 +355,7 @@ fun CartScreen(navController: NavHostController) {
                                         }
                                     }
                                 }
-                                val openDialog = remember { mutableStateOf(false)  }
+                                val openDialog = remember { mutableStateOf(false) }
                                 if (openDialog.value) {
                                     AlertDialog(
                                         modifier = Modifier
@@ -412,6 +468,12 @@ fun CartScreen(navController: NavHostController) {
                         }
                     }
 
+                }
+            }
+            else {
+                Text(
+                    text = "Загрузка..."
+                )
             }
         }
     }

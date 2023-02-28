@@ -3,6 +3,8 @@ package ru.liquidtoiletpaper.myapplication.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val PrimaryPageBackground = Color(0xFF363940)
+val DarkenedBackground15 = Color(0xFF2d3036)
+val DarkenedBackground20 = Color(0xFF2b2d33)
 val AlternativePrimaryBackground = Color(0xff212226)
 val PrimaryWhite = Color(0xffFFFFFF)
 val LowerPrimaryText = Color(0xffdfdfdf)

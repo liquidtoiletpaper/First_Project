@@ -12,8 +12,7 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -69,7 +68,7 @@ import ru.liquidtoiletpaper.myapplication.screens.profileScreens.*
 import ru.liquidtoiletpaper.myapplication.ui.theme.*
 import kotlin.concurrent.thread
 import kotlin.time.Duration.Companion.milliseconds
-
+val productsListCheck = mutableStateOf(false)
 class MainActivity : ComponentActivity() {
 
     /// Заблокировать поворот экрана на устройстве
@@ -175,6 +174,23 @@ fun requestProduct(id: Int, context: Context, callback: (response: String?) -> U
     VolleySingleton.getInstance(context).addToRequestQueue(request)
 }
 
+fun requestProducts(context: Context, callback: (response: String?) -> Unit) {
+    val url = "https://tautaste.ru/getProducts"
+    val queue = Volley.newRequestQueue(context)
+    val request = object : StringRequest(
+        Method.GET, url,
+        Response.Listener { response ->
+            callback.invoke(response)
+        },
+        Response.ErrorListener { error ->
+            println(error)
+        }
+    ){
+
+    }
+    VolleySingleton.getInstance(context).addToRequestQueue(request)
+}
+
 fun requestProductCharacteristics(id: Int, context: Context, callback: (response: String?) -> Unit) {
     val url = "https://tautaste.ru/getProductCharacteristics?product_id=$id"
     val queue = Volley.newRequestQueue(context)
@@ -192,18 +208,7 @@ fun requestProductCharacteristics(id: Int, context: Context, callback: (response
     VolleySingleton.getInstance(context).addToRequestQueue(request)
 }
 
-fun requestProducts(context: Context, callback: (response: String?) -> Unit) {
-    val url = "https://tautaste.ru/getProducts"
-    val queue = Volley.newRequestQueue(context)
-    val request = StringRequest(
-        Request.Method.GET, url,
-        {
-        },
-        {
-        }
-    )
-    VolleySingleton.getInstance(context).addToRequestQueue(request)
-}
+
 
 fun requestCartProducts(context: Context, callback: (response: String?) -> Unit) {
     val url = "https://tautaste.ru/getCartProducts?id=${User.id}"
@@ -345,6 +350,7 @@ fun removeFavProducts(context: Context, id: Int, callback: (response: String?) -
 
 fun updateProducts(context: Context){
     ProductsList.clearProducts()
+    /*
     for(i in 1..7){
         requestProduct(i, context) { response ->
             val shell = Json.decodeFromString<ResponseShell>(response.toString())
@@ -358,6 +364,30 @@ fun updateProducts(context: Context){
                 product.category = productModel.category
                 product.cost = productModel.cost
                 ProductsList.addProducts(product)
+                Log.d("MyLog", "productModel: $productModel")
+            }
+        }
+    }
+     */
+    requestProducts(context) { response ->
+        val shell = Json.decodeFromString<ResponseShell>(response.toString())
+        Log.d("MyLog", "shell: $shell")
+        if (shell.status == "success") {
+            val productsModel = Json.decodeFromJsonElement<JsonArray>(shell.content!!)
+            Log.d("MyLog", "productsModel: $productsModel")
+            productsSize = productsModel.size
+            for (p in productsModel){
+                val product = Product()
+                val productModel = Json.decodeFromJsonElement<ProductModel>(p)
+                product.productId = productModel.product_id
+                product.image = productModel.image
+                product.name = productModel.name
+                product.description = productModel.description
+                product.category = productModel.category
+                product.cost = productModel.cost
+                ProductsList.addProducts(product)
+                Log.d("MyLog", "ProductsList: ${ProductsList.products}")
+                Log.d("MyLog", "p: $p")
             }
         }
     }
@@ -372,7 +402,6 @@ fun Main() {
     val navController = rememberNavController()
     Navigation2(navController = navController)
 }
-
 
 @Composable
 fun OrderPay(navController: NavController) {
@@ -425,11 +454,12 @@ fun OrderPay(navController: NavController) {
         Column(
             modifier = Modifier
                 .padding(padding)
+                .verticalScroll(rememberScrollState())
         ){
             Column(
                 modifier = Modifier
                     .clickable {
-                        charIsOpen.value = true
+
                     }
                     .padding(horizontal = 20.dp)
                     .padding(vertical = 10.dp)
@@ -440,6 +470,7 @@ fun OrderPay(navController: NavController) {
                     Column(
                         modifier = Modifier
                             .weight(10f)
+                            .padding(top = 10.dp)
                     ){
                         Text(
                             text = "Товаров: ${CartList.products.size}",
@@ -454,6 +485,67 @@ fun OrderPay(navController: NavController) {
                             .weight(1f),
                         tint = SecondaryText,
                     )
+                }
+
+                /*
+                Column(
+                    modifier = Modifier
+                        .horizontalScroll(rememberScrollState())
+                        .background(DarkenedBackground20)
+                ) {
+                    val tempList = mutableListOf<Product>()
+                    for(p in CartList.products) {
+                        if(p !in tempList){
+                            tempList.add(p)
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ){
+                                ProductItem(product = p, navController = navController)
+                                Row(
+                                    verticalAlignment = CenterVertically
+                                ){
+                                    Text(text = "Кол-во:", style = Typography.h5, modifier = Modifier.weight(1f))
+                                    Text(text = "${ProdIds.calculateAmount(p.productId)}", style = Typography.h5, modifier = Modifier.weight(1f))
+                                }
+                            }
+                        }
+                    }
+                }
+                 */
+            }
+            val tempList = mutableListOf<Product>()
+            Row(
+                verticalAlignment = CenterVertically,
+                modifier = Modifier
+                    .horizontalScroll(rememberScrollState())
+                    .fillMaxWidth()
+                    .background(DarkenedBackground15)
+                    .padding(vertical = 10.dp)
+                    .padding(horizontal = 20.dp)
+            ) {
+                for(p in CartList.products) {
+                    tempList.add(p)
+                    Column(Modifier.background(DarkenedBackground20)){ ProductItem(product = p, navController = navController) }
+                    /*
+                    Row(
+                        verticalAlignment = CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        Text(
+                            text = "Кол-во:",
+                            style = Typography.h5,
+                            modifier = Modifier.weight(1f)
+                        )
+                        Text(
+                            text = "${ProdIds.calculateAmount(p.productId)}",
+                            style = Typography.h5,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+
+                     */
                 }
             }
         }
@@ -485,8 +577,21 @@ fun MainPage(navController: NavController) {
         requestProducts(context) { response ->
             val shell = Json.decodeFromString<ResponseShell>(response.toString())
             if (shell.status == "success") {
-                val productsModel = Json.decodeFromJsonElement<ProductsModel>(shell.content!!)
-                productsSize = productsModel.product.size
+                ProductsList.clearProducts()
+                val productsModel = Json.decodeFromJsonElement<JsonArray>(shell.content!!)
+                productsSize = productsModel.size
+                for (p in productsModel){
+                    val product = Product()
+                    val productModel = Json.decodeFromJsonElement<ProductModel>(p)
+                    product.productId = productModel.product_id
+                    product.image = productModel.image
+                    product.name = productModel.name
+                    product.description = productModel.description
+                    product.category = productModel.category
+                    product.cost = productModel.cost
+                    ProductsList.addProducts(product)
+                }
+                productsListCheck.value = true
             }
         }
     }
@@ -526,13 +631,13 @@ fun MainPage(navController: NavController) {
                         }
                     }
                 }
+                Log.d("MyLog", "CartList: ${CartList.products}")
             }
         }
     }
     thread1.start()
     thread1.join()
     thread2.start()
-    Log.d("MyLog", "ProdIds: ${ProdIds.products}")
     val navController = rememberNavController()
     var key = false
     fun validate(length: Int, minLength: Int, maxLength: Int) {
@@ -610,7 +715,6 @@ fun ProductItem(product: Product, navController: NavController){
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 20.dp)
                 .clickable {
                     productItem.productId = product.productId
                     productItem.name = product.name
@@ -623,6 +727,7 @@ fun ProductItem(product: Product, navController: NavController){
                 .padding(horizontal = 20.dp)
                 .padding(vertical = 10.dp)
         ) {
+            /*
             GlideImage(
                 modifier = Modifier
                     .weight(3f)
@@ -631,6 +736,8 @@ fun ProductItem(product: Product, navController: NavController){
                 contentDescription = product.image,
                 contentScale = ContentScale.Fit
             )
+
+             */
             Column(
                 modifier = Modifier
                     .weight(5f)
